@@ -1,0 +1,13 @@
+{
+  "parser": "babel-eslint",
+  "root": true,
+  "extends": [
+    "@codemachiner/eslint-config/targets/node"
+  ],
+  "settings": {
+    "import/resolver": "node",
+  },
+  "rules": {
+    "prettier/prettier": "error",
+  },
+}
