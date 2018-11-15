@@ -37,7 +37,7 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "@asd14/m": "0.15.0",
-    "@asd14/pluginus": "0.3.0",
+    "@asd14/pluginus": "0.3.1",
     "connect": "3.6.6",
     "cors": "2.8.5",
     "cuid": "2.1.4",
