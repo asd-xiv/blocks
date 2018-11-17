@@ -2,8 +2,9 @@ const debug = require("debug")("Blocks:Example")
 
 const http = require("http")
 const path = require("path")
+const { block } = require("../../src")
 
-module.exports = require("../../src")({
+module.exports = block({
   settings: {
     APP_VERSION: 1,
     APP_PORT: 3002,
