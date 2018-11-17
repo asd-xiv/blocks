@@ -1,7 +1,7 @@
 const debug = require("debug")("Blocks:BodyMiddleware")
 const { isEmpty } = require("@asd14/m")
 
-const InputValidationError = require("../errors/input-validation.error")
+const InputValidationError = require("../errors/input.error")
 
 /**
  * { function_description }
