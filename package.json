@@ -36,8 +36,8 @@
   "main": "src/index.js",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "@asd14/m": "0.15.0",
-    "@asd14/pluginus": "0.3.1",
+    "@asd14/m": "0.15.2",
+    "@asd14/pluginus": "0.4.0",
     "connect": "3.6.6",
     "cors": "2.8.5",
     "cuid": "2.1.4",
@@ -45,7 +45,7 @@
     "path-to-regexp": "2.4.0"
   },
   "devDependencies": {
-    "@codemachiner/eslint-config": "3.0.0",
+    "@asd14/eslint-config": "3.0.1",
     "babel-eslint": "10.0.1",
     "coveralls": "3.0.2",
     "eslint": "5.9.0",
