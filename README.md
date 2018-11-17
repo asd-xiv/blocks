@@ -10,7 +10,7 @@
 - [Develop](#develop)
 - [Use](#use)
 - [Changelog](#changelog)
-  - [0.1.0 - 8 October 2018](#010---8-october-2018)
+  - [0.2.0 - 18 November 2018](#020---18-november-2018)
 
 <!-- /MarkdownTOC -->
 
@@ -22,12 +22,15 @@
 
 ## Changelog
 
-History of all changes in [CHANGELOG.md](https://github.com/asd14/blocks/master/CHANGELOG.md)
+History of all changes in [CHANGELOG.md](/CHANGELOG.md)
 
-### 0.1.0 - 8 October 2018
+### 0.2.0 - 18 November 2018
 
-#### Added
+#### Add
 
-#### Changed
+- Add basic [`tests`](/src/index.test.js)
 
-#### Removed
+#### Change
+
+- Enable CORS middleware only if CORS_ORIGIN is not null
+- Expose Base, Auth, Input and NotFound errors
