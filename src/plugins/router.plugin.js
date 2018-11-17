@@ -1,14 +1,14 @@
 const debug = require("debug")("Blocks:RouterPlugin")
 
 const pathToRegexp = require("path-to-regexp")
-const { push, reduce, find } = require("@asd14/m")
+const { count, push, reduce, find } = require("@asd14/m")
 const ajv = require("ajv")({
   allErrors: true,
   coerceTypes: true,
   useDefaults: true,
 })
 
-const InputValidationError = require("../errors/input-validation.error")
+const InputValidationError = require("../errors/input.error")
 const AuthorizationError = require("../errors/authorization.error")
 
 module.exports = {
@@ -18,6 +18,8 @@ module.exports = {
     let routes = []
 
     return {
+      count: () => count(routes),
+
       /**
        * Searches for the first match.
        *

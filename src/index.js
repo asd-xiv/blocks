@@ -3,7 +3,12 @@ const debug = require("debug")("Blocks:Main")
 const connect = require("connect")
 const path = require("path")
 const pluginus = require("@asd14/pluginus")
-const { pipe, map, forEach } = require("@asd14/m")
+const { is, pipe, map, forEach } = require("@asd14/m")
+
+const BaseError = require("./errors/base.error")
+const NotFoundError = require("./errors/not-found.error")
+const InputError = require("./errors/input.error")
+const AuthorizationError = require("./errors/authorization.error")
 
 const createMiddlewarePipe = middleware => {
   const app = connect()
@@ -15,7 +20,7 @@ const createMiddlewarePipe = middleware => {
   return app
 }
 
-module.exports = async ({
+const block = async ({
   settings = {},
   folders,
   plugins,
@@ -51,6 +56,9 @@ module.exports = async ({
 
     //
     Plugins.Config.add({
+      CORS_ORIGIN: null,
+      CORS_METHODS: "GET,HEAD,PUT,PATCH,POST,DELETE",
+      APP_PORT: 8080,
       ...settings,
       STARTUP_TIME: new Date(),
     })
@@ -60,18 +68,28 @@ module.exports = async ({
         map(middleware => middleware(Plugins)),
         createMiddlewarePipe
       )([
-        require("./middleware/req__1-bootstrap"),
-        require("./middleware/req__2-cors"),
-        require("./middleware/req__3-query"),
-        require("./middleware/req__4-body"),
-        require("./middleware/req__5-route-exists"),
+        require("./middleware/req-bootstrap"),
+        ...(is(Plugins.Config.get("CORS_ORIGIN"))
+          ? require("./middleware/req-cors")
+          : []),
+        require("./middleware/req-query"),
+        require("./middleware/req-body"),
+        require("./middleware/req-route-exists"),
         ...beforeRoute,
-        require("./middleware/res__1-route"),
+        require("./middleware/res-route"),
         ...afterRoute,
-        require("./middleware/res__2-error"),
-        require("./middleware/res__3-goodbye"),
+        require("./middleware/res-error"),
+        require("./middleware/res-goodbye"),
       ]),
 
       Plugins,
     }
   })
+
+module.exports = {
+  block,
+  BaseError,
+  AuthorizationError,
+  InputError,
+  NotFoundError,
+}
