@@ -15,25 +15,21 @@ test("blocks", t =>
     t.deepEquals(
       Object.keys(Plugins),
       ["Router", "Config"],
-      "Application loaded with 2 plugins initialized"
+      "Router and Config plugins initialized"
     )
 
-    t.equals(
-      Plugins.Router.count(),
-      1,
-      "Router plugin loaded /ping default route"
-    )
+    t.equals(Plugins.Router.count(), 1, "Router plugin has /ping route")
 
     t.equals(
       count(middlewarePipeline.stack),
       7,
-      "Middleware loaded (whithout cors)"
+      "7 middleware loaded (whithout cors)"
     )
 
     t.equals(
       Plugins.Config.get("APP_PORT"),
       3002,
-      "Pass custom setting APP_PORT"
+      "Custom setting APP_PORT overwrites default"
     )
 
     t.end()

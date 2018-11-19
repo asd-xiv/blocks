@@ -23,8 +23,8 @@ const createMiddlewarePipe = middleware => {
 const block = async ({
   settings = {},
   folders,
-  plugins,
-  routes,
+  plugins = /\.plugins\.js$/,
+  routes = /\.routes\.js$/,
   middleware: { beforeRoute = [], afterRoute = [] } = {},
 }) =>
   Promise.all([

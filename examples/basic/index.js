@@ -5,11 +5,7 @@ const path = require("path")
 const { block } = require("../../src")
 
 module.exports = block({
-  settings: {
-    APP_VERSION: 1,
-    APP_PORT: 3002,
-    CORS_ORIGIN: null,
-  },
+  // settings: {},
   folders: path.resolve("./src"),
 }).then(({ Plugins: { Config }, middlewarePipeline }) =>
   http
