@@ -1,14 +1,14 @@
 {
-  "name": "@asd14/blocks",
+  "name": "@leeruniek/blocks",
   "version": "0.2.0",
   "description": "A Node.js API framework",
-  "homepage": "https://github.com/asd14/blocks",
+  "homepage": "https://github.com/leeruniek/blocks",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/asd14/blocks.git"
+    "url": "git+https://github.com/leeruniek/blocks.git"
   },
   "bugs": {
-    "url": "https://github.com/asd14/blocks/issues"
+    "url": "https://github.com/leeruniek/blocks/issues"
   },
   "scripts": {
     "----UTIL-------------------------------------": "",
