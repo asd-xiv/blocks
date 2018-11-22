@@ -10,7 +10,7 @@
 - [Develop](#develop)
 - [Use](#use)
 - [Changelog](#changelog)
-  - [0.2.0 - 18 November 2018](#020---18-november-2018)
+  - [0.2.2 - 22 November 2018](#022---22-november-2018)
 
 <!-- /MarkdownTOC -->
 
@@ -24,13 +24,8 @@
 
 History of all changes in [CHANGELOG.md](/CHANGELOG.md)
 
-### 0.2.0 - 18 November 2018
-
-#### Add
-
-- Add basic [`tests`](/src/index.test.js)
+### 0.2.2 - 22 November 2018
 
 #### Change
 
-- Enable CORS middleware only if CORS_ORIGIN is not null
-- Expose Base, Auth, Input and NotFound errors
+- Add debug message when adding a route

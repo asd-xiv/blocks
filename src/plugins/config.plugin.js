@@ -9,10 +9,18 @@ module.exports = {
 
   create: () => {
     let settings = {
+      PORT: 8080,
       MICRO_VERSION: pkg.version,
       ENV: process.env.NODE_ENV,
-      CORS_ORIGIN: null,
-      CORS_METHODS: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+      CORS_ORIGIN: process.env.CORS_ORIGIN || null,
+      CORS_METHODS: process.env.CORS_METHODS || [
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE",
+        "OPTIONS",
+      ],
     }
 
     return {

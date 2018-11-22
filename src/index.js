@@ -56,9 +56,6 @@ const block = ({
 
     //
     Plugins.Config.add({
-      CORS_ORIGIN: null,
-      CORS_METHODS: "GET,HEAD,PUT,PATCH,POST,DELETE",
-      APP_PORT: 8080,
       ...settings,
       STARTUP_TIME: new Date(),
     })

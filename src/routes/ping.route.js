@@ -37,6 +37,6 @@ module.exports = {
     ping: "pong",
     aliveFor: elapsedTime(plugins.Config.get("STARTUP_TIME"))(new Date()),
     v: plugins.Config.get("MICRO_VERSION"),
-    v2: plugins.Config.get("APP_VERSION") || "",
+    v2: plugins.Config.get("VERSION") || "",
   }),
 }
