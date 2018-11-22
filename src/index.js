@@ -20,7 +20,7 @@ const createMiddlewarePipe = middleware => {
   return app
 }
 
-const block = async ({
+const block = ({
   settings = {},
   folders,
   plugins,
