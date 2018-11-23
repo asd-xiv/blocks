@@ -6,9 +6,8 @@ const { block } = require("../../src")
 
 module.exports = block({
   settings: {
-    APP_VERSION: 1,
-    APP_PORT: 3002,
-    CORS_ORIGIN: null,
+    VERSION: 1,
+    PORT: 3002,
   },
   folders: path.resolve("./src"),
 }).then(({ Plugins: { Config }, middlewarePipeline }) =>
@@ -16,8 +15,8 @@ module.exports = block({
     .createServer(middlewarePipeline)
     .on("close", () => {})
     .on("error", error => debug(error))
-    .listen(Config.get("APP_PORT"), "localhost", () => {
-      debug(`### Started server on port ${Config.get("APP_PORT")}`)
+    .listen(Config.get("PORT"), "localhost", () => {
+      debug(`### Started server on port ${Config.get("PORT")}`)
     })
 )
 
