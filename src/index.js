@@ -43,7 +43,7 @@ const block = ({
     pluginus({
       folders,
       files: [path.resolve(__dirname, "routes", "ping.route.js"), routes],
-      handleName: fileName => fileName.replace(".route.js", ""),
+      name: fileName => fileName.replace(".route.js", ""),
     }),
   ]).then(([Plugins, Routes]) => {
     // add user defined routes to the Router plugin
