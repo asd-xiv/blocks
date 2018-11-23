@@ -30,6 +30,7 @@ const block = ({
   Promise.all([
     // find and initialize plugins
     pluginus({
+      seed: settings,
       folders,
       files: [
         path.resolve(__dirname, "plugins", "config.plugin.js"),
@@ -56,7 +57,6 @@ const block = ({
 
     //
     Plugins.Config.add({
-      ...settings,
       STARTUP_TIME: new Date(),
     })
 

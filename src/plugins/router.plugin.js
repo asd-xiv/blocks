@@ -12,9 +12,7 @@ const InputValidationError = require("../errors/input.error")
 const AuthorizationError = require("../errors/authorization.error")
 
 module.exports = {
-  depend: [],
-
-  create: () => {
+  create: () => () => {
     let routes = []
 
     return {

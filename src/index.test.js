@@ -7,8 +7,8 @@ const { block } = require(".")
 test("blocks", t =>
   block({
     settings: {
-      APP_VERSION: 1,
-      APP_PORT: 3002,
+      VERSION: 1,
+      PORT: 3002,
     },
     folders: path.resolve("./src"),
   }).then(({ Plugins, middlewarePipeline }) => {
@@ -30,11 +30,7 @@ test("blocks", t =>
       "Middleware loaded (whithout cors)"
     )
 
-    t.equals(
-      Plugins.Config.get("APP_PORT"),
-      3002,
-      "Pass custom setting APP_PORT"
-    )
+    t.equals(Plugins.Config.get("PORT"), 3002, "Pass custom setting PORT")
 
     t.end()
 
