@@ -62,7 +62,7 @@ module.exports = {
        *
        * @return {undefined}
        */
-      add: ({ method, path, schema, isAllowed, action }) => {
+      add: ({ method, path, schema, ...rest }) => {
         const keys = []
 
         debug(`Add route: ${method}:${path}`)
@@ -71,8 +71,7 @@ module.exports = {
           method,
           path,
           schema,
-          isAllowed,
-          action,
+          ...rest,
           pathParamsKeys: keys,
           pathRegExp: pathToRegexp(path, keys),
           validate: ajv.compile(schema),
