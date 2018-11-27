@@ -11,7 +11,7 @@
   - [Default plugins](#default-plugins)
 - [Develop](#develop)
 - [Changelog](#changelog)
-  - [0.3.0 - 23 November 2018](#030---23-november-2018)
+  - [0.3.1 - 27 November 2018](#031---27-november-2018)
 
 <!-- /MarkdownTOC -->
 
@@ -73,9 +73,8 @@ npm run tdd
 
 History of all changes in [CHANGELOG.md](/CHANGELOG.md)
 
-### 0.3.0 - 23 November 2018
+### 0.3.1 - 27 November 2018
 
 #### Change
 
-- Add debug message when adding a route
-- Update pluginus, send settings as seed to plugin create
+- Allow custom properties on routes
