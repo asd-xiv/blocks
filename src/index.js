@@ -25,7 +25,7 @@ const block = ({
   folders,
   plugins,
   routes,
-  middleware: { beforeRoute = [], afterRoute = [] } = {},
+  middleware: { beforeRoute = [], afterRoute = [], afterError = [] } = {},
 }) =>
   Promise.all([
     // find and initialize plugins
@@ -76,6 +76,7 @@ const block = ({
         require("./middleware/res-route"),
         ...afterRoute,
         require("./middleware/res-error"),
+        ...afterError,
         require("./middleware/res-goodbye"),
       ]),
 
