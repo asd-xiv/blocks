@@ -11,7 +11,7 @@
   - [Default plugins](#default-plugins)
 - [Develop](#develop)
 - [Changelog](#changelog)
-  - [0.3.1 - 27 November 2018](#031---27-november-2018)
+  - [0.4.0 - 28 November 2018](#040---28-november-2018)
 
 <!-- /MarkdownTOC -->
 
@@ -73,8 +73,8 @@ npm run tdd
 
 History of all changes in [CHANGELOG.md](/CHANGELOG.md)
 
-### 0.3.1 - 27 November 2018
+### 0.4.0 - 28 November 2018
 
-#### Change
+#### Add
 
-- Allow custom properties on routes
+- Allow setting middleware after an error occurs

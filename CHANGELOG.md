@@ -9,9 +9,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.4.0] - 28 November 2018
+
+### Add 
+
+- Allow setting middleware after an error occurs
+
 ## [0.3.1] - 27 November 2018
 
-#### Change
+### Change
 
 - Allow custom properties on routes
 
