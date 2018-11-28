@@ -11,7 +11,7 @@
   - [Default plugins](#default-plugins)
 - [Develop](#develop)
 - [Changelog](#changelog)
-  - [0.4.0 - 28 November 2018](#040---28-november-2018)
+  - [0.4.1 - 28 November 2018](#041---28-november-2018)
 
 <!-- /MarkdownTOC -->
 
@@ -73,8 +73,8 @@ npm run tdd
 
 History of all changes in [CHANGELOG.md](/CHANGELOG.md)
 
-### 0.4.0 - 28 November 2018
+### 0.4.1 - 28 November 2018
 
-#### Add
+#### Change
 
-- Allow setting middleware after an error occurs
+- Pass the error object to the next middleware
