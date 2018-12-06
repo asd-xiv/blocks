@@ -67,7 +67,7 @@ const block = ({
       )([
         require("./middleware/req-bootstrap"),
         ...(is(Plugins.Config.get("CORS_ORIGIN"))
-          ? require("./middleware/req-cors")
+          ? [require("./middleware/req-cors")]
           : []),
         require("./middleware/req-query"),
         require("./middleware/req-body"),
@@ -77,6 +77,7 @@ const block = ({
         ...afterRoute,
         require("./middleware/res-error"),
         ...afterError,
+        require("./middleware/res-goodbye-error"),
         require("./middleware/res-goodbye"),
       ]),
 

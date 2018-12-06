@@ -8,6 +8,12 @@ module.exports = block({
   settings: {
     VERSION: 1,
     PORT: 3002,
+    CORS_ORIGIN: [
+      "http://leeruniek.localhost:3000",
+      "https://stage.leeruniek.nl",
+      "https://portal.leeruniek.nl",
+    ],
+    CORS_METHODS: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   },
   folders: path.resolve("./src"),
 }).then(({ Plugins: { Config }, middlewarePipeline }) =>
