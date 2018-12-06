@@ -26,7 +26,7 @@ test("blocks", t =>
 
     t.equals(
       count(middlewarePipeline.stack),
-      7,
+      8,
       "Middleware loaded (whithout cors)"
     )
 
