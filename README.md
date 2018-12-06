@@ -11,7 +11,7 @@
   - [Default plugins](#default-plugins)
 - [Develop](#develop)
 - [Changelog](#changelog)
-  - [0.4.1 - 28 November 2018](#041---28-november-2018)
+  - [0.4.2 - 6 December 2018](#042---6-december-2018)
 
 <!-- /MarkdownTOC -->
 
@@ -73,8 +73,9 @@ npm run tdd
 
 History of all changes in [CHANGELOG.md](/CHANGELOG.md)
 
-### 0.4.1 - 28 November 2018
+### 0.4.2 - 6 December 2018
 
 #### Change
 
-- Pass the error object to the next middleware
+- Fix bug where CORS middlware was not loaded properly
+- Fix bug where having a single error middleware and an error happen the response would not get setup as json
