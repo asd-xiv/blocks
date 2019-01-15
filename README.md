@@ -73,9 +73,8 @@ npm run tdd
 
 History of all changes in [CHANGELOG.md](/CHANGELOG.md)
 
-### 0.4.2 - 6 December 2018
+### 0.4.3 - 15 January 2019
 
 #### Change
 
-- Fix bug where CORS middlware was not loaded properly
-- Fix bug where having a single error middleware and an error happen the response would not get setup as json
+- Update packages
