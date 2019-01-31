@@ -14,19 +14,19 @@ test("blocks", t =>
   }).then(({ Plugins, middlewarePipeline }) => {
     t.deepEquals(
       Object.keys(Plugins),
-      ["Router", "Config"],
+      ["Prometheus", "Router", "Config"],
       "Application loaded with 2 plugins initialized"
     )
 
     t.equals(
       Plugins.Router.count(),
-      1,
-      "Router plugin loaded /ping default route"
+      2,
+      "Router plugin loaded /ping and /metrics default routes"
     )
 
     t.equals(
       count(middlewarePipeline.stack),
-      8,
+      9,
       "Middleware loaded (whithout cors)"
     )
 

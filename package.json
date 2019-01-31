@@ -39,7 +39,8 @@
     "cors": "2.8.5",
     "cuid": "2.1.4",
     "debug": "4.1.1",
-    "path-to-regexp": "3.0.0"
+    "path-to-regexp": "3.0.0",
+    "prom-client": "11.2.1"
   },
   "devDependencies": {
     "@asd14/eslint-config": "4.0.2",

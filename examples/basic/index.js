@@ -17,13 +17,9 @@ module.exports = block({
   },
   folders: path.resolve("./src"),
 }).then(({ Plugins: { Config }, middlewarePipeline }) =>
-  http
-    .createServer(middlewarePipeline)
-    .on("close", () => {})
-    .on("error", error => debug(error))
-    .listen(Config.get("PORT"), "localhost", () => {
-      debug(`### Started server on port ${Config.get("PORT")}`)
-    })
+  http.createServer(middlewarePipeline).listen(Config.get("PORT"), () => {
+    debug(`### Started server on port ${Config.get("PORT")}`)
+  })
 )
 
 /*

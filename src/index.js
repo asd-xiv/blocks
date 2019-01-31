@@ -35,6 +35,7 @@ const block = ({
       files: [
         path.resolve(__dirname, "plugins", "config.plugin.js"),
         path.resolve(__dirname, "plugins", "router.plugin.js"),
+        path.resolve(__dirname, "plugins", "prometheus.plugin.js"),
         plugins,
       ],
     }),
@@ -42,7 +43,11 @@ const block = ({
     // find and initialize routes
     pluginus({
       folders,
-      files: [path.resolve(__dirname, "routes", "ping.route.js"), routes],
+      files: [
+        path.resolve(__dirname, "routes", "ping.route.js"),
+        path.resolve(__dirname, "routes", "metrics.route.js"),
+        routes,
+      ],
       name: fileName => fileName.replace(".route.js", ""),
     }),
   ]).then(([Plugins, Routes]) => {
@@ -75,6 +80,7 @@ const block = ({
         ...beforeRoute,
         require("./middleware/res-route"),
         ...afterRoute,
+        require("./middleware/res-metrics"),
         require("./middleware/res-error"),
         ...afterError,
         require("./middleware/res-goodbye-error"),
