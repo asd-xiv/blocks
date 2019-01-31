@@ -73,8 +73,8 @@ npm run tdd
 
 History of all changes in [CHANGELOG.md](/CHANGELOG.md)
 
-### 0.4.3 - 15 January 2019
+### 0.5 - 31 January 2019
 
-#### Change
+#### Add
 
-- Update packages
+- Add Prometheus metrics support via `/metrics` 
