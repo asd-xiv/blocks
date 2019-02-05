@@ -4,16 +4,18 @@
 
 > A Node.js API framework
 
-<!-- MarkdownTOC levels="1,2,3" autolink="true" indent="  " -->
 
-- [Install](#install)
-- [Use](#use)
-  - [Default plugins](#default-plugins)
-- [Develop](#develop)
-- [Changelog](#changelog)
-  - [0.4.2 - 6 December 2018](#042---6-december-2018)
+<!-- vim-markdown-toc GFM -->
 
-<!-- /MarkdownTOC -->
+* [Install](#install)
+* [Use](#use)
+  * [Default plugins](#default-plugins)
+* [Develop](#develop)
+* [Changelog](#changelog)
+  * [0.5.1 - 5 February 2019](#051---5-february-2019)
+    * [Change](#change)
+
+<!-- vim-markdown-toc -->
 
 ## Install
 
@@ -73,8 +75,8 @@ npm run tdd
 
 History of all changes in [CHANGELOG.md](/CHANGELOG.md)
 
-### 0.5 - 31 January 2019
+### 0.5.1 - 5 February 2019
 
-#### Add
+#### Change
 
-- Add Prometheus metrics support via `/metrics` 
+- `/metrics` has no schema restrictions on headers

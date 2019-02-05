@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.5.1] - 5 February 2019
+
+### Change
+
+- `/metrics` has no schema restrictions on headers
 ## [0.5] - 31 January 2019
 
 ### Add
@@ -68,8 +73,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 First
 
-[Unreleased]: https://github.com/leeruniek/blocks/compare/v0.5...HEAD
+[Unreleased]: https://github.com/leeruniek/blocks/compare/v0.5.1...HEAD
 
+[0.5.1]: https://github.com/leeruniek/blocks/compare/v0.5.0...v0.5.1
 [0.5]: https://github.com/leeruniek/blocks/compare/v0.4.3...v0.5
 [0.4.3]: https://github.com/leeruniek/blocks/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/leeruniek/blocks/compare/v0.4.1...v0.4.2
