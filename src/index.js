@@ -30,6 +30,8 @@ const block = ({
 }) => {
   const props = {
     METRICS: true,
+    METRICS_NAMESPACE: "blocks",
+    METRICS_WITH_DEFAULT: false,
     PORT: 8080,
     MICRO_VERSION: pkg.version,
     ENV: "development",

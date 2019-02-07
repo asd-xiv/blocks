@@ -2,19 +2,21 @@ const debug = require("debug")("Blocks:PrometheusPlugin")
 const Prometheus = require("prom-client")
 
 module.exports = {
-  depend: [],
+  depend: ["Config"],
 
-  create: () => () => {
-    // Prometheus.collectDefaultMetrics()
+  create: () => Config => {
+    if (Config.get("METRICS_WITH_DEFAULT") === true) {
+      Prometheus.collectDefaultMetrics()
+    }
 
     const RequestCounter = new Prometheus.Counter({
-      name: `requests__count`,
+      name: `${Config.get("METRICS_NAMESPACE")}__requests_count`,
       help: "Number of requests",
       labelNames: ["method", "route", "status"],
     })
 
     const DurationHistogram = new Prometheus.Histogram({
-      name: `requests__duration`,
+      name: `${Config.get("METRICS_NAMESPACE")}__requests_duration`,
       help: "Duration histogram of http responses (ms)",
       buckets: [20, 40, 60, 100, 160, 260, 420],
     })
