@@ -16,8 +16,7 @@ module.exports = {
 
     const DurationHistogram = new Prometheus.Histogram({
       name: `${Config.get("METRICS_NAMESPACE")}__request_buckets_milliseconds`,
-      help:
-        "request duration buckets in milliseconds",
+      help: "request duration buckets in milliseconds",
       labelNames: ["method", "route", "status"],
       buckets: [20, 40, 60, 100, 160, 260, 420],
     })
