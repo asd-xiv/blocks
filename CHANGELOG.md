@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.5.2] - 7 February 2019
+
+### Change
+
+- Make Prometheus tracking optional
+
 ## [0.5.1] - 5 February 2019
 
 ### Change

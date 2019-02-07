@@ -12,7 +12,7 @@
   * [Default plugins](#default-plugins)
 * [Develop](#develop)
 * [Changelog](#changelog)
-  * [0.5.1 - 5 February 2019](#051---5-february-2019)
+  * [0.5.2 - 7 February 2019](#052---7-february-2019)
     * [Change](#change)
 
 <!-- vim-markdown-toc -->
@@ -75,8 +75,8 @@ npm run tdd
 
 History of all changes in [CHANGELOG.md](/CHANGELOG.md)
 
-### 0.5.1 - 5 February 2019
+### 0.5.2 - 7 February 2019
 
 #### Change
 
-- `/metrics` has no schema restrictions on headers
+- Make Prometheus tracking optional 
