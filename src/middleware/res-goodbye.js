@@ -7,7 +7,8 @@ module.exports = ({ Config, Prometheus }) => (req, res) => {
   const payloadType = typeof res.ctx.payload
   const endAt = process.hrtime(req.ctx.startAt)
 
-  const body = JSON.stringify(res.ctx.payload || {})
+  const body =
+    payloadType === "object" ? JSON.stringify(res.ctx.payload) : res.ctx.payload
   const contentType =
     payloadType === "object"
       ? "application/json; charset=utf-8"
