@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.5.5] - 7 February 2019
+
+### Change
+
+- Add `NAMESPACE` and `WITH_DEFAULT` metrics options
+
 ## [0.5.4] - 7 February 2019
 
 ### Change
@@ -92,8 +98,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 First
 
-[Unreleased]: https://github.com/leeruniek/blocks/compare/v0.5.4...HEAD
+[Unreleased]: https://github.com/leeruniek/blocks/compare/v0.5.5...HEAD
 
+[0.5.5]: https://github.com/leeruniek/blocks/compare/v0.5.4...v0.5.5
 [0.5.4]: https://github.com/leeruniek/blocks/compare/v0.5.3...v0.5.4
 [0.5.3]: https://github.com/leeruniek/blocks/compare/v0.5.2...v0.5.3
 [0.5.2]: https://github.com/leeruniek/blocks/compare/v0.5.1...v0.5.2
