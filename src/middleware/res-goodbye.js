@@ -1,7 +1,7 @@
 const debug = require("debug")("Blocks:GoodbyeMiddleware")
 const { forEach } = require("@asd14/m")
 
-module.exports = () => (req, res) => {
+module.exports = ({ Config, Prometheus }) => (req, res) => {
   debug(`${req.method}:${req.url} responding with ${res.ctx.status}`)
 
   const payloadType = typeof res.ctx.payload
@@ -44,6 +44,14 @@ module.exports = () => (req, res) => {
     ["Content-Length", Buffer.byteLength(body, "utf8")],
   ])
 
+  if (Config.get("METRICS") === true) {
+    Prometheus.measure({
+      method: req.method,
+      route: req.ctx.pathname,
+      status: res.ctx.status,
+      duration: endAt[0] * 1000 + endAt[1] / 1000000,
+    })
+  }
   res.writeHead(res.ctx.status)
   res.end(body, "utf8")
 }

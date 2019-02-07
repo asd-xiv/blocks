@@ -47,9 +47,7 @@ const block = ({
       files: [
         path.resolve(__dirname, "plugins", "config.plugin.js"),
         path.resolve(__dirname, "plugins", "router.plugin.js"),
-        ...(props.METRICS
-          ? [path.resolve(__dirname, "plugins", "prometheus.plugin.js")]
-          : []),
+        path.resolve(__dirname, "plugins", "prometheus.plugin.js"),
         plugins,
       ],
     }),
@@ -89,7 +87,6 @@ const block = ({
         ...beforeRoute,
         require("./middleware/res-route"),
         ...afterRoute,
-        ...(props.METRICS ? [require("./middleware/res-metrics")] : []),
         require("./middleware/res-error"),
         ...afterError,
         require("./middleware/res-goodbye-error"),
