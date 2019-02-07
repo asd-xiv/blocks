@@ -12,7 +12,7 @@
   * [Default plugins](#default-plugins)
 * [Develop](#develop)
 * [Changelog](#changelog)
-  * [0.5.3 - 7 February 2019](#053---7-february-2019)
+  * [0.5.4 - 7 February 2019](#054---7-february-2019)
     * [Change](#change)
 
 <!-- vim-markdown-toc -->
@@ -75,8 +75,8 @@ npm run tdd
 
 History of all changes in [CHANGELOG.md](/CHANGELOG.md)
 
-### 0.5.3 - 7 February 2019
+### 0.5.4 - 7 February 2019
 
 #### Change
 
-- Move tracking in `goodbye` middleware to also catch error responses
+- JSON stringify based on route response type 
