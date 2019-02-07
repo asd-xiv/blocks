@@ -6,6 +6,7 @@ const { block } = require("../../src")
 
 module.exports = block({
   settings: {
+    METRICS: false,
     VERSION: 1,
     PORT: 3002,
     CORS_ORIGIN: [

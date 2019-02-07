@@ -5,6 +5,7 @@ const path = require("path")
 const pluginus = require("@asd14/pluginus")
 const { is, pipe, map, forEach } = require("@asd14/m")
 
+const pkg = require("../package.json")
 const BaseError = require("./errors/base.error")
 const NotFoundError = require("./errors/not-found.error")
 const InputError = require("./errors/input.error")
@@ -26,16 +27,29 @@ const block = ({
   plugins,
   routes,
   middleware: { beforeRoute = [], afterRoute = [], afterError = [] } = {},
-}) =>
-  Promise.all([
+}) => {
+  const props = {
+    METRICS: true,
+    PORT: 8080,
+    MICRO_VERSION: pkg.version,
+    ENV: "development",
+    CORS_ORIGIN: null,
+    CORS_METHODS: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    STARTUP_TIME: new Date(),
+    ...settings,
+  }
+
+  return Promise.all([
     // find and initialize plugins
     pluginus({
-      seed: settings,
+      seed: props,
       folders,
       files: [
         path.resolve(__dirname, "plugins", "config.plugin.js"),
         path.resolve(__dirname, "plugins", "router.plugin.js"),
-        path.resolve(__dirname, "plugins", "prometheus.plugin.js"),
+        ...(props.METRICS
+          ? [path.resolve(__dirname, "plugins", "prometheus.plugin.js")]
+          : []),
         plugins,
       ],
     }),
@@ -45,7 +59,9 @@ const block = ({
       folders,
       files: [
         path.resolve(__dirname, "routes", "ping.route.js"),
-        path.resolve(__dirname, "routes", "metrics.route.js"),
+        ...(props.METRICS
+          ? [path.resolve(__dirname, "routes", "metrics.route.js")]
+          : []),
         routes,
       ],
       name: fileName => fileName.replace(".route.js", ""),
@@ -60,27 +76,20 @@ const block = ({
       })
     })(Object.values(Routes))
 
-    //
-    Plugins.Config.add({
-      STARTUP_TIME: new Date(),
-    })
-
     return {
       middlewarePipeline: pipe(
         map(middleware => middleware(Plugins)),
         createMiddlewarePipe
       )([
         require("./middleware/req-bootstrap"),
-        ...(is(Plugins.Config.get("CORS_ORIGIN"))
-          ? [require("./middleware/req-cors")]
-          : []),
+        ...(is(props.CORS_ORIGIN) ? [require("./middleware/req-cors")] : []),
         require("./middleware/req-query"),
         require("./middleware/req-body"),
         require("./middleware/req-route-exists"),
         ...beforeRoute,
         require("./middleware/res-route"),
         ...afterRoute,
-        require("./middleware/res-metrics"),
+        ...(props.METRICS ? [require("./middleware/res-metrics")] : []),
         require("./middleware/res-error"),
         ...afterError,
         require("./middleware/res-goodbye-error"),
@@ -90,6 +99,7 @@ const block = ({
       Plugins,
     }
   })
+}
 
 module.exports = {
   block,
