@@ -2,50 +2,62 @@
 
 # blocks
 
-> A Node.js API framework
+> Node.js API framework. You have a `request` and need to produce a `response`.
+
+![Request-Response cycle](docs/bin/req-res-cycle.svg "Request-Response cycle")
+
+--- 
 
 <!-- vim-markdown-toc GFM -->
 
-* [Install](#install)
-* [About](#about)
+* [Features](#features)
+* [Routes](#routes)
+  * [Add route](#add-route)
   * [Default routes](#default-routes)
-  * [Main libraries used](#main-libraries-used)
-  * [Defining a new route](#defining-a-new-route)
+    * [Alive](#alive)
+    * [Metrics](#metrics)
+* [Plugins](#plugins)
+  * [Add plugin](#add-plugin)
   * [Default plugins](#default-plugins)
-    * [Config](#config)
-    * [Prometheus](#prometheus)
+* [Install](#install)
 * [Todos CRUD example](#todos-crud-example)
+* [No support](#no-support)
 * [Develop](#develop)
 * [Changelog](#changelog)
   * [0.6 - March 2019](#06---march-2019)
     * [Add](#add)
     * [Change](#change)
 
-<!-- vim-markdown-too -->
+<!-- vim-markdown-toc -->
 
-## Install
+## Features
 
-```bash
-npm install @leeruniek/blocks
-```
+__Route input validation__ - [`ajv`](https://github.com/epoberezkin/ajv)
 
-## About
+> Pass request data (headers, body, query parameters, URL parameters) through custom JSON Schemas defined for each route. Make sure no unwanted data gets in, de-clutter the route logic and make the API behave more consistent.  
+If validation fails, an automatic `409 Conflict` response will be sent to the client.
 
-You have a `request` and need to produce a `response`. To achieve this tremendous task, Blocks will __(1)__ validate that the request is clean by running the headers, query, body and URL param data through a set of JSON schemas and __(2)__ check if the client doing the request is allowed access. Both things are configurable per route.
+__Route permission checking__
 
-There is build in support _query parsing_ and _CORS_.
+> Simple function outside of main route logic. If it returns false, an automatic `403 Forbidden` response will be sent to the client.
 
-![Request-Response cycle](docs/bin/req-res-cycle.svg "Request-Response cycle")
+__Query string parsing__ - [`qs`](https://github.com/ljharb/qs)
+
+> Parsed data will be available on the `request.ctx` object.
+
+__Cross-origin resource sharing__
+
+> Using [`cors`](https://github.com/expressjs/cors)
 
 ## Routes
 
-## Add route
+### Add route
 
-## Default routes
+### Default routes
 
-### `GET: /ping`
+#### Alive
 
-A status check endpoint to know when the API is alive.
+`GET: /ping` A status check endpoint to know when the API is alive.
 
 ```js
 {
@@ -57,21 +69,21 @@ A status check endpoint to know when the API is alive.
 }
 ```
 
-### `GET: /metrics`
+#### Metrics
 
-If server started with `METRICS: true`, a route will be exposed with Prometheus data waiting to be consumed.
+`GET: /metrics` If server started with `METRICS: true`, a route will be exposed with Prometheus data waiting to be consumed.
 
 ## Plugins
 
-### Config plugin
+### Add plugin
 
-### Prometheus plugin
+### Default plugins
 
-## Main libraries used
+## Install
 
-1. [`qs`](https://github.com/ljharb/qs) - Query parameter parsing
-1. [`ajv`](https://github.com/epoberezkin/ajv) - JSON Schema validation
-1. [`cors`](https://github.com/expressjs/cors) - Cross-origin resource sharing 
+```bash
+npm install @leeruniek/blocks
+```
 
 ## Todos CRUD example 
 
@@ -110,6 +122,11 @@ block({
     })
 )
 ```
+
+## No support
+
+1. JWT parsing. Add through custom middleware
+1. Database. Add through custom plugin
 
 ## Develop
 
