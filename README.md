@@ -21,60 +21,57 @@
     * [Add](#add)
     * [Change](#change)
 
-<!-- vim-markdown-toc -->
+<!-- vim-markdown-too -->
 
 ## Install
 
 ```bash
-npm i --save-exact @leeruniek/blocks
+npm install @leeruniek/blocks
 ```
 
 ## About
 
-You have a `request` and need to produce a `response`. To do this, Blocks will `(1)` validate that the request clean by running the request data through a set of JSON schemas and `(2)` check if the client doing the request is allowed access.
-Both things are configurable per route.
+You have a `request` and need to produce a `response`. To achieve this tremendous task, Blocks will __(1)__ validate that the request is clean by running the headers, query, body and URL param data through a set of JSON schemas and __(2)__ check if the client doing the request is allowed access. Both things are configurable per route.
 
 There is build in support _query parsing_ and _CORS_.
 
 ![Request-Response cycle](docs/bin/req-res-cycle.svg "Request-Response cycle")
 
-### Default routes
+## Routes
 
-`GET: /ping`
+## Add route
+
+## Default routes
+
+### `GET: /ping`
 
 A status check endpoint to know when the API is alive.
 
-```json
+```js
 {
   "ping": "pong",
   "aliveFor": {
-    "days": 2,
-    "hours": 1,
-    "minutes": 47,
-    "seconds": 46
+    "days": 2, "hours": 1, "minutes": 47, "seconds": 46
   },
-  "v": "0.5.6", // package.json version field
+  "version": "0.5.6", // package.json version 
 }
 ```
 
-`GET: /metrics`
+### `GET: /metrics`
 
-If server started with `METRICS: true` a route will be exposed with Prometheus data waiting to be consumed.
+If server started with `METRICS: true`, a route will be exposed with Prometheus data waiting to be consumed.
 
-### Main libraries used
+## Plugins
+
+### Config plugin
+
+### Prometheus plugin
+
+## Main libraries used
 
 1. [`qs`](https://github.com/ljharb/qs) - Query parameter parsing
 1. [`ajv`](https://github.com/epoberezkin/ajv) - JSON Schema validation
 1. [`cors`](https://github.com/expressjs/cors) - Cross-origin resource sharing 
-
-### Defining a new route
-
-
-### Default plugins
-
-#### Config
-
-#### Prometheus
 
 ## Todos CRUD example 
 
