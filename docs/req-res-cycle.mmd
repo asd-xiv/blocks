@@ -1,0 +1,13 @@
+sequenceDiagram
+    participant Request
+    participant JSONSchemaValidator
+    participant PermissionChecker
+    participant RouteAction
+
+    Request ->> JSONSchemaValidator: Hello! I have data
+    JSONSchemaValidator -->> Request: 409: `drop_table_name` not allowed
+    JSONSchemaValidator ->> PermissionChecker: Data is valid
+    PermissionChecker -->> Request: 403: YOU SHALL NOT PASS!
+    PermissionChecker ->> RouteAction: Data allowed to move along
+    RouteAction ->> Request: I'll take that data and give you other data in return
+    Note right of RouteAction: All this so you can <br/> put a border and <br/> a shadow over it

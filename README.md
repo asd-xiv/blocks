@@ -9,6 +9,7 @@
 
 * [Install](#install)
 * [Use](#use)
+  * [Overview](#overview)
   * [Default plugins](#default-plugins)
 * [Develop](#develop)
 * [Changelog](#changelog)
@@ -24,6 +25,10 @@ npm i --save-exact @leeruniek/blocks
 ```
 
 ## Use
+
+### Overview
+
+![Request-Response cycle](docs/bin/req-res-cycle.svg "Request-Response cycle")
 
 ```javascript
 const http = require("http")
