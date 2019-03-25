@@ -11,17 +11,16 @@
 <!-- vim-markdown-toc GFM -->
 
 * [Features](#features)
+* [Install](#install)
+* [Basic example](#basic-example)
 * [Routes](#routes)
-  * [Add route](#add-route)
   * [Default routes](#default-routes)
-    * [Alive](#alive)
-    * [Metrics](#metrics)
+    * [Status check](#status-check)
+    * [Prometheus data](#prometheus-data)
+  * [Add route](#add-route)
 * [Plugins](#plugins)
   * [Add plugin](#add-plugin)
   * [Default plugins](#default-plugins)
-* [Install](#install)
-* [Todos CRUD example](#todos-crud-example)
-* [No support](#no-support)
 * [Develop](#develop)
 * [Changelog](#changelog)
   * [0.6 - March 2019](#06---march-2019)
@@ -39,7 +38,8 @@ If validation fails, an automatic `409 Conflict` response will be sent to the cl
 
 __Route permission checking__
 
-> Simple function outside of main route logic. If it returns false, an automatic `403 Forbidden` response will be sent to the client.
+> Simple function outside of main route logic.  
+If it returns false, an automatic `403 Forbidden` response will be sent to the client.
 
 __Query string parsing__ - [`qs`](https://github.com/ljharb/qs)
 
@@ -49,43 +49,13 @@ __Cross-origin resource sharing__
 
 > Using [`cors`](https://github.com/expressjs/cors)
 
-## Routes
-
-### Add route
-
-### Default routes
-
-#### Alive
-
-`GET: /ping` A status check endpoint to know when the API is alive.
-
-```js
-{
-  "ping": "pong",
-  "aliveFor": {
-    "days": 2, "hours": 1, "minutes": 47, "seconds": 46
-  },
-  "version": "0.5.6", // package.json version 
-}
-```
-
-#### Metrics
-
-`GET: /metrics` If server started with `METRICS: true`, a route will be exposed with Prometheus data waiting to be consumed.
-
-## Plugins
-
-### Add plugin
-
-### Default plugins
-
 ## Install
 
 ```bash
 npm install @leeruniek/blocks
 ```
 
-## Todos CRUD example 
+## Basic example 
 
 `src/index.js`
 
@@ -109,10 +79,10 @@ block({
   // where plugins and routes are
   folders: path.resolve("./src"),
 
-  // RegExp to match & load plugin files 
+  // RegExp to match plugin files 
   // plugins: /\.plugins\.js$/,
 
-  // RegExp to match & load routes files 
+  // RegExp to match routes files 
   // routes: /\.routes\.js$/,
 }).then(({ Plugins: { Config }, middlewarePipeline }) =>
   http
@@ -123,10 +93,89 @@ block({
 )
 ```
 
-## No support
+## Routes
 
-1. JWT parsing. Add through custom middleware
-1. Database. Add through custom plugin
+### Default routes
+
+#### Status check
+
+`GET: /ping` 
+```js
+{
+  "ping": "pong",
+  "aliveFor": {
+    "days": 2, "hours": 1, "minutes": 47, "seconds": 46
+  },
+  "version": "0.5.6", // package.json version 
+}
+```
+
+#### Prometheus data
+
+`GET: /metrics` If server started with `METRICS: true`. 
+
+### Add route
+
+`src/something.route.js`
+
+```js
+module.exports = {
+  method: "GET",
+  path: "/something",
+
+  // JSON schema object for validating request data 
+  schema: require("./something.schema"),
+
+  // Permission checking. If allowed will continue to action, otherwise return 403.
+  isAllowed: (/* plugins */) => async ({ method, ctx }) => {
+    console.log(`${method}:${ctx.pathname} - isAllowed`)
+
+    return true
+  },
+
+  // Route logic
+  action: (/* plugins */) => async (/* req */) => {
+  
+    return {
+      message: "This is something else!"
+    }
+  },
+}
+```
+
+`src/something.schema.js`
+
+```js
+module.exports = {
+  type: "object",
+  properties: {
+    headers: {
+      type: "object",
+    },
+
+    params: {
+      type: "object",
+      additionalProperties: false,
+    },
+
+    query: {
+      type: "object",
+      additionalProperties: false,
+    },
+
+    body: {
+      type: "object",
+      additionalProperties: false,
+    },
+  },
+}
+```
+
+## Plugins
+
+### Add plugin
+
+### Default plugins
 
 ## Develop
 
