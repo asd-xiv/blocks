@@ -19,27 +19,31 @@
     * [Prometheus data](#prometheus-data)
   * [Add route](#add-route)
 * [Plugins](#plugins)
-  * [Add plugin](#add-plugin)
   * [Default plugins](#default-plugins)
+    * [Config](#config)
+  * [Add plugin](#add-plugin)
 * [Develop](#develop)
 * [Changelog](#changelog)
   * [0.6 - March 2019](#06---march-2019)
     * [Add](#add)
-    * [Change](#change)
 
 <!-- vim-markdown-toc -->
 
 ## Features
 
-__Route input validation__ - [`ajv`](https://github.com/epoberezkin/ajv)
+__Validate input__ - [`ajv`](https://github.com/epoberezkin/ajv)
 
 > Pass request data (headers, body, query parameters, URL parameters) through custom JSON Schemas defined for each route. Make sure no unwanted data gets in, de-clutter the route logic and make the API behave more consistent.  
 If validation fails, an automatic `409 Conflict` response will be sent to the client.
 
-__Route permission checking__
+__Check permissions__
 
 > Simple function outside of main route logic.  
 If it returns false, an automatic `403 Forbidden` response will be sent to the client.
+
+__Async support__
+
+> Route actions, middleware and plugins support `async/await`.
 
 __Query string parsing__ - [`qs`](https://github.com/ljharb/qs)
 
@@ -123,19 +127,18 @@ module.exports = {
   method: "GET",
   path: "/something",
 
-  // JSON schema object for validating request data 
+  // Data is valid then continue to permissionn check, otherwise return 409
   schema: require("./something.schema"),
 
-  // Permission checking. If allowed will continue to action, otherwise return 403.
+  // Is allowed then continue to action, otherwise return 403
   isAllowed: (/* plugins */) => async ({ method, ctx }) => {
     console.log(`${method}:${ctx.pathname} - isAllowed`)
 
     return true
   },
 
-  // Route logic
+  // Returned value will be set in `res` body 
   action: (/* plugins */) => async (/* req */) => {
-  
     return {
       message: "This is something else!"
     }
@@ -171,11 +174,40 @@ module.exports = {
 }
 ```
 
+See [`ajv`](https://github.com/epoberezkin/ajv) and [JSON Schema docs](https://json-schema.org) for more on data validation.
+
 ## Plugins
 
-### Add plugin
-
 ### Default plugins
+
+#### Config
+
+Getter over the settings object when instantiating `blocks`. Accessible in route's `isAllowed` and `action` methods and when defining custom middleware.
+
+While you can use `process.env` to access CI variables globally, use this opportunity to write a few words about each.
+
+`src/index.js`
+```js
+blocks({
+  settings: {
+    // (CI) Key to decrypt incoming json-web-tokens. See `jwt.middle.js` for details.
+    JWT_SECRET: process.env.JWT_SECRET ?? "CHANGE ME!"
+    ...
+  },
+  ...
+})
+```
+
+`src/middleware/jwt.middle.js`
+```js
+module.exports = ({ Config }) => (req, res, next) => {
+  ...
+  jwt.verify(req.headers.authorization, Config.get("JWT_SECRET"))
+  ...
+}
+```
+
+### Add plugin
 
 ## Develop
 
@@ -199,7 +231,5 @@ History of all changes in [CHANGELOG.md](/CHANGELOG.md)
 
 #### Add
 
-- Diagrams and word describing how thing work
-
-#### Change
+- Diagrams and words describing how things work
 
