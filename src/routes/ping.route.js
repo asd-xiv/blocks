@@ -1,9 +1,9 @@
 const debug = require("debug")("Blocks:PingRoute")
 const { elapsedTime } = require("@asd14/m")
+
 /**
  * GET: /ping
  */
-
 module.exports = {
   method: "GET",
   path: "/ping",

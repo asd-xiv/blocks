@@ -1,4 +1,7 @@
 /**
+ * Some common patterns.
+ * See github.com/epoberezkin/ajv and json-schema.org for more.
+ *
  * foo: {
  *   type: "string",
  *   pattern: "^[a-z0-9-]+$",
