@@ -43,7 +43,7 @@ If it returns false, an automatic `403 Forbidden` response will be sent to the c
 
 __Async support__
 
-> Route actions, middleware and plugins support `async/await`.
+> Route actions, middleware and plugins have `async/await` support.
 
 __Query string parsing__ - [`qs`](https://github.com/ljharb/qs)
 
@@ -190,7 +190,7 @@ While you can use `process.env` to access CI variables globally, use this opport
 ```js
 blocks({
   settings: {
-    // (CI) Key to decrypt incoming json-web-tokens. See `jwt.middle.js` for details.
+    // (CI) Key to verify incoming json-web-tokens. See `jwt.middle.js` for details.
     JWT_SECRET: process.env.JWT_SECRET ?? "CHANGE ME!"
     ...
   },
@@ -198,7 +198,7 @@ blocks({
 })
 ```
 
-`src/middleware/jwt.middle.js`
+`src/middleware/req__jwt.js`
 ```js
 module.exports = ({ Config }) => (req, res, next) => {
   ...
@@ -208,6 +208,42 @@ module.exports = ({ Config }) => (req, res, next) => {
 ```
 
 ### Add plugin
+
+A plugin consists of a constructor function and a list of other plugins that is dependent on.
+
+Whatever the `create` function returns will be considered as the plugin's content and is what will be exposed to the routes, middleware and other plugins.
+
+`src/plugins/database.plugin.js`
+
+```js
+const Sequelize = require("sequelize")
+
+module.exports = {
+  // Array of plugins to wait for before running `create`
+  depend: ["Config"],
+
+  /** 
+   * Constructor function, whatever returns will be considered as the plugin's
+   * content and is what will be exposed to the routes, middleware and other 
+   * plugins.
+   *
+   * @param  {Object}  props  Initial settings object passed to the `blocks`
+   *                          constructor
+   *
+   * @returns  {any|Promise<any>}  Plugin content. Will resolve before continuing.
+   */
+  create: (/* props */) => Config => {
+    console.log("Checking DB connection")
+    
+    // Database connection, model loading etc
+    ...
+    return {
+      Todos: ...,
+      Comments: ...,
+    }
+  }
+}
+```
 
 ## Develop
 
