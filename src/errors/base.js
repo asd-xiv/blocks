@@ -1,7 +1,4 @@
-/**
- * @class BaseError
- */
-module.exports = class BaseError extends Error {
+export class BaseError extends Error {
   constructor(message, details = {}) {
     super(message)
 
