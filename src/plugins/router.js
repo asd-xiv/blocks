@@ -1,17 +1,18 @@
 const debug = require("debug")("Blocks:RouterPlugin")
 
-const pathToRegexp = require("path-to-regexp")
-const { count, push, reduce, find } = require("@asd14/m")
+import pathToRegexp from "path-to-regexp"
+import { count, push, reduce, find } from "@asd14/m"
+
 const ajv = require("ajv")({
   allErrors: true,
   coerceTypes: true,
   useDefaults: true,
 })
 
-const InputValidationError = require("../errors/input.error")
-const AuthorizationError = require("../errors/authorization.error")
+import { InputValidationError } from "../errors/input"
+import { AuthorizationError } from "../errors/authorization"
 
-module.exports = {
+export default {
   create: () => () => {
     let routes = []
 

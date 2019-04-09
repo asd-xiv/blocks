@@ -1,9 +1,10 @@
 /* eslint-disable no-sync */
 
 const debug = require("debug")("Blocks:ConfigPlugin")
-const { get, merge } = require("@asd14/m")
 
-module.exports = {
+import { get, merge } from "@asd14/m"
+
+export default {
   create: seed => () => {
     let settings = seed
 

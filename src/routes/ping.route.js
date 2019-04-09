@@ -1,9 +1,7 @@
 const debug = require("debug")("Blocks:PingRoute")
-const { elapsedTime } = require("@asd14/m")
 
-/**
- * GET: /ping
- */
+import { elapsedTime } from "@asd14/m"
+
 module.exports = {
   method: "GET",
   path: "/ping",
@@ -36,7 +34,6 @@ module.exports = {
   action: plugins => async () => ({
     ping: "pong",
     aliveFor: elapsedTime(plugins.Config.get("STARTUP_TIME"))(new Date()),
-    v: plugins.Config.get("MICRO_VERSION"),
-    v2: plugins.Config.get("VERSION") || "",
+    v: plugins.Config.get("VERSION"),
   }),
 }
