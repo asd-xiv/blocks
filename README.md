@@ -16,7 +16,6 @@
 * [Routes](#routes)
   * [Default routes](#default-routes)
     * [Status check](#status-check)
-    * [Prometheus data](#prometheus-data)
   * [Add route](#add-route)
 * [Plugins](#plugins)
   * [Default plugins](#default-plugins)
@@ -36,7 +35,7 @@ __Validate input__ - [`ajv`](https://github.com/epoberezkin/ajv)
 > Pass request data (headers, body, query parameters, URL parameters) through custom JSON Schemas defined for each route. Make sure no unwanted data gets in, de-clutter the route logic and make the API behave more consistent.  
 If validation fails, an automatic `409 Conflict` response will be sent to the client.
 
-__Check permissions__
+__Permissions__
 
 > Simple function outside of main route logic.  
 If it returns false, an automatic `403 Forbidden` response will be sent to the client.
@@ -45,18 +44,15 @@ __Async support__
 
 > Route actions, middleware and plugins have `async/await` support.
 
-__Query string parsing__ - [`qs`](https://github.com/ljharb/qs)
+Other:
 
-> Parsed data will be available on the `request.ctx` object.
-
-__Cross-origin resource sharing__
-
-> Using [`cors`](https://github.com/expressjs/cors)
+* Query string parsing - [`qs`](https://github.com/ljharb/qs)
+* Cross-origin resource sharing - [`cors`](https://github.com/expressjs/cors)
 
 ## Install
 
 ```bash
-npm install @leeruniek/blocks
+npm install @asd14/blocks
 ```
 
 ## Basic example 
@@ -65,29 +61,18 @@ npm install @leeruniek/blocks
 
 ```javascript
 const http = require("http")
-const path = require("path")
-const { block } = require("@leeruniek/blocks")
+const { block } = require("@asd14/blocks")
 
 block({
   // settings: {
-  //   METRICS: true,
-  //   METRICS_NAMESPACE: "blocks",
-  //   METRICS_WITH_DEFAULT: false,
   //   PORT: 8080,
-  //   MICRO_VERSION: pkg.version,
+  //   VERSION: pkg.version,
   //   ENV: "development",
   //   CORS_ORIGIN: null,
   //   CORS_METHODS: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   // },
-
-  // where plugins and routes are
-  folders: path.resolve("./src"),
-
-  // RegExp to match plugin files 
-  // plugins: /\.plugins\.js$/,
-
-  // RegExp to match routes files 
-  // routes: /\.routes\.js$/,
+  // plugins: [],
+  // routes: [],
 }).then(({ Plugins: { Config }, middlewarePipeline }) =>
   http
     .createServer(middlewarePipeline)
@@ -113,10 +98,6 @@ block({
   "version": "0.5.6", // package.json version 
 }
 ```
-
-#### Prometheus data
-
-`GET: /metrics` If server started with `METRICS: true`. 
 
 ### Add route
 
@@ -223,14 +204,13 @@ module.exports = {
   depend: ["Config"],
 
   /** 
-   * Constructor function, whatever returns will be considered as the plugin's
-   * content and is what will be exposed to the routes, middleware and other 
-   * plugins.
+   * Constructor, return value will be considered the plugin's content exposed
+   * to routes, middleware and other plugins.
    *
    * @param  {Object}  props  Initial settings object passed to the `blocks`
    *                          constructor
    *
-   * @returns  {any|Promise<any>}  Plugin content. Will resolve before continuing.
+   * @returns  {any|Promise<any>}  Plugin content
    */
   create: (/* props */) => Config => {
     console.log("Checking DB connection")
@@ -248,7 +228,7 @@ module.exports = {
 ## Develop
 
 ```bash
-git clone git@github.com:leeruniek/blocks.git && \
+git clone git@github.com:asd14/blocks.git && \
   cd blocks && \
   npm run setup
 
