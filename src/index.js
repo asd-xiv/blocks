@@ -1,15 +1,14 @@
 const debug = require("debug")("Blocks:Main")
 
-const connect = require("connect")
-const path = require("path")
-const pluginus = require("@asd14/pluginus")
-const { is, pipe, map, forEach } = require("@asd14/m")
+import connect from "connect"
+import path from "path"
+import { pluginus } from "@asd14/pluginus"
+import { is, pipe, map, forEach } from "@asd14/m"
 
-const pkg = require("../package.json")
-const BaseError = require("./errors/base.error")
-const NotFoundError = require("./errors/not-found.error")
-const InputError = require("./errors/input.error")
-const AuthorizationError = require("./errors/authorization.error")
+import { BaseError } from "./errors/base"
+import { NotFoundError } from "./errors/not-found"
+import { InputValidationError } from "./errors/input"
+import { AuthorizationError } from "./errors/authorization"
 
 const createMiddlewarePipe = middleware => {
   const app = connect()
@@ -23,17 +22,18 @@ const createMiddlewarePipe = middleware => {
 
 const block = ({
   settings = {},
-  folders,
-  plugins,
-  routes,
-  middleware: { beforeRoute = [], afterRoute = [], afterError = [] } = {},
-}) => {
+  plugins = [],
+  routes = [],
+  middleware: {
+    beforeRoute = [],
+    afterRoute = [],
+    afterError = [],
+    beforeSend = [],
+  } = {},
+} = {}) => {
   const props = {
-    METRICS: true,
-    METRICS_NAMESPACE: "blocks",
-    METRICS_WITH_DEFAULT: false,
+    NAME: "blocksAPI",
     PORT: 8080,
-    MICRO_VERSION: pkg.version,
     ENV: "development",
     CORS_ORIGIN: null,
     CORS_METHODS: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
@@ -41,44 +41,25 @@ const block = ({
     ...settings,
   }
 
-  return Promise.all([
-    // find and initialize plugins
-    pluginus({
-      seed: props,
-      folders,
-      files: [
-        path.resolve(__dirname, "plugins", "config.plugin.js"),
-        path.resolve(__dirname, "plugins", "router.plugin.js"),
-        path.resolve(__dirname, "plugins", "prometheus.plugin.js"),
-        plugins,
-      ],
-    }),
-
-    // find and initialize routes
-    pluginus({
-      folders,
-      files: [
-        path.resolve(__dirname, "routes", "ping.route.js"),
-        ...(props.METRICS
-          ? [path.resolve(__dirname, "routes", "metrics.route.js")]
-          : []),
-        routes,
-      ],
-      name: fileName => fileName.replace(".route.js", ""),
-    }),
-  ]).then(([Plugins, Routes]) => {
+  return pluginus({
+    props,
+  })([
+    path.resolve(__dirname, "plugins", "config.js"),
+    path.resolve(__dirname, "plugins", "router.js"),
+    ...plugins,
+  ]).then(ResolvedPlugins => {
     // add user defined routes to the Router plugin
     forEach(route => {
-      Plugins.Router.add({
+      ResolvedPlugins.Router.add({
         ...route,
-        isAllowed: route.isAllowed(Plugins),
-        action: route.action(Plugins),
+        isAllowed: route.isAllowed(ResolvedPlugins),
+        action: route.action(ResolvedPlugins),
       })
-    })(Object.values(Routes))
+    })([require("./routes/ping.route.js"), ...routes])
 
     return {
       middlewarePipeline: pipe(
-        map(middleware => middleware(Plugins)),
+        map(middleware => middleware(ResolvedPlugins)),
         createMiddlewarePipe
       )([
         require("./middleware/req-bootstrap"),
@@ -92,18 +73,19 @@ const block = ({
         require("./middleware/res-error"),
         ...afterError,
         require("./middleware/res-goodbye-error"),
+        ...beforeSend,
         require("./middleware/res-goodbye"),
       ]),
 
-      Plugins,
+      Plugins: ResolvedPlugins,
     }
   })
 }
 
-module.exports = {
+export {
   block,
   BaseError,
   AuthorizationError,
-  InputError,
+  InputValidationError,
   NotFoundError,
 }

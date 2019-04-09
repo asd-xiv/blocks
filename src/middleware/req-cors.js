@@ -1,5 +1,6 @@
 const debug = require("debug")("Blocks:CORSMiddleware")
-const cors = require("cors")
+
+import cors from "cors"
 
 module.exports = ({ Config }) =>
   cors({
