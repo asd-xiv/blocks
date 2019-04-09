@@ -63,6 +63,7 @@ typings/
 
 # Babel compile
 dist/
+lib/
 
 # Sublime text
 *.sublime-project
