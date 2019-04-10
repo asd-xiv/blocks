@@ -5,16 +5,19 @@
 
 # blocks
 
-> You have a `request` and need a `response`.
+> With a `request`, produce a `response`
 
 ![Request-Response cycle](docs/bin/req-res-cycle.svg "Request-Response cycle")
+
+---
 
 <!-- vim-markdown-toc GFM -->
 
 * [Features](#features)
   * [Validate input](#validate-input)
   * [Permissions](#permissions)
-  * [Async support](#async-support)
+  * [Async/await](#asyncawait)
+  * [Other](#other)
 * [Install](#install)
 * [Basic example](#basic-example)
 * [Routes](#routes)
@@ -30,8 +33,6 @@
 
 <!-- vim-markdown-toc -->
 
----
-
 ## Features
 
 ### Validate input
@@ -46,11 +47,11 @@ See [`ajv`](https://github.com/epoberezkin/ajv) and [JSON Schema docs](https://j
 > Simple function outside of main route logic.  
 If it returns false, an automatic `403 Forbidden` response will be sent to the client.
 
-### Async support
+### Async/await
 
-> Route actions, middleware and plugins have `async/await` support.
+> Route actions, middleware and plugins can return a promise.
 
-Other:
+### Other
 
 * Query string parsing - [`qs`](https://github.com/ljharb/qs)
 * Cross-origin resource sharing - [`cors`](https://github.com/expressjs/cors)
@@ -80,6 +81,12 @@ block({
   // },
   // plugins: [],
   // routes: [],
+  // middleware: {
+  //   beforeRoute = [],
+  //   afterRoute = [],
+  //   afterError = [],
+  //   beforeSend = [],
+  // },
 }).then(({ Plugins: { Config }, middlewarePipeline }) =>
   http
     .createServer(middlewarePipeline)

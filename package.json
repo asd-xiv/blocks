@@ -1,7 +1,7 @@
 {
   "name": "@asd14/blocks",
   "version": "0.6.1",
-  "description": "You have a request and need a response.",
+  "description": "With a request, produce a response",
   "homepage": "https://github.com/asd14/blocks",
   "repository": {
     "type": "git",
@@ -28,7 +28,7 @@
     "coverage:report": "NODE_ENV=test nyc npm test && nyc report --reporter=html",
     "coverage": "NODE_ENV=test nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
-  "keywords": [],
+  "keywords": ["nodejs", "api", "server"],
   "author": {
     "name": "Andrei Dumitrescu",
     "url": "https://github.com/andreidcm"
