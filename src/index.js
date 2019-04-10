@@ -3,22 +3,12 @@ const debug = require("debug")("Blocks:Main")
 import connect from "connect"
 import path from "path"
 import { pluginus } from "@asd14/pluginus"
-import { is, pipe, map, forEach } from "@asd14/m"
+import { is, forEach, reduce } from "@asd14/m"
 
 import { BaseError } from "./errors/base"
 import { NotFoundError } from "./errors/not-found"
 import { InputValidationError } from "./errors/input"
 import { AuthorizationError } from "./errors/authorization"
-
-const createMiddlewarePipe = middleware => {
-  const app = connect()
-
-  for (let i = 0, length = middleware.length - 1; i <= length; i++) {
-    app.use(middleware[i])
-  }
-
-  return app
-}
 
 const block = ({
   settings = {},
@@ -47,37 +37,40 @@ const block = ({
     path.resolve(__dirname, "plugins", "config.js"),
     path.resolve(__dirname, "plugins", "router.js"),
     ...plugins,
-  ]).then(ResolvedPlugins => {
-    // add user defined routes to the Router plugin
-    forEach(route => {
-      ResolvedPlugins.Router.add({
+  ]).then(resolvedPlugins => {
+    // Add routes to Router plugin
+    forEach(item => {
+      const route = typeof item === "string" ? require(item) : item
+
+      resolvedPlugins.Router.add({
         ...route,
-        isAllowed: route.isAllowed(ResolvedPlugins),
-        action: route.action(ResolvedPlugins),
+        isAllowed: route.isAllowed(resolvedPlugins),
+        action: route.action(resolvedPlugins),
       })
-    })([require("./routes/ping.route.js"), ...routes])
+    })(["./routes/ping.route.js", ...routes])
 
     return {
-      middlewarePipeline: pipe(
-        map(middleware => middleware(ResolvedPlugins)),
-        createMiddlewarePipe
-      )([
-        require("./middleware/req-bootstrap"),
-        ...(is(props.CORS_ORIGIN) ? [require("./middleware/req-cors")] : []),
-        require("./middleware/req-query"),
-        require("./middleware/req-body"),
-        require("./middleware/req-route-exists"),
+      middlewarePipeline: reduce((acc, item) => {
+        const middle = typeof item === "string" ? require(item) : item
+
+        return acc.use(middle(resolvedPlugins))
+      }, connect())([
+        "./middleware/req-bootstrap",
+        ...(is(props.CORS_ORIGIN) ? ["./middleware/req-cors"] : []),
+        "./middleware/req-query",
+        "./middleware/req-body",
+        "./middleware/req-route-exists",
         ...beforeRoute,
-        require("./middleware/res-route"),
+        "./middleware/res-route",
         ...afterRoute,
-        require("./middleware/res-error"),
+        "./middleware/res-error",
         ...afterError,
-        require("./middleware/res-goodbye-error"),
+        "./middleware/res-goodbye-error",
         ...beforeSend,
-        require("./middleware/res-goodbye"),
+        "./middleware/res-goodbye",
       ]),
 
-      Plugins: ResolvedPlugins,
+      Plugins: resolvedPlugins,
     }
   })
 }
