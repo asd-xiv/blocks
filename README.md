@@ -5,8 +5,7 @@
 
 # blocks
 
-> Node.js API framework.
-> You have a `request` and need to produce a `response`.
+> You have a `request` and need a `response`.
 
 ![Request-Response cycle](docs/bin/req-res-cycle.svg "Request-Response cycle")
 
@@ -26,10 +25,12 @@
   * [Add plugin](#add-plugin)
 * [Develop](#develop)
 * [Changelog](#changelog)
-  * [0.6 - 10 April 2019](#06---10-april-2019)
-    * [Add](#add)
+  * [0.6.1 - 10 April 2019](#061---10-april-2019)
+    * [Change](#change)
 
 <!-- vim-markdown-toc -->
+
+---
 
 ## Features
 
@@ -246,7 +247,7 @@ Run all `*.test.js` in `examples` folder
 npm test
 ```
 
-Watch `src` and `examples` folder for changes
+Watch `src` and `examples` folders and re-run tests
 
 ```bash
 npm run tdd
@@ -256,9 +257,8 @@ npm run tdd
 
 History of all changes in [CHANGELOG.md](/CHANGELOG.md)
 
-### 0.6 - 10 April 2019
+### 0.6.1 - 10 April 2019
 
-#### Add
+#### Change
 
-* Can add "beforeSend" middleware
-* Diagrams and words describing how things work
+* Update `pluginus` to allow plugins in commonjs format as well
