@@ -1,4 +1,5 @@
-<!-- markdownlint-disable line-length -->
+<!-- markdownlint-disable first-line-h1 line-length -->
+
 [![npm package version](https://badge.fury.io/js/%40asd14%2Fblocks.svg)](https://badge.fury.io/js/%40asd14%2Fblocks)
 [![Coverage Status](https://coveralls.io/repos/github/asd14/blocks/badge.svg)](https://coveralls.io/github/asd14/blocks)
 
@@ -12,6 +13,9 @@
 <!-- vim-markdown-toc GFM -->
 
 * [Features](#features)
+  * [Validate input](#validate-input)
+  * [Permissions](#permissions)
+  * [Async support](#async-support)
 * [Install](#install)
 * [Basic example](#basic-example)
 * [Routes](#routes)
@@ -29,19 +33,19 @@
 
 ## Features
 
-__Validate input__
+### Validate input
 
 > Pass request data (headers, body, query parameters, URL parameters) through custom JSON Schemas defined for each route. Make sure no unwanted data gets in, de-clutter the route logic and make the API behave more consistent.  
 If validation fails, an automatic `409 Conflict` response will be sent to the client.
 
 See [`ajv`](https://github.com/epoberezkin/ajv) and [JSON Schema docs](https://json-schema.org) for more on data validation.
 
-__Permissions__
+### Permissions
 
 > Simple function outside of main route logic.  
 If it returns false, an automatic `403 Forbidden` response will be sent to the client.
 
-__Async support__
+### Async support
 
 > Route actions, middleware and plugins have `async/await` support.
 
@@ -56,7 +60,7 @@ Other:
 npm i @asd14/blocks
 ```
 
-## Basic example 
+## Basic example
 
 `src/index.js`
 
@@ -88,7 +92,7 @@ block({
 
 ### Default "/ping" route
 
-`GET: /ping` 
+`GET: /ping`
 
 ```js
 {
@@ -96,7 +100,7 @@ block({
   "aliveFor": {
     "days": 2, "hours": 1, "minutes": 47, "seconds": 46
   },
-  "version": "0.5.6", 
+  "version": "0.5.6",
 }
 ```
 
@@ -109,13 +113,13 @@ module.exports = {
   method: "GET",
   path: "/something",
 
-  // If req data is valid 
-  // -> continue to permissionn check 
+  // If req data is valid
+  // -> continue to permissionn check
   // -> otherwise return 409
   schema: require("./something.schema"),
 
-  // If allowed 
-  // -> continue to action 
+  // If allowed
+  // -> continue to action
   // -> otherwise return 403
   isAllowed: (/* plugins */) => async ({ method, ctx }) => {
     console.log(`${method}:${ctx.pathname} - isAllowed`)
@@ -123,7 +127,7 @@ module.exports = {
     return true
   },
 
-  // Returned value will be set in `res` body 
+  // Returned value will be set in `res` body
   action: (/* plugins */) => async (/* req */) => {
     return {
       message: "This is something else!"
@@ -173,7 +177,7 @@ While you can use `process.env` to access CI variables globally, use this opport
 ```js
 blocks({
   settings: {
-    // (CI) Key to verify incoming json-web-tokens. See `src/middleware/req-jwt.js` 
+    // (CI) Key to verify incoming json-web-tokens. See `src/middleware/req-jwt.js`
     JWT_SECRET: process.env.JWT_SECRET ?? "CHANGE ME!"
     ...
   },
@@ -206,7 +210,7 @@ module.exports = {
   // Array of plugins to wait for before running `create`
   depend: ["Config"],
 
-  /** 
+  /**
    * Constructor, return value will be considered the plugin's content exposed
    * to routes, middleware and other plugins.
    *
@@ -217,7 +221,7 @@ module.exports = {
    */
   create: (/* props */) => Config => {
     console.log("Checking DB connection")
-    
+
     // Database connection, model loading etc
     ...
     return {
@@ -256,6 +260,5 @@ History of all changes in [CHANGELOG.md](/CHANGELOG.md)
 
 #### Add
 
-- Can add "beforeSend" middleware 
-- Diagrams and words describing how things work
-
+* Can add "beforeSend" middleware
+* Diagrams and words describing how things work

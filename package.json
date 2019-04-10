@@ -18,10 +18,15 @@
     "build": "babel src -d lib",
     "prepare": "npm audit fix && npm test && npm run lint && npm run build",
     "prepublishOnly": "npm run coverage",
+    "----LINT-------------------------------------": "",
+    "lint:js": "eslint --ext .js src/",
+    "lint:md": "markdownlint *.md",
+    "lint": "npm run lint:md && npm run lint:js",
     "----TEST-------------------------------------": "",
-    "lint": "eslint src",
     "test": "tape -r @babel/register examples/**/*.test.js",
-    "tdd": "nodemon --watch src --watch examples --exec \"npm test | tap-diff\""
+    "tdd": "nodemon --watch src --watch examples --exec \"npm test | tap-diff\"",
+    "coverage:report": "NODE_ENV=test nyc npm test && nyc report --reporter=html",
+    "coverage": "NODE_ENV=test nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
   "keywords": [],
   "author": {

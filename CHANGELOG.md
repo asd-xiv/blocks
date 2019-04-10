@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Add
 
-- Can add "beforeSend" middleware 
+- Can add "beforeSend" middleware
 - Diagrams and words describing how things work
 
 ## [0.5.5] - 7 February 2019
@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Change
 
-- JSON stringify based on route response type 
+- JSON stringify based on route response type
 
 ## [0.5.3] - 7 February 2019
 
@@ -50,7 +50,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Add
 
-- Add Prometheus metrics support via `/metrics` 
+- Add Prometheus metrics support via `/metrics`
 
 ## [0.4.3] - 15 January 2019
 
