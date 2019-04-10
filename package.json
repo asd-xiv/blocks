@@ -1,6 +1,6 @@
 {
   "name": "@asd14/blocks",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Node.js API framework. You have a request and need to produce a response.",
   "homepage": "https://github.com/asd14/blocks",
   "repository": {
