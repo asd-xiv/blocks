@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.6] - 10 April 2019
+
+### Add
+
+- Can add "beforeSend" middleware 
+- Diagrams and words describing how things work
+
 ## [0.5.5] - 7 February 2019
 
 ### Change

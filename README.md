@@ -4,7 +4,8 @@
 
 # blocks
 
-> Node.js API framework. You have a `request` and need to produce a `response`.
+> Node.js API framework.
+> You have a `request` and need to produce a `response`.
 
 ![Request-Response cycle](docs/bin/req-res-cycle.svg "Request-Response cycle")
 
@@ -14,26 +15,26 @@
 * [Install](#install)
 * [Basic example](#basic-example)
 * [Routes](#routes)
-  * [Default "ping" route](#default-ping-route)
+  * [Default "/ping" route](#default-ping-route)
   * [Add route](#add-route)
 * [Plugins](#plugins)
   * [Default "Config" plugin](#default-config-plugin)
   * [Add plugin](#add-plugin)
 * [Develop](#develop)
-  * [Default plugins](#default-plugins)
-* [Develop](#develop-1)
 * [Changelog](#changelog)
-  * [0.6 - March 2019](#06---march-2019)
+  * [0.6 - 10 April 2019](#06---10-april-2019)
     * [Add](#add)
 
 <!-- vim-markdown-toc -->
 
 ## Features
 
-__Validate input__ - [`ajv`](https://github.com/epoberezkin/ajv)
+__Validate input__
 
 > Pass request data (headers, body, query parameters, URL parameters) through custom JSON Schemas defined for each route. Make sure no unwanted data gets in, de-clutter the route logic and make the API behave more consistent.  
 If validation fails, an automatic `409 Conflict` response will be sent to the client.
+
+See [`ajv`](https://github.com/epoberezkin/ajv) and [JSON Schema docs](https://json-schema.org) for more on data validation.
 
 __Permissions__
 
@@ -59,12 +60,13 @@ npm i @asd14/blocks
 
 `src/index.js`
 
-```javascript
+```js
 const http = require("http")
 const { block } = require("@asd14/blocks")
 
 block({
   // settings: {
+  //   NAME: "blocksAPI",
   //   PORT: 8080,
   //   VERSION: pkg.version,
   //   ENV: "development",
@@ -84,9 +86,10 @@ block({
 
 ## Routes
 
-### Default "ping" route
+### Default "/ping" route
 
 `GET: /ping` 
+
 ```js
 {
   "ping": "pong",
@@ -106,12 +109,14 @@ module.exports = {
   method: "GET",
   path: "/something",
 
-  // If req data is valid then continue to permissionn check, 
-  // otherwise return 409
+  // If req data is valid 
+  // -> continue to permissionn check 
+  // -> otherwise return 409
   schema: require("./something.schema"),
 
-  // Is allowed then continue to action, 
-  // otherwise return 403
+  // If allowed 
+  // -> continue to action 
+  // -> otherwise return 403
   isAllowed: (/* plugins */) => async ({ method, ctx }) => {
     console.log(`${method}:${ctx.pathname} - isAllowed`)
 
@@ -155,8 +160,6 @@ module.exports = {
 }
 ```
 
-See [`ajv`](https://github.com/epoberezkin/ajv) and [JSON Schema docs](https://json-schema.org) for more on data validation.
-
 ## Plugins
 
 ### Default "Config" plugin
@@ -166,10 +169,11 @@ Getter over the settings object when instantiating `blocks`. Accessible in route
 While you can use `process.env` to access CI variables globally, use this opportunity to write a few words about each.
 
 `src/index.js`
+
 ```js
 blocks({
   settings: {
-    // (CI) Key to verify incoming json-web-tokens. See `jwt.middle.js` for details.
+    // (CI) Key to verify incoming json-web-tokens. See `src/middleware/req-jwt.js` 
     JWT_SECRET: process.env.JWT_SECRET ?? "CHANGE ME!"
     ...
   },
@@ -177,7 +181,8 @@ blocks({
 })
 ```
 
-`src/middleware/req__jwt.js`
+`src/middleware/req-jwt.js`
+
 ```js
 module.exports = ({ Config }) => (req, res, next) => {
   ...
@@ -229,44 +234,17 @@ module.exports = {
 git clone git@github.com:asd14/blocks.git && \
   cd blocks && \
   npm run setup
-
-# run tests (any `*.test.js`) once
-npm test
-
-# watch `src` folder for changes and run test automatically
-npm run tdd
 ```
 
-```javascript
-const http = require("http")
-const { block } = require("@asd14/blocks")
-
-block({
-  // settings: {
-  //   APP_PORT: 8080,
-  // },
-}).then(({ Plugins: { Config }, middlewarePipeline }) =>
-  http
-    .createServer(middlewarePipeline)
-    .listen(Config.get("APP_PORT"), "localhost", () => {
-      console.log(`### Started server on port ${Config.get("APP_PORT")}`)
-    })
-)
-```
-
-### Default plugins
-
-## Develop
+Run all `*.test.js` in `examples` folder
 
 ```bash
-git clone git@github.com:asd14/blocks.git && \
-  cd blocks && \
-  npm run setup
-
-# run tests (any `*.test.js`) once
 npm test
+```
 
-# watch `src` folder for changes and run test automatically
+Watch `src` and `examples` folder for changes
+
+```bash
 npm run tdd
 ```
 
@@ -274,9 +252,10 @@ npm run tdd
 
 History of all changes in [CHANGELOG.md](/CHANGELOG.md)
 
-### 0.6 - March 2019
+### 0.6 - 10 April 2019
 
 #### Add
 
+- Can add "beforeSend" middleware 
 - Diagrams and words describing how things work
 
