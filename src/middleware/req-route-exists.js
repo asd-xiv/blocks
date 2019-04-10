@@ -1,5 +1,6 @@
 const debug = require("debug")("Blocks:URLParamsMiddleware")
-const NotFoundError = require("../errors/not-found.error")
+
+import { NotFoundError } from "../errors/not-found"
 
 module.exports = ({ Router }) => (req, res, next) => {
   const { route, params } = Router.find({

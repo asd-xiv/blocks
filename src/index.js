@@ -1,14 +1,14 @@
 const debug = require("debug")("Blocks:Main")
 
-const connect = require("connect")
-const path = require("path")
-const pluginus = require("@asd14/pluginus")
-const { is, pipe, map, forEach } = require("@asd14/m")
+import connect from "connect"
+import path from "path"
+import { pluginus } from "@asd14/pluginus"
+import { is, pipe, map, forEach } from "@asd14/m"
 
-const BaseError = require("./errors/base.error")
-const NotFoundError = require("./errors/not-found.error")
-const InputError = require("./errors/input.error")
-const AuthorizationError = require("./errors/authorization.error")
+import { BaseError } from "./errors/base"
+import { NotFoundError } from "./errors/not-found"
+import { InputValidationError } from "./errors/input"
+import { AuthorizationError } from "./errors/authorization"
 
 const createMiddlewarePipe = middleware => {
   const app = connect()
@@ -20,58 +20,50 @@ const createMiddlewarePipe = middleware => {
   return app
 }
 
-const block = async ({
+const block = ({
   settings = {},
-  folders,
-  plugins = /\.plugins\.js$/,
-  routes = /\.routes\.js$/,
-  middleware: { beforeRoute = [], afterRoute = [] } = {},
-}) =>
-  Promise.all([
-    // find and initialize plugins
-    pluginus({
-      folders,
-      files: [
-        path.resolve(__dirname, "plugins", "config.plugin.js"),
-        path.resolve(__dirname, "plugins", "router.plugin.js"),
-        plugins,
-      ],
-    }),
+  plugins = [],
+  routes = [],
+  middleware: {
+    beforeRoute = [],
+    afterRoute = [],
+    afterError = [],
+    beforeSend = [],
+  } = {},
+} = {}) => {
+  const props = {
+    NAME: "blocksAPI",
+    PORT: 8080,
+    ENV: "development",
+    CORS_ORIGIN: null,
+    CORS_METHODS: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    STARTUP_TIME: new Date(),
+    ...settings,
+  }
 
-    // find and initialize routes
-    pluginus({
-      folders,
-      files: [path.resolve(__dirname, "routes", "ping.route.js"), routes],
-      handleName: fileName => fileName.replace(".route.js", ""),
-    }),
-  ]).then(([Plugins, Routes]) => {
+  return pluginus({
+    props,
+  })([
+    path.resolve(__dirname, "plugins", "config.js"),
+    path.resolve(__dirname, "plugins", "router.js"),
+    ...plugins,
+  ]).then(ResolvedPlugins => {
     // add user defined routes to the Router plugin
     forEach(route => {
-      Plugins.Router.add({
+      ResolvedPlugins.Router.add({
         ...route,
-        isAllowed: route.isAllowed(Plugins),
-        action: route.action(Plugins),
+        isAllowed: route.isAllowed(ResolvedPlugins),
+        action: route.action(ResolvedPlugins),
       })
-    })(Object.values(Routes))
-
-    //
-    Plugins.Config.add({
-      CORS_ORIGIN: null,
-      CORS_METHODS: "GET,HEAD,PUT,PATCH,POST,DELETE",
-      APP_PORT: 8080,
-      ...settings,
-      STARTUP_TIME: new Date(),
-    })
+    })([require("./routes/ping.route.js"), ...routes])
 
     return {
       middlewarePipeline: pipe(
-        map(middleware => middleware(Plugins)),
+        map(middleware => middleware(ResolvedPlugins)),
         createMiddlewarePipe
       )([
         require("./middleware/req-bootstrap"),
-        ...(is(Plugins.Config.get("CORS_ORIGIN"))
-          ? require("./middleware/req-cors")
-          : []),
+        ...(is(props.CORS_ORIGIN) ? [require("./middleware/req-cors")] : []),
         require("./middleware/req-query"),
         require("./middleware/req-body"),
         require("./middleware/req-route-exists"),
@@ -79,17 +71,21 @@ const block = async ({
         require("./middleware/res-route"),
         ...afterRoute,
         require("./middleware/res-error"),
+        ...afterError,
+        require("./middleware/res-goodbye-error"),
+        ...beforeSend,
         require("./middleware/res-goodbye"),
       ]),
 
-      Plugins,
+      Plugins: ResolvedPlugins,
     }
   })
+}
 
-module.exports = {
+export {
   block,
   BaseError,
   AuthorizationError,
-  InputError,
+  InputValidationError,
   NotFoundError,
 }

@@ -11,5 +11,5 @@ module.exports = () => (error, req, res, next) => {
     details: error.details || {},
   }
 
-  next()
+  next(error)
 }

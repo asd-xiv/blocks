@@ -1,0 +1,13 @@
+sequenceDiagram
+    participant Request
+    participant JSONSchema
+    participant Permission
+    participant Route
+
+    Request ->> JSONSchema: Hello! I have data
+    JSONSchema -->> Request: 409: `drop_table_name` not allowed
+    JSONSchema ->> Permission: Data is valid
+    Permission -->> Request: 403: YOU SHALL NOT PASS!
+    Permission ->> Route: Data is allowed
+    Route ->> Request: I'll take that data and give you other data in return
+    Note right of Route: All this so you can <br/> put a border and <br/> a shadow over it
