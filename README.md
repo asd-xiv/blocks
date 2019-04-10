@@ -28,7 +28,7 @@
   * [Add plugin](#add-plugin)
 * [Develop](#develop)
 * [Changelog](#changelog)
-  * [0.6.1 - 10 April 2019](#061---10-april-2019)
+  * [0.6.2 - 10 April 2019](#062---10-april-2019)
     * [Change](#change)
 
 <!-- vim-markdown-toc -->
@@ -264,8 +264,8 @@ npm run tdd
 
 History of all changes in [CHANGELOG.md](/CHANGELOG.md)
 
-### 0.6.1 - 10 April 2019
+### 0.6.2 - 10 April 2019
 
 #### Change
 
-* Update `pluginus` to allow plugins in commonjs format as well
+* Allow passing of absolute file paths for plugins, middleware and routes when initialising `blocks`
