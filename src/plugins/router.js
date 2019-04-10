@@ -1,20 +1,19 @@
 const debug = require("debug")("Blocks:RouterPlugin")
 
-const pathToRegexp = require("path-to-regexp")
-const { count, push, reduce, find } = require("@asd14/m")
+import pathToRegexp from "path-to-regexp"
+import { count, push, reduce, find } from "@asd14/m"
+
 const ajv = require("ajv")({
   allErrors: true,
   coerceTypes: true,
   useDefaults: true,
 })
 
-const InputValidationError = require("../errors/input.error")
-const AuthorizationError = require("../errors/authorization.error")
+import { InputValidationError } from "../errors/input"
+import { AuthorizationError } from "../errors/authorization"
 
-module.exports = {
-  depend: [],
-
-  create: () => {
+export default {
+  create: () => () => {
     let routes = []
 
     return {
@@ -64,14 +63,19 @@ module.exports = {
        *
        * @return {undefined}
        */
-      add: newRoute => {
+      add: ({ method, path, schema, ...rest }) => {
         const keys = []
 
+        debug(`Add route: ${method}:${path}`)
+
         routes = push({
-          ...newRoute,
+          method,
+          path,
+          schema,
+          ...rest,
           pathParamsKeys: keys,
-          pathRegExp: pathToRegexp(newRoute.path, keys),
-          validate: ajv.compile(newRoute.schema),
+          pathRegExp: pathToRegexp(path, keys),
+          validate: ajv.compile(schema),
         })(routes)
       },
 
@@ -84,8 +88,8 @@ module.exports = {
        *
        * @return {Object}
        */
-      answer: async ({ route, req }) => {
-        // json schema check
+      answer: ({ route, req }) => {
+        // Input validation check
         if (
           !route.validate({
             headers: req.headers,
@@ -99,15 +103,24 @@ module.exports = {
           })
         }
 
-        // permission check
-        if (!(await route.isAllowed(req))) {
-          throw new AuthorizationError()
-        }
+        return (
+          route
+            // Route Permission check
+            .isAllowed(req)
+            .then(isAllowed => {
+              if (!isAllowed) {
+                throw new AuthorizationError()
+              }
 
-        return {
-          status: req.method === "POST" ? 201 : 200,
-          payload: await route.action(req),
-        }
+              return null
+            })
+            // Route action logic
+            .then(() => route.action(req))
+            .then(routePayloaad => ({
+              status: req.method === "POST" ? 201 : 200,
+              payload: routePayloaad,
+            }))
+        )
       },
     }
   },

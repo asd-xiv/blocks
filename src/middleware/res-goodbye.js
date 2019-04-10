@@ -1,11 +1,19 @@
 const debug = require("debug")("Blocks:GoodbyeMiddleware")
-const { forEach } = require("@asd14/m")
+
+import { forEach } from "@asd14/m"
 
 module.exports = () => (req, res) => {
   debug(`${req.method}:${req.url} responding with ${res.ctx.status}`)
 
-  const body = JSON.stringify(res.ctx.payload || {})
+  const payloadType = typeof res.ctx.payload
   const endAt = process.hrtime(req.ctx.startAt)
+
+  const body =
+    payloadType === "object" ? JSON.stringify(res.ctx.payload) : res.ctx.payload
+  const contentType =
+    payloadType === "object"
+      ? "application/json; charset=utf-8"
+      : "text/plain; charset=utf-8"
 
   forEach(([name, value]) => res.setHeader(name, value))([
     // https://helmetjs.github.io/docs/dont-sniff-mimetype/
@@ -34,7 +42,7 @@ module.exports = () => (req, res) => {
     // from the first middleware to now
     ["X-Response-Time", `${endAt[0]}s ${endAt[1] / 1000000}ms`],
 
-    ["Content-Type", "application/json; charset=utf-8"],
+    ["Content-Type", contentType],
     ["Content-Length", Buffer.byteLength(body, "utf8")],
   ])
 

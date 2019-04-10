@@ -1,9 +1,6 @@
-const BaseError = require("./base.error")
+import { BaseError } from "./base"
 
-/**
- * @class NotFoundError
- */
-module.exports = class NotFoundError extends BaseError {
+export class NotFoundError extends BaseError {
   constructor(message, details = {}) {
     super(message, details)
 
