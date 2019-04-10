@@ -1,7 +1,7 @@
 {
   "name": "@asd14/blocks",
-  "version": "0.5.7",
-  "description": "A Node.js API framework",
+  "version": "0.5.0",
+  "description": "Node.js API framework. You have a request and need to produce a response.",
   "homepage": "https://github.com/asd14/blocks",
   "repository": {
     "type": "git",
@@ -57,7 +57,7 @@
     "eslint-plugin-no-inferred-method-name": "1.0.2",
     "eslint-plugin-prettier": "3.0.1",
     "eslint-plugin-promise": "4.1.1",
-    "eslint-plugin-unicorn": "8.0.1",
+    "eslint-plugin-unicorn": "8.0.2",
     "markdownlint-cli": "0.15.0",
     "nodemon": "1.18.11",
     "npm-check": "5.9.0",
