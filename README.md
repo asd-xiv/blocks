@@ -5,7 +5,7 @@
 
 # blocks
 
-> With a `request`, produce a `response`
+> `request` |> `think hard` |> `response`
 
 ![Request-Response cycle](docs/bin/req-res-cycle.svg "Request-Response cycle")
 
@@ -19,7 +19,7 @@
   * [Async/await](#asyncawait)
   * [Other](#other)
 * [Install](#install)
-* [Basic example](#basic-example)
+* [Example](#example)
 * [Routes](#routes)
   * [Default "/ping" route](#default-ping-route)
   * [Add route](#add-route)
@@ -62,31 +62,43 @@ If it returns false, an automatic `403 Forbidden` response will be sent to the c
 npm i @asd14/blocks
 ```
 
-## Basic example
+## Example
 
 `src/index.js`
 
 ```js
 const http = require("http")
+const glob = require("glob")
 const { block } = require("@asd14/blocks")
 
 block({
-  // settings: {
-  //   NAME: "blocksAPI",
-  //   PORT: 8080,
-  //   VERSION: pkg.version,
-  //   ENV: "development",
-  //   CORS_ORIGIN: null,
-  //   CORS_METHODS: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  // },
-  // plugins: [],
-  // routes: [],
-  // middleware: {
-  //   beforeRoute = [],
-  //   afterRoute = [],
-  //   afterError = [],
-  //   beforeSend = [],
-  // },
+  settings: {
+    // Used by default /ping route
+    NAME: pkg.name,
+    VERSION: pkg.version,
+
+    // Not used yet
+    ENV: "development",
+    
+    // Passed to "cors" 3rd party middleware
+    CORS_ORIGIN: null,
+    CORS_METHODS: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+
+    // Other
+    PORT: 8080,
+  },
+
+  // string[]  Plugins and routes absolute file paths. 
+  //           Using `glob` for easy scanning.
+  plugins: glob.sync("./src/plugins/*.js", { absolute: true }),
+  routes: glob.sync("./src/**/*.route.js", { absolute: true }),
+
+  middleware: {
+    beforeRoute = [],
+    afterRoute = [],
+    afterError = [],
+    beforeSend = [],
+  },
 }).then(({ Plugins: { Config }, middlewarePipeline }) =>
   http
     .createServer(middlewarePipeline)
@@ -108,6 +120,7 @@ block({
   "aliveFor": {
     "days": 2, "hours": 1, "minutes": 47, "seconds": 46
   },
+  "name": "foo",
   "version": "0.5.6",
 }
 ```
@@ -129,14 +142,14 @@ module.exports = {
   // If allowed
   // -> continue to action
   // -> otherwise return 403
-  isAllowed: (/* plugins */) => async ({ method, ctx }) => {
+  isAllowed: (/* pluginsObj */) => async ({ method, ctx }) => {
     console.log(`${method}:${ctx.pathname} - isAllowed`)
 
     return true
   },
 
   // Returned value will be set in `res` body
-  action: (/* plugins */) => async (/* req */) => {
+  action: (/* pluginsObj */) => async (/* req */) => {
     return {
       message: "This is something else!"
     }
@@ -174,9 +187,11 @@ module.exports = {
 
 ## Plugins
 
+Separate code interfacing 3rd party libraries or services. Plugins are accesible in middleware and routes ([pluginus](https://github.com/asd14/pluginus) dependency injection library is used under the hood).
+
 ### Default "Config" plugin
 
-Getter over the settings object when instantiating `blocks`. Accessible in route's `isAllowed` and `action` methods and when defining custom middleware.
+Getter over the settings object when instantiating `blocks`. 
 
 While you can use `process.env` to access CI variables globally, use this opportunity to write a few words about each.
 
@@ -209,13 +224,19 @@ A plugin consists of a constructor function and a list of other plugins that is 
 
 Whatever the `create` function returns will be considered as the plugin's content and is what will be exposed to the routes, middleware and other plugins.
 
-`src/plugins/database.plugin.js`
+`src/plugins/database.js`
 
 ```js
 const Sequelize = require("sequelize")
 
 module.exports = {
-  // Array of plugins to wait for before running `create`
+  /**
+   * Array of plugins to wait for before running `create`.
+   * Name is constructed from the filename by removing the extension and
+   * turning it into CammelCase. 
+   * 
+   * Ex. "test__name--BEM.plugin.js" => "TestNameBemPlugin" 
+   */
   depend: ["Config"],
 
   /**
