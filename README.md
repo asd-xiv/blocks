@@ -28,7 +28,7 @@
   * [Add plugin](#add-plugin)
 * [Develop](#develop)
 * [Changelog](#changelog)
-  * [0.6.2 - 10 April 2019](#062---10-april-2019)
+  * [0.7 - 11 July 2019](#07---11-july-2019)
     * [Change](#change)
 
 <!-- vim-markdown-toc -->
@@ -79,7 +79,7 @@ block({
 
     // Not used yet
     ENV: "development",
-    
+
     // Passed to "cors" 3rd party middleware
     CORS_ORIGIN: null,
     CORS_METHODS: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
@@ -88,7 +88,7 @@ block({
     PORT: 8080,
   },
 
-  // string[]  Plugins and routes absolute file paths. 
+  // string[]  Plugins and routes absolute file paths.
   //           Using `glob` for easy scanning.
   plugins: glob.sync("./src/plugins/*.js", { absolute: true }),
   routes: glob.sync("./src/**/*.route.js", { absolute: true }),
@@ -191,7 +191,7 @@ Separate code interfacing 3rd party libraries or services. Plugins are accesible
 
 ### Default "Config" plugin
 
-Getter over the settings object when instantiating `blocks`. 
+Getter over the settings object when instantiating `blocks`.
 
 While you can use `process.env` to access CI variables globally, use this opportunity to write a few words about each.
 
@@ -233,9 +233,9 @@ module.exports = {
   /**
    * Array of plugins to wait for before running `create`.
    * Name is constructed from the filename by removing the extension and
-   * turning it into CammelCase. 
-   * 
-   * Ex. "test__name--BEM.plugin.js" => "TestNameBemPlugin" 
+   * turning it into CammelCase.
+   *
+   * Ex. "test__name--BEM.plugin.js" => "TestNameBemPlugin"
    */
   depend: ["Config"],
 
@@ -285,8 +285,8 @@ npm run tdd
 
 History of all changes in [CHANGELOG.md](/CHANGELOG.md)
 
-### 0.6.2 - 10 April 2019
+### 0.7 - 11 July 2019
 
 #### Change
 
-* Allow passing of absolute file paths for plugins, middleware and routes when initialising `blocks`
+* Update packages
