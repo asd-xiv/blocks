@@ -26,7 +26,8 @@
     "test-env": "riteway -r @babel/register tests/custom.test.js",
     "test": "npm run test-default && npm run test-env",
     "tdd": "nodemon --watch src --watch examples --exec \"npm test\"",
-    "coverage": "NODE_ENV=test nyc npm test && nyc report --reporter=text-lcov | coveralls"
+    "coverage:report": "nyc npm test && nyc report --reporter=html",
+    "coverage:ci": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
   "keywords": [
     "nodejs",

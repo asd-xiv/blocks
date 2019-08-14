@@ -26,10 +26,11 @@
 * [Configuration](#configuration)
 * [Routes](#routes)
   * [Default "/ping" route](#default-ping-route)
-  * [New route](#new-route)
+  * [Custom route](#custom-route)
+  * [Custom JSON schema](#custom-json-schema)
 * [Plugins](#plugins)
   * [Default "Config" plugin](#default-config-plugin)
-  * [New plugin](#new-plugin)
+  * [Custom plugin](#custom-plugin)
 * [Develop](#develop)
 * [Commit messages](#commit-messages)
 * [Changelog](#changelog)
@@ -118,14 +119,14 @@ We recommend using [`dotenv`](https://github.com/motdotla/dotenv) for easy local
 }
 ```
 
-### New route
+### Custom route
 
 `src/something.route.js`
 
 ```js
 module.exports = {
   method: "GET",
-  path: "/something",
+  path: "/something/:id",
 
   /**
    * If req data is valid
@@ -158,15 +159,15 @@ module.exports = {
    *
    * @return {mixed}
    */
-  action: (/* pluginsObj */) => async (/* req */) => {
+  action: (/* pluginsObj */) => async req => {
     return {
-      message: "This is something else!"
+      message: "This ${req.ctx.params.id} is something else!"
     }
   },
 }
 ```
 
-`src/something.schema.js`
+### Custom JSON schema
 
 A schema can contain only 4 (optional) keys:
 
@@ -179,31 +180,40 @@ See [`src/plugins/route-default.schema.js`](src/plugins/route-default.schema.js)
 
 Each key needs to be a [`ajv`](https://github.com/epoberezkin/ajv) compatible schema object.
 
+`src/something.schema.js`
+
 ```js
 module.exports = {
-  headers: {
-    type: "object",
-    required: ["content-type"],
-    properties: {
-      "content-type": {
-        enum: ["application/json; charset=UTF-8", "application/json"],
-      },
-    },
-  },
-
   params: {
     type: "object",
     additionalProperties: false,
+    required: ["id"],
+    properties: {
+      id: {
+        type: "string",
+        pattern: "^[a-z0-9-]+$",
+        maxLength: 25,
+        minLength: 25,
+      }
+    }
   },
 
   query: {
     type: "object",
     additionalProperties: false,
-  },
-
-  body: {
-    type: "object",
-    additionalProperties: false,
+    properties: {
+      offset: {
+        type: "integer",
+        minimum: 0,
+        default: 0,
+      },
+      limit: {
+        type: "integer",
+        minimum: 1,
+        maximum: 100,
+        default: 20,
+      },
+    },
   },
 }
 ```
@@ -220,7 +230,7 @@ Contains values populated from `process.env`. Since all `process.env` values are
 
 See [`_env`](_env) file for defaults and all config options.
 
-### New plugin
+### Custom plugin
 
 A plugin consists of a constructor function and a list of other plugins that is dependent on.
 

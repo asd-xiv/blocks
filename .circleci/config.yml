@@ -100,7 +100,7 @@ jobs:
 
       - run:
           name: "blocks: Publish test coverage to COVERALLS"
-          command: "npm run coverage"
+          command: "npm run coverage:ci"
 
   publish:
     <<: *job_defaults
