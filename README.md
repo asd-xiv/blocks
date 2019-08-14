@@ -85,8 +85,9 @@ dotenv.config()
 
 // initialize application
 const app = block({
-  plugins: glob.sync("./src/plugins/*.js", { absolute: true }),
-  routes: glob.sync("./src/**/*.route.js", { absolute: true }),
+  // always scan relative to current folder 
+  plugins: glob.sync("./plugins/*.js", { cwd: __dirname, absolute: true }),
+  routes: glob.sync("./**/*.route.js", { cwd: __dirname, absolute: true }),
 })
 
 // start node server
