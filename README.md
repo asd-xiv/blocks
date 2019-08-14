@@ -58,6 +58,7 @@ If it returns false, an automatic `403 Forbidden` response will be sent.
 
 * Middleware support of existing package - [`connect`](https://github.com/senchalabs/connect)
 * Query string parsing - [`qs`](https://github.com/ljharb/qs)
+* Route param parsing - [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp)
 * Cross-origin resource sharing - [`cors`](https://github.com/expressjs/cors)
 * Secure your API with various HTTP headers - [`helmet`](https://github.com/helmetjs/helmet)
 
@@ -167,12 +168,12 @@ module.exports = {
 
 `src/something.schema.js`
 
-A schema can contain only 4 (optional) keys: 
+A schema can contain only 4 (optional) keys:
 
-* `headers`: validates `req.headers`
-* `params`: validates `req.ctx.params`. Parsed from URL with  
-* `query`: validates `req.ctx.query`. Parsed from URL with [`qs`](https://github.com/ljharb/qs)
-* `body`: validates `req.ctx.body`. Parsed from `req` with `JSON.parse`
+* `headers` validates `req.headers`
+* `params` validates `req.ctx.params` parsed from URL with [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp)
+* `query`: validates `req.ctx.query` parsed from URL with [`qs`](https://github.com/ljharb/qs)
+* `body` validates `req.ctx.body` parsed from `req` with `JSON.parse`
 
 See [`src/plugins/route-default.schema.js`](src/plugins/route-default.schema.js) for default values.
 
