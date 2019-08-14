@@ -11,7 +11,6 @@ import { InputValidationError } from "./errors/input"
 import { AuthorizationError } from "./errors/authorization"
 
 const block = ({
-  settings = {},
   plugins = [],
   routes = [],
   middleware: {
@@ -21,56 +20,49 @@ const block = ({
     beforeSend = [],
   } = {},
 } = {}) => {
-  const props = {
-    NAME: "blocksAPI",
-    PORT: 8080,
-    ENV: "development",
-    CORS_ORIGIN: null,
-    CORS_METHODS: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    STARTUP_TIME: new Date(),
-    ...settings,
-  }
-
-  return pluginus({
-    props,
-  })([
+  const ROUTE_PATHS = ["./routes/ping.route.js", ...routes]
+  const PLUGIN_PATHS = [
     path.resolve(__dirname, "plugins", "config.js"),
     path.resolve(__dirname, "plugins", "router.js"),
     ...plugins,
-  ]).then(resolvedPlugins => {
-    // Add routes to Router plugin
+  ]
+  const MIDDLEWARE_PATHS = [
+    "./middleware/req-bootstrap",
+    "./middleware/req-cors",
+    "./middleware/req-query",
+    "./middleware/req-body",
+    "./middleware/req-route-exists",
+    ...beforeRoute,
+    "./middleware/res-route",
+    ...afterRoute,
+    "./middleware/res-error",
+    ...afterError,
+    "./middleware/res-goodbye-error",
+    ...beforeSend,
+    "./middleware/res-helmet",
+    "./middleware/res-goodbye",
+  ]
+
+  return pluginus()(PLUGIN_PATHS).then(Plugins => {
     forEach(item => {
       const route = typeof item === "string" ? require(item) : item
 
-      resolvedPlugins.Router.add({
+      Plugins.Router.add({
         ...route,
-        isAllowed: route.isAllowed(resolvedPlugins),
-        action: route.action(resolvedPlugins),
+        isAllowed: is(route.isAllowed) ? route.isAllowed(Plugins) : () => false,
+        action: route.action(Plugins),
       })
-    })(["./routes/ping.route.js", ...routes])
+    })(ROUTE_PATHS)
 
     return {
       middlewarePipeline: reduce((acc, item) => {
-        const middle = typeof item === "string" ? require(item) : item
+        const middle =
+          typeof item === "string" ? require(item)(Plugins) : item(Plugins)
 
-        return acc.use(middle(resolvedPlugins))
-      }, connect())([
-        "./middleware/req-bootstrap",
-        ...(is(props.CORS_ORIGIN) ? ["./middleware/req-cors"] : []),
-        "./middleware/req-query",
-        "./middleware/req-body",
-        "./middleware/req-route-exists",
-        ...beforeRoute,
-        "./middleware/res-route",
-        ...afterRoute,
-        "./middleware/res-error",
-        ...afterError,
-        "./middleware/res-goodbye-error",
-        ...beforeSend,
-        "./middleware/res-goodbye",
-      ]),
+        return is(middle) ? acc.use(middle) : acc
+      }, connect())(MIDDLEWARE_PATHS),
 
-      Plugins: resolvedPlugins,
+      Plugins,
     }
   })
 }
