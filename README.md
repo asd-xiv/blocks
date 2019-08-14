@@ -142,7 +142,7 @@ module.exports = {
   /**
    * Permission checking, if allowed:
    *  -> continue to action
-   *  -> otherwise return 403**
+   *  -> otherwise return 403
    *
    * @param  {Object}  plugins  Plugins
    * @param  {Object}  req      Node request
@@ -285,13 +285,13 @@ git clone git@github.com:asd14/blocks.git && \
   npm run setup
 ```
 
-Run all `*.test.js` in `examples` folder
+Run all `*.test.js` in `tests` folder
 
 ```bash
 npm test
 ```
 
-Watch `src` and `examples` folders and re-run tests
+Watch `src` and `tests` folders and re-run tests
 
 ```bash
 npm run tdd
