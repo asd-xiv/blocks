@@ -26,10 +26,10 @@
 * [Configuration](#configuration)
 * [Routes](#routes)
   * [Default "/ping" route](#default-ping-route)
-  * [Add route](#add-route)
+  * [New route](#new-route)
 * [Plugins](#plugins)
   * [Default "Config" plugin](#default-config-plugin)
-  * [Add plugin](#add-plugin)
+  * [New plugin](#new-plugin)
 * [Develop](#develop)
 * [Commit messages](#commit-messages)
 * [Changelog](#changelog)
@@ -117,7 +117,7 @@ We recommend using [`dotenv`](https://github.com/motdotla/dotenv) for easy local
 }
 ```
 
-### Add route
+### New route
 
 `src/something.route.js`
 
@@ -167,6 +167,17 @@ module.exports = {
 
 `src/something.schema.js`
 
+A schema can contain only 4 (optional) keys: 
+
+* `headers`: validates `req.headers`
+* `params`: validates `req.ctx.params`. Parsed from URL with  
+* `query`: validates `req.ctx.query`. Parsed from URL with [`qs`](https://github.com/ljharb/qs)
+* `body`: validates `req.ctx.body`. Parsed from `req` with `JSON.parse`
+
+See [`src/plugins/route-default.schema.js`](src/plugins/route-default.schema.js) for default values.
+
+Each key needs to be a [`ajv`](https://github.com/epoberezkin/ajv) compatible schema object.
+
 ```js
 module.exports = {
   headers: {
@@ -198,19 +209,17 @@ module.exports = {
 
 ## Plugins
 
-Separate code interfacing with 3rd party libraries or services.
+Separate code interfacing with 3rd party libraries or services. [pluginus](https://github.com/asd14/pluginus) dependency injection library is used.
 
-Plugins are accesible in other plugins, middleware and routes ([pluginus](https://github.com/asd14/pluginus) dependency injection library is used under the hood).
+Plugins are accesible in other plugins, middleware and routes.
 
 ### Default "Config" plugin
 
-Object with values populated from `process.env` via [dotenv](https://github.com/motdotla/dotenv) to make local development and CI deployments.
+Contains values populated from `process.env`. Since all `process.env` values are strings, some `Config` values have transformations applied. Ex `CORS_METHODS` is `.split(,)`, boolean and number values are coerced etc.
 
-Since all process.env values are strings, some `Config` value have transformations applied: `CORS_METHODS` is `.split(,)`, boolean and number values are coerced etc.
+See [`_env`](_env) file for defaults and all config options.
 
-See `[_env](_env)` file for all config options.
-
-### Add plugin
+### New plugin
 
 A plugin consists of a constructor function and a list of other plugins that is dependent on.
 
