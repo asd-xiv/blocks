@@ -15,14 +15,14 @@ describe("blocks :: init with defaults", async assert => {
 
   assert({
     given: "no custom plugins",
-    should: "load only default Config and Router plugins",
+    should: "load only default Config and Router",
     actual: Object.keys(Plugins),
     expected: ["Config", "Router"],
   })
 
   assert({
     given: "no custom route",
-    should: "contain only default /ping route",
+    should: "load only default /ping",
     actual: Plugins.Router.count(),
     expected: 1,
   })
