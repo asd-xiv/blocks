@@ -27,7 +27,7 @@
     "test": "npm run test-default && npm run test-env",
     "tdd": "nodemon --watch src --watch examples --exec \"npm test\"",
     "coverage:report": "nyc npm test && nyc report --reporter=html",
-    "coverage:ci": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
+    "coverage:ci": "nyc npm run test && nyc report --reporter=text-lcov | coveralls"
   },
   "keywords": [
     "nodejs",
@@ -82,7 +82,6 @@
     "request": "2.88.0",
     "request-promise": "4.2.4",
     "riteway": "6.1.0",
-    "semantic-release": "15.13.21",
-    "tap-diff": "0.1.1"
+    "semantic-release": "15.13.21"
   }
 }
