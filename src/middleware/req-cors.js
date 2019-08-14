@@ -1,12 +1,15 @@
 const debug = require("debug")("Blocks:CORSMiddleware")
 
 import cors from "cors"
+import { isEmpty } from "@asd14/m"
 
-module.exports = ({ Config }) =>
-  cors({
-    origin: Config.get("CORS_ORIGIN"),
-    methods: Config.get("CORS_METHODS"),
+module.exports = ({ Config: { CORS_ORIGIN, CORS_METHODS } }) =>
+  isEmpty(CORS_ORIGIN)
+    ? null
+    : cors({
+        origin: CORS_ORIGIN,
+        methods: CORS_METHODS,
 
-    // some legacy browsers (IE11, various SmartTVs) choke on 204
-    optionsSuccessStatus: 200,
-  })
+        // some legacy browsers (IE11, various SmartTVs) choke on 204
+        optionsSuccessStatus: 200,
+      })

@@ -3,13 +3,6 @@ const debug = require("debug")("Blocks:BodyMiddleware")
 import { isEmpty } from "@asd14/m"
 import { InputValidationError } from "../errors/input"
 
-/**
- * { function_description }
- *
- * @param  {Object}   req  The request
- *
- * @return {Promise}
- */
 const parseBody = req => {
   const bodyChunks = []
 
