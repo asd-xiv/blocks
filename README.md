@@ -90,11 +90,15 @@ const app = block({
 })
 
 // start node server
-app.then(({ Plugins, middlewarePipeline }) => {
-  const server = http.createServer(middlewarePipeline)
+app
+  .then(({ Plugins, middlewarePipeline }) => {
+    const server = http.createServer(middlewarePipeline)
 
-  server.listen(Plugins.Config.PORT)
-})
+    server.listen(Plugins.Config.PORT)
+  })
+  .catch(error => {
+    console.log("Server could not start", error)
+  })
 ```
 
 ## Configuration
