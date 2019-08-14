@@ -1,7 +1,4 @@
 /**
- * Some common patterns.
- * See github.com/epoberezkin/ajv and json-schema.org for more.
- *
  * foo: {
  *   type: "string",
  *   pattern: "^[a-z0-9-]+$",
@@ -13,7 +10,7 @@
  *   type: "integer",
  *   minimum: 1,
  *   maximum: 100,
- *   default: 10,
+ *   default: 20,
  * },
  *
  * bar: {
@@ -38,26 +35,35 @@
  *   ],
  * },
  */
+
 module.exports = {
-  type: "object",
-  properties: {
-    headers: {
-      type: "object",
+  headers: {
+    type: "object",
+    required: ["content-type"],
+    properties: {
+      "content-type": {
+        enum: ["application/json; charset=UTF-8", "application/json"],
+      },
     },
+  },
 
-    params: {
-      type: "object",
-      additionalProperties: false,
+  params: {
+    type: "object",
+    additionalProperties: false,
+    properties: {
+      name: {
+        type: "string",
+      },
     },
+  },
 
-    query: {
-      type: "object",
-      additionalProperties: false,
-    },
+  query: {
+    type: "object",
+    additionalProperties: false,
+  },
 
-    body: {
-      type: "object",
-      additionalProperties: false,
-    },
+  body: {
+    type: "object",
+    additionalProperties: false,
   },
 }
