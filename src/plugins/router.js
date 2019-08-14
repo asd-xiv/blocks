@@ -1,19 +1,22 @@
 const debug = require("debug")("Blocks:RouterPlugin")
 
 import pathToRegexp from "path-to-regexp"
-import { count, push, reduce, find } from "@asd14/m"
-
-const ajv = require("ajv")({
-  allErrors: true,
-  coerceTypes: true,
-  useDefaults: true,
-})
+import { count, push, reduce, find, merge, pick } from "@asd14/m"
 
 import { InputValidationError } from "../errors/input"
 import { AuthorizationError } from "../errors/authorization"
 
 export default {
-  create: () => () => {
+  depend: ["Config"],
+
+  create: () => ({ AJV_ALL_ERRORS, AJV_COERCE_TYPES, AJV_USE_DEFAULTS }) => {
+    const ajv = require("ajv")({
+      allErrors: AJV_ALL_ERRORS,
+      coerceTypes: AJV_COERCE_TYPES,
+      useDefaults: AJV_USE_DEFAULTS,
+    })
+    const defaultRouteSchema = require("./route-default.schema")
+
     let routes = []
 
     return {
@@ -63,7 +66,7 @@ export default {
        *
        * @return {undefined}
        */
-      add: ({ method, path, schema, ...rest }) => {
+      add: ({ method = "GET", path, schema = {}, isAllowed, ...rest }) => {
         const keys = []
 
         debug(`Add route: ${method}:${path}`)
@@ -72,10 +75,17 @@ export default {
           method,
           path,
           schema,
+          isAllowed,
           ...rest,
           pathParamsKeys: keys,
           pathRegExp: pathToRegexp(path, keys),
-          validate: ajv.compile(schema),
+          validate: ajv.compile({
+            type: "object",
+            properties: merge(
+              defaultRouteSchema,
+              pick(["headers", "params", "query", "body"])(schema)
+            ),
+          }),
         })(routes)
       },
 
@@ -104,9 +114,7 @@ export default {
         }
 
         return (
-          route
-            // Route Permission check
-            .isAllowed(req)
+          Promise.resolve(route.isAllowed(req))
             .then(isAllowed => {
               if (!isAllowed) {
                 throw new AuthorizationError()

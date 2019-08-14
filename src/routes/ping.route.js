@@ -1,18 +1,25 @@
 const debug = require("debug")("Blocks:PingRoute")
 
-import { elapsedTime } from "@asd14/m"
+import { elapsedTime, is } from "@asd14/m"
 
 module.exports = {
   method: "GET",
   path: "/ping",
+
+  /**
+   * If req data is valid
+   *  -> continue to permissionn check
+   *  -> otherwise return 409
+   */
   schema: require("./ping.schema"),
 
   /**
-   * Permission checking.
-   * If allowed will continue to action, otherwise return 403.
+   * Permission checking, if allowed:
+   *  -> continue to action
+   *  -> otherwise return 403**
    *
-   * @param  {Object}  plugins  All plugins
-   * @param  {Object}  req      The request
+   * @param  {Object}  plugins  Plugins
+   * @param  {Object}  req      Node request
    *
    * @return {boolean}
    */
@@ -23,17 +30,17 @@ module.exports = {
   },
 
   /**
-   * Route logic.
-   * Do something here that will confirm you not being a pencil pusher.
+   * After schema validation and permission checking, do route logic
    *
-   * @param  {Object}  plugins  All plugins
-   * @param  {Object}  req      The request
+   * @param  {Object}  plugins  Plugins
+   * @param  {Object}  req      Node request
    *
    * @return {mixed}
    */
-  action: plugins => async () => ({
+  action: ({ Config: { NAME, VERSION, ID, STARTUP_TIME } }) => async () => ({
+    name: is(ID) ? `${NAME}-${ID}` : NAME,
+    version: VERSION,
     ping: "pong",
-    aliveFor: elapsedTime(plugins.Config.get("STARTUP_TIME"))(new Date()),
-    v: plugins.Config.get("VERSION"),
+    aliveFor: elapsedTime(STARTUP_TIME)(new Date()),
   }),
 }
