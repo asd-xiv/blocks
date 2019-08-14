@@ -1,6 +1,4 @@
 {
-  ignore: [],
-
   presets: [
     [
       "@babel/preset-env",
@@ -20,5 +18,19 @@
      * is spread out over multiple files.
      */
     "@babel/plugin-transform-runtime",
+
+    // var foo = object.foo ?? "default"
+    //
+    // || gives false positives for "" , 0 or false
+    "@babel/plugin-proposal-nullish-coalescing-operator",
+
+    // let result = "hello"
+    //   |> doubleSay
+    //   |> capitalize
+    //   |> exclaim;
+    // result //=> "Hello, hello!"
+    ["@babel/plugin-proposal-pipeline-operator", {
+      "proposal": "minimal",
+    }],
   ],
 }
