@@ -22,12 +22,11 @@
     "lint:md": "markdownlint *.md",
     "lint": "npm run lint:md && npm run lint:js",
     "----TEST": "",
-    "test-default": "riteway -r @babel/register tests/default.test.js",
-    "test-env": "riteway -r @babel/register tests/custom.test.js",
-    "test": "npm run test-default && npm run test-env",
+    "start": "nodemon -r @babel/register examples/simple.js",
+    "test": "riteway -r @babel/register tests/index.js",
     "tdd": "nodemon --watch src --watch examples --exec \"npm test\"",
     "coverage:report": "nyc npm test && nyc report --reporter=html",
-    "coverage:ci": "NODE_ENV=test nyc npm run test && nyc report --reporter=text-lcov | coveralls"
+    "coverage:ci": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
   "keywords": [
     "nodejs",

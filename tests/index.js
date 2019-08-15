@@ -1,4 +1,5 @@
 import http from "http"
+import path from "path"
 import { describe } from "riteway"
 
 import { block } from "../src"
@@ -11,20 +12,27 @@ const request = require("request-promise").defaults({
 })
 
 describe("blocks :: init with defaults", async assert => {
-  const { Plugins, middlewarePipeline } = await block()
-
-  assert({
-    given: "no custom plugins",
-    should: "load only default Config and Router",
-    actual: Object.keys(Plugins),
-    expected: ["Config", "Router"],
+  const { Plugins, middlewarePipeline } = await block({
+    plugins: [path.resolve(__dirname, "plugins", "good.js")],
+    routes: [
+      require("./routes/no-schema.route"),
+      require("./routes/with-schema.route"),
+      require("./routes/no-allow.route"),
+    ],
   })
 
   assert({
-    given: "no custom route",
-    should: "load only default /ping",
+    given: "1 custom plugin",
+    should: "load default plugins and custom",
+    actual: Object.keys(Plugins),
+    expected: ["Config", "Good", "Router"],
+  })
+
+  assert({
+    given: "3 custom routes",
+    should: "load default /ping and custom",
     actual: Plugins.Router.count(),
-    expected: 1,
+    expected: 4,
   })
 
   assert({
