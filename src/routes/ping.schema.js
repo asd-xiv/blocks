@@ -39,12 +39,7 @@
 module.exports = {
   headers: {
     type: "object",
-    required: ["content-type"],
-    properties: {
-      "content-type": {
-        enum: ["application/json; charset=UTF-8", "application/json"],
-      },
-    },
+    additionalProperties: true,
   },
 
   params: {
