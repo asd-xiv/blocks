@@ -16,7 +16,6 @@ app
     const server = http.createServer(middlewarePipeline)
 
     server.listen({
-      host: "localhost",
       port: Plugins.Config.PORT,
     })
 
