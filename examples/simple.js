@@ -15,8 +15,19 @@ app
   .then(({ Plugins, middlewarePipeline }) => {
     const server = http.createServer(middlewarePipeline)
 
-    server.listen(Plugins.Config.PORT)
+    server.listen({
+      host: "localhost",
+      port: Plugins.Config.PORT,
+    })
+
+    server.on("error", error => {
+      console.log("Server error", error)
+    })
+
+    server.on("listening", () => {
+      console.log(`Server started on port ${Plugins.Config.PORT}`)
+    })
   })
   .catch(error => {
-    console.log("Server could not start", error)
+    console.log("Application could not initialize", error)
   })
