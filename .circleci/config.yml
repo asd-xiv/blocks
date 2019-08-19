@@ -63,6 +63,7 @@ jobs:
             - node_modules
             - lib
             - src
+            - tests
             - .git
             - .babelrc
             - .eslintrc
