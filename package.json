@@ -23,7 +23,7 @@
     "lint": "npm run lint:md && npm run lint:js",
     "----TEST": "",
     "start": "nodemon -r @babel/register examples/simple.js",
-    "test": "riteway -r @babel/register tests/index.js",
+    "test": "node -r @babel/register tests/index.js",
     "tdd": "nodemon --watch src --watch examples --exec \"npm test\"",
     "coverage:report": "nyc npm test && nyc report --reporter=html",
     "coverage:ci": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
@@ -50,7 +50,7 @@
     "debug": "4.1.1",
     "helmet": "3.20.0",
     "path-to-regexp": "3.0.0",
-    "qs": "6.7.0"
+    "qs": "6.8.0"
   },
   "devDependencies": {
     "@asd14/eslint-config": "5.2.0",
@@ -63,8 +63,8 @@
     "@babel/register": "7.5.5",
     "babel-eslint": "10.0.2",
     "coveralls": "3.0.6",
-    "dotenv": "8.0.0",
-    "eslint": "6.1.0",
+    "dotenv": "8.1.0",
+    "eslint": "6.2.0",
     "eslint-config-prettier": "6.0.0",
     "eslint-plugin-import": "2.18.2",
     "eslint-plugin-json": "1.4.0",
@@ -72,7 +72,7 @@
     "eslint-plugin-prettier": "3.1.0",
     "eslint-plugin-promise": "4.2.1",
     "eslint-plugin-unicorn": "10.0.0",
-    "markdownlint-cli": "0.17.0",
+    "markdownlint-cli": "0.18.0",
     "nodemon": "1.19.1",
     "npm-check": "5.9.0",
     "nyc": "14.1.1",
