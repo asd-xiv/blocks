@@ -49,6 +49,7 @@
     "cuid": "2.1.6",
     "debug": "4.1.1",
     "helmet": "3.20.0",
+    "jsonwebtoken": "8.5.1",
     "path-to-regexp": "3.0.0",
     "qs": "6.8.0"
   },
@@ -64,8 +65,8 @@
     "babel-eslint": "10.0.2",
     "coveralls": "3.0.6",
     "dotenv": "8.1.0",
-    "eslint": "6.2.0",
-    "eslint-config-prettier": "6.0.0",
+    "eslint": "6.2.1",
+    "eslint-config-prettier": "6.1.0",
     "eslint-plugin-import": "2.18.2",
     "eslint-plugin-json": "1.4.0",
     "eslint-plugin-no-inferred-method-name": "1.0.2",
