@@ -50,6 +50,7 @@ describe("blocks :: init with defaults", async assert => {
       STARTUP_TIME: Plugins.Config.STARTUP_TIME,
       NAME: "blocks",
       PORT: 8000,
+      JWT_SECRET: undefined,
       CORS_ORIGIN: undefined,
       CORS_METHODS: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
       QS_DELIMITER: "&",
