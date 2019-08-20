@@ -5,12 +5,17 @@
 NAME=blocks
 PORT=8000
 
+## JWT support
+## github.com/auth0/node-jsonwebtoken
+##
+## - disable JWT middleware by setting JWT_SECRET blank
+JWT_SECRET="CHANGE ME!"
+
 ##
 ## CORS support
 ## github.com/expressjs/cors
 ##
-## - disable cors middleware by setting CORS_ORIGIN to empty value or not
-##   defining
+## - disable cors middleware by setting CORS_ORIGIN blank
 ## - applying .split(",") to both variables
 ##
 CORS_ORIGIN=http://localhost,https://dev.foo.bar

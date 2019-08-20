@@ -9,6 +9,7 @@ export default {
     const {
       NAME,
       PORT,
+      JWT_SECRET,
       CORS_ORIGIN,
       CORS_METHODS,
       QS_DELIMITER,
@@ -37,6 +38,10 @@ export default {
       STARTUP_TIME: new Date(),
       NAME: NAME ?? "blocks",
       PORT: is(PORT) ? Number(PORT) : 8000,
+
+      // JWT support
+      // github.com/auth0/node-jsonwebtoken
+      JWT_SECRET,
 
       // CORS support
       // github.com/expressjs/cors

@@ -58,6 +58,7 @@ If it returns false, an automatic `403 Forbidden` response will be sent.
 ### Other
 
 * Middleware support of existing package - [`connect`](https://github.com/senchalabs/connect)
+* JSON Web Token - [`jsonwebtoken`](https://github.com/auth0/node-jsonwebtoken)
 * Query string parsing - [`qs`](https://github.com/ljharb/qs)
 * Route param parsing - [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp)
 * Cross-origin resource sharing - [`cors`](https://github.com/expressjs/cors)
@@ -199,6 +200,16 @@ Each key needs to be a [`ajv`](https://github.com/epoberezkin/ajv) compatible sc
 
 ```js
 module.exports = {
+  headers: {
+    type: "object",
+    required: ["authorization"],
+    properties: {
+      authorization: {
+        type: "string",
+      },
+    },
+  },
+
   params: {
     type: "object",
     additionalProperties: false,
