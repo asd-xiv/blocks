@@ -28,7 +28,7 @@ CORS_METHODS=GET,POST,PUT,PATCH,DELETE,OPTIONS
 QS_DELIMITER=&
 QS_ALLOW_DOTS=true
 QS_STRICT_NULL_HANDLING=true
-QS_ARRAY_FORMAT=brackets
+QS_ARRAY_FORMAT=comma
 
 ##
 ## Help secure Express apps with various HTTP headers

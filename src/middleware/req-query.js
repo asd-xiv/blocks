@@ -14,7 +14,7 @@ module.exports = ({
     delimiter: QS_DELIMITER,
     allowDots: QS_ALLOW_DOTS,
     strictNullHandling: QS_STRICT_NULL_HANDLING,
-    arrayFormat: QS_ARRAY_FORMAT,
+    comma: QS_ARRAY_FORMAT === "comma",
   })
 
   next()
