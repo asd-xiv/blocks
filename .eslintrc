@@ -2,7 +2,7 @@
   "parser": "babel-eslint",
   "root": true,
   "extends": [
-    "@asd14/eslint-config/targets/node"
+    "@mutantlove/eslint-config/targets/node"
   ],
   "settings": {
     "import/resolver": "node",

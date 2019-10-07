@@ -1,7 +1,7 @@
 const debug = require("debug")("Blocks:CORSMiddleware")
 
 import cors from "cors"
-import { isEmpty } from "@asd14/m"
+import { isEmpty } from "@mutantlove/m"
 
 module.exports = ({ Config: { CORS_ORIGIN, CORS_METHODS } }) =>
   isEmpty(CORS_ORIGIN)

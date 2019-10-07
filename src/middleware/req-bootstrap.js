@@ -1,7 +1,7 @@
 const debug = require("debug")("Blocks:BootstrapMiddleware")
 
 import cuid from "cuid"
-import { pick } from "@asd14/m"
+import { pick } from "@mutantlove/m"
 
 module.exports = () => (req, res, next) => {
   req.ctx = {

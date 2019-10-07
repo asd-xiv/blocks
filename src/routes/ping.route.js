@@ -1,6 +1,6 @@
 const debug = require("debug")("Blocks:PingRoute")
 
-import { elapsedTime, is } from "@asd14/m"
+import { elapsedTime, is } from "@mutantlove/m"
 
 module.exports = {
   method: "GET",

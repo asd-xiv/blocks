@@ -1,6 +1,6 @@
 const debug = require("debug")("Blocks:BodyMiddleware")
 
-import { isEmpty } from "@asd14/m"
+import { isEmpty } from "@mutantlove/m"
 import { InputValidationError } from "../errors/input"
 
 const parseBody = req => {

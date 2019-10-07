@@ -1,7 +1,7 @@
 const debug = require("debug")("Blocks:RouterPlugin")
 
 import pathToRegexp from "path-to-regexp"
-import { count, push, reduce, find, merge, pick } from "@asd14/m"
+import { count, push, reduce, find, merge, pick } from "@mutantlove/m"
 
 import { InputValidationError } from "../errors/input"
 import { AuthorizationError } from "../errors/authorization"

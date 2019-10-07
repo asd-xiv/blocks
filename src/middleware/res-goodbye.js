@@ -1,6 +1,6 @@
 const debug = require("debug")("Blocks:GoodbyeMiddleware")
 
-import { forEach } from "@asd14/m"
+import { forEach } from "@mutantlove/m"
 
 module.exports = () => (req, res) => {
   debug(`${req.method}:${req.url} responding with ${res.ctx.status}`)

@@ -1,6 +1,6 @@
 const debug = require("debug")("Blocks:ConfigPlugin")
 
-import { is, isEmpty } from "@asd14/m"
+import { when, i, same, is, isEmpty } from "@mutantlove/m"
 
 export default {
   create: () => () => {
@@ -36,7 +36,7 @@ export default {
 
     return {
       STARTUP_TIME: new Date(),
-      NAME: NAME ?? "blocks",
+      NAME: when(is, i, same("blocks"))(NAME),
       PORT: is(PORT) ? Number(PORT) : 8000,
 
       // JWT support
@@ -52,33 +52,44 @@ export default {
 
       // Query string parsing
       // github.com/ljharb/qs
-      QS_DELIMITER: QS_DELIMITER ?? "&",
-      QS_ALLOW_DOTS: toBool(QS_ALLOW_DOTS) ?? true,
-      QS_STRICT_NULL_HANDLING: toBool(QS_STRICT_NULL_HANDLING) ?? true,
-      QS_ARRAY_FORMAT: QS_ARRAY_FORMAT ?? "brackets",
+      QS_DELIMITER: when(isEmpty, same("&"))(QS_DELIMITER),
+      QS_ALLOW_DOTS: when(isEmpty, same(true))(toBool(QS_ALLOW_DOTS)),
+      QS_STRICT_NULL_HANDLING: when(isEmpty, same(true))(
+        toBool(QS_STRICT_NULL_HANDLING)
+      ),
+      QS_ARRAY_FORMAT: when(isEmpty, same("brackets"))(QS_ARRAY_FORMAT),
 
       // Help secure Express apps with various HTTP headers
       // github.com/helmetjs/helmet
-      HELMET_CONTENT_SECURITY_POLICY:
-        toBool(HELMET_CONTENT_SECURITY_POLICY) ?? false,
-      HELMET_DNS_PREFETCH_CONTROL: toBool(HELMET_DNS_PREFETCH_CONTROL) ?? true,
-      HELMET_EXPECT_CT: toBool(HELMET_EXPECT_CT) ?? false,
-      HELMET_FEATURE_POLICY: toBool(HELMET_FEATURE_POLICY) ?? false,
-      HELMET_FRAMEGUARD: toBool(HELMET_FRAMEGUARD) ?? true,
-      HELMET_HIDE_POWER_BY: toBool(HELMET_HIDE_POWER_BY) ?? false,
-      HELMET_HSTS: toBool(HELMET_HSTS) ?? true,
-      HELMET_IE_NO_OPEN: toBool(HELMET_IE_NO_OPEN) ?? true,
-      HELMET_NO_CACHE: toBool(HELMET_NO_CACHE) ?? true,
-      HELMET_NO_SNIFF: toBool(HELMET_NO_SNIFF) ?? true,
-      HELMET_CROSSDOMAIN: toBool(HELMET_CROSSDOMAIN) ?? true,
-      HELMET_REFERER_POLICY: toBool(HELMET_REFERER_POLICY) ?? false,
-      HELMET_XSS_FILTER: toBool(HELMET_XSS_FILTER) ?? true,
+      HELMET_CONTENT_SECURITY_POLICY: when(isEmpty, same(false))(
+        toBool(HELMET_CONTENT_SECURITY_POLICY)
+      ),
+      HELMET_DNS_PREFETCH_CONTROL: when(isEmpty, same(true))(
+        toBool(HELMET_DNS_PREFETCH_CONTROL)
+      ),
+      HELMET_EXPECT_CT: when(isEmpty, same(false))(toBool(HELMET_EXPECT_CT)),
+      HELMET_FEATURE_POLICY: when(isEmpty, same(false))(
+        toBool(HELMET_FEATURE_POLICY)
+      ),
+      HELMET_FRAMEGUARD: when(isEmpty, same(true))(toBool(HELMET_FRAMEGUARD)),
+      HELMET_HIDE_POWER_BY: when(isEmpty, same(false))(
+        toBool(HELMET_HIDE_POWER_BY)
+      ),
+      HELMET_HSTS: when(isEmpty, same(true))(toBool(HELMET_HSTS)),
+      HELMET_IE_NO_OPEN: when(isEmpty, same(true))(toBool(HELMET_IE_NO_OPEN)),
+      HELMET_NO_CACHE: when(isEmpty, same(true))(toBool(HELMET_NO_CACHE)),
+      HELMET_NO_SNIFF: when(isEmpty, same(true))(toBool(HELMET_NO_SNIFF)),
+      HELMET_CROSSDOMAIN: when(isEmpty, same(true))(toBool(HELMET_CROSSDOMAIN)),
+      HELMET_REFERER_POLICY: when(isEmpty, same(false))(
+        toBool(HELMET_REFERER_POLICY)
+      ),
+      HELMET_XSS_FILTER: when(isEmpty, same(true))(toBool(HELMET_XSS_FILTER)),
 
       // Request data validation with ajv
       // github.com/epoberezkin/ajv
-      AJV_ALL_ERRORS: toBool(AJV_ALL_ERRORS) ?? true,
-      AJV_COERCE_TYPES: toBool(AJV_COERCE_TYPES) ?? true,
-      AJV_USE_DEFAULTS: toBool(AJV_USE_DEFAULTS) ?? true,
+      AJV_ALL_ERRORS: when(isEmpty, same(true))(toBool(AJV_ALL_ERRORS)),
+      AJV_COERCE_TYPES: when(isEmpty, same(true))(toBool(AJV_COERCE_TYPES)),
+      AJV_USE_DEFAULTS: when(isEmpty, same(true))(toBool(AJV_USE_DEFAULTS)),
     }
   },
 }

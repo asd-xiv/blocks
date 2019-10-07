@@ -1,8 +1,8 @@
 <!-- markdownlint-disable first-line-h1 line-length -->
 
-[![CircleCI](https://circleci.com/gh/asd14/blocks.svg?style=svg)](https://circleci.com/gh/asd14/blocks)
-[![npm package version](https://badge.fury.io/js/%40asd14%2Fblocks.svg)](https://badge.fury.io/js/%40asd14%2Fblocks)
-[![Coverage Status](https://coveralls.io/repos/github/asd14/blocks/badge.svg)](https://coveralls.io/github/asd14/blocks)
+[![CircleCI](https://circleci.com/gh/mutantlove/blocks.svg?style=svg)](https://circleci.com/gh/mutantlove/blocks)
+[![npm package version](https://badge.fury.io/js/%40mutantlove%2Fblocks.svg)](https://badge.fury.io/js/%40mutantlove%2Fblocks)
+[![Coverage Status](https://coveralls.io/repos/github/mutantlove/blocks/badge.svg)](https://coveralls.io/github/mutantlove/blocks)
 
 # blocks
 
@@ -67,7 +67,7 @@ If it returns false, an automatic `403 Forbidden` response will be sent.
 ## Install
 
 ```bash
-npm i @asd14/blocks
+npm install @mutantlove/blocks
 ```
 
 ## Example
@@ -79,7 +79,7 @@ import http from "http"
 import glob from "glob"
 import dotenv from "dotenv"
 
-import { block } from "@asd14/blocks"
+import { block } from "@mutantlove/blocks"
 
 // load config into process.env
 dotenv.config()
@@ -246,7 +246,7 @@ module.exports = {
 
 ## Plugins
 
-Separate code interfacing with 3rd party libraries or services. [pluginus](https://github.com/asd14/pluginus) dependency injection library is used.
+Separate code interfacing with 3rd party libraries or services. [pluginus](https://github.com/mutantlove/pluginus) dependency injection library is used.
 
 Plugins are accesible in other plugins, middleware and routes.
 
@@ -302,7 +302,7 @@ module.exports = {
 ## Develop
 
 ```bash
-git clone git@github.com:asd14/blocks.git && \
+git clone git@github.com:mutantlove/blocks.git && \
   cd blocks && \
   npm run setup
 ```
@@ -343,4 +343,4 @@ BREAKING CHANGE: Half of features not working anymore
 
 ## Changelog
 
-See the [releases section](https://github.com/asd14/blocks/releases) for details.
+See the [releases section](https://github.com/mutantlove/blocks/releases) for details.

@@ -23,7 +23,7 @@ job_filter: &job_filter
 #
 workflows:
   version: 2
-  build_test_coverage_publish:
+  deploy_npm:
     jobs:
       - setup:
           <<: *job_filter
