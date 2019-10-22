@@ -18,6 +18,7 @@ describe("blocks :: init with defaults", async assert => {
       require("./routes/no-schema.route"),
       require("./routes/with-schema.route"),
       require("./routes/no-allow.route"),
+      require("./routes/return-undefined.route"),
     ],
   })
 
@@ -29,10 +30,10 @@ describe("blocks :: init with defaults", async assert => {
   })
 
   assert({
-    given: "3 custom routes",
+    given: "4 custom routes",
     should: "load default /ping and custom",
     actual: Plugins.Router.count(),
-    expected: 4,
+    expected: 5,
   })
 
   assert({
@@ -110,6 +111,13 @@ describe("blocks :: init with defaults", async assert => {
         },
       },
     },
+  })
+
+  assert({
+    given: "route that returns undefined",
+    should: "return empty JSON object",
+    actual: await request(`${API_URL}/return-undefined`),
+    expected: {},
   })
 
   server.close()
