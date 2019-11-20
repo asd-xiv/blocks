@@ -25,8 +25,8 @@ describe("blocks :: init with defaults", async assert => {
   assert({
     given: "1 custom plugin",
     should: "load default plugins (Router, QueryParser) and custom",
-    actual: Object.keys(Plugins),
-    expected: ["Router", "QueryParser", "Good"],
+    actual: Object.keys(Plugins).sort(),
+    expected: ["Good", "QueryParser", "Router"],
   })
 
   assert({
