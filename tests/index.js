@@ -24,9 +24,9 @@ describe("blocks :: init with defaults", async assert => {
 
   assert({
     given: "1 custom plugin",
-    should: "load default plugins and custom",
+    should: "load default plugins (Router, QueryParser) and custom",
     actual: Object.keys(Plugins),
-    expected: ["Config", "Good", "Router"],
+    expected: ["Router", "QueryParser", "Good"],
   })
 
   assert({
@@ -43,49 +43,18 @@ describe("blocks :: init with defaults", async assert => {
     expected: 9,
   })
 
-  assert({
-    given: "no .env data provided",
-    should: "have default settings",
-    actual: Plugins.Config,
-    expected: {
-      STARTUP_TIME: Plugins.Config.STARTUP_TIME,
-      NAME: "blocks",
-      PORT: 8000,
-      JWT_SECRET: undefined,
-      CORS_ORIGIN: undefined,
-      CORS_METHODS: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-      QS_DELIMITER: "&",
-      QS_ALLOW_DOTS: true,
-      QS_STRICT_NULL_HANDLING: true,
-      QS_ARRAY_FORMAT: "brackets",
-      HELMET_CONTENT_SECURITY_POLICY: false,
-      HELMET_DNS_PREFETCH_CONTROL: true,
-      HELMET_EXPECT_CT: false,
-      HELMET_FEATURE_POLICY: false,
-      HELMET_FRAMEGUARD: true,
-      HELMET_HIDE_POWER_BY: false,
-      HELMET_HSTS: true,
-      HELMET_IE_NO_OPEN: true,
-      HELMET_NO_CACHE: true,
-      HELMET_NO_SNIFF: true,
-      HELMET_CROSSDOMAIN: true,
-      HELMET_REFERER_POLICY: false,
-      HELMET_XSS_FILTER: true,
-      AJV_ALL_ERRORS: true,
-      AJV_COERCE_TYPES: true,
-      AJV_USE_DEFAULTS: true,
-    },
-  })
-
-  const API_URL = `http://localhost:${Plugins.Config.PORT}`
-  const server = http
-    .createServer(middlewarePipeline)
-    .listen(Plugins.Config.PORT, "localhost")
+  const PORT = 4567
+  const API_URL = `http://localhost:${PORT}`
+  const server = http.createServer(middlewarePipeline).listen(PORT, "localhost")
 
   assert({
     given: "default route /ping",
     should: "response with pong",
-    actual: await request(`${API_URL}/ping`).then(body => ({
+    actual: await request(`${API_URL}/ping`, {
+      headers: {
+        "Content-Type": "application/json; charset=UTF-8",
+      },
+    }).then(body => ({
       name: body.name,
       ping: body.ping,
     })),
@@ -104,7 +73,7 @@ describe("blocks :: init with defaults", async assert => {
       body: {
         error: "NotFoundError",
         code: 404,
-        message: "Endpoint not found",
+        message: "Endpoint GET:/not-exist not found",
         details: {
           method: "GET",
           pathname: "/not-exist",
@@ -118,6 +87,24 @@ describe("blocks :: init with defaults", async assert => {
     should: "return empty JSON object",
     actual: await request(`${API_URL}/return-undefined`),
     expected: {},
+  })
+
+  assert({
+    given: "form encoded body and content type",
+    should: "parse body with qs",
+    actual: await request(`${API_URL}/with-schema/mutant`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: "parsed=with%20qs&another=value",
+    }),
+    expected: {
+      message: "Hello Plugin World!",
+      params: { name: "mutant" },
+      query: {},
+      body: { parsed: "with qs", another: "value" },
+    },
   })
 
   server.close()

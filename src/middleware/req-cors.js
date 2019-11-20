@@ -1,15 +1,19 @@
 const debug = require("debug")("Blocks:CORSMiddleware")
 
 import cors from "cors"
-import { isEmpty } from "@mutantlove/m"
+import { is, isEmpty } from "@mutantlove/m"
 
-module.exports = ({ Config: { CORS_ORIGIN, CORS_METHODS } }) =>
-  isEmpty(CORS_ORIGIN)
+module.exports = () => {
+  const ORIGIN = process.env.CORS_ORIGIN
+  const METHODS = process.env.CORS_METHODS
+
+  return isEmpty(ORIGIN)
     ? null
     : cors({
-        origin: CORS_ORIGIN,
-        methods: CORS_METHODS,
+        origin: ORIGIN === "true" ? true : ORIGIN,
+        methods: is(METHODS) ? METHODS : "GET,HEAD,PUT,PATCH,POST,DELETE",
 
         // some legacy browsers (IE11, various SmartTVs) choke on 204
         optionsSuccessStatus: 200,
       })
+}

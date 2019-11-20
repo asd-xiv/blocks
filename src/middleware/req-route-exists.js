@@ -15,10 +15,13 @@ module.exports = ({ Router }) => (req, res, next) => {
     next()
   } else {
     next(
-      new NotFoundError("Endpoint not found", {
-        method: req.method,
-        pathname: req.ctx.pathname,
-      })
+      new NotFoundError(
+        `Endpoint ${req.method}:${req.ctx.pathname} not found`,
+        {
+          method: req.method,
+          pathname: req.ctx.pathname,
+        }
+      )
     )
   }
 }

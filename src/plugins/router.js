@@ -1,19 +1,21 @@
 const debug = require("debug")("Blocks:RouterPlugin")
 
-import pathToRegexp from "path-to-regexp"
-import { count, push, reduce, find, merge, pick } from "@mutantlove/m"
+import { pathToRegexp } from "path-to-regexp"
+import { count, push, reduce, find, merge, pick, is } from "@mutantlove/m"
 
 import { InputValidationError } from "../errors/input"
 import { AuthorizationError } from "../errors/authorization"
 
 export default {
-  depend: ["Config"],
+  create: () => () => {
+    const ALL_ERRORS = process.env.AJV_ALL_ERRORS
+    const COERCE_TYPES = process.env.AJV_COERCE_TYPES
+    const USE_DEFAULTS = process.env.AJV_USE_DEFAULTS
 
-  create: () => ({ AJV_ALL_ERRORS, AJV_COERCE_TYPES, AJV_USE_DEFAULTS }) => {
     const ajv = require("ajv")({
-      allErrors: AJV_ALL_ERRORS,
-      coerceTypes: AJV_COERCE_TYPES,
-      useDefaults: AJV_USE_DEFAULTS,
+      allErrors: is(ALL_ERRORS) ? ALL_ERRORS === "true" : true,
+      coerceTypes: is(COERCE_TYPES) ? COERCE_TYPES === "true" : true,
+      useDefaults: is(USE_DEFAULTS) ? USE_DEFAULTS === "true" : true,
     })
     const defaultRouteSchema = require("./route-default.schema")
 

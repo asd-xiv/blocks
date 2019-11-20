@@ -1,11 +1,11 @@
 const debug = require("debug")("Blocks:GoodPlugin")
 
 export default {
-  depend: ["Config"],
+  depend: [],
 
-  create: () => Config => {
+  create: () => () => {
     return {
-      getMessage: () => `Hello ${Config.NAME} Plugin World!`,
+      getMessage: () => `Hello Plugin World!`,
     }
   },
 }

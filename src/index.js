@@ -20,10 +20,12 @@ const block = ({
     beforeSend = [],
   } = {},
 } = {}) => {
+  process.env.STARTUP_TIME = new Date()
+
   const ROUTE_PATHS = ["./routes/ping.route.js", ...routes]
   const PLUGIN_PATHS = [
-    path.resolve(__dirname, "plugins", "config.js"),
     path.resolve(__dirname, "plugins", "router.js"),
+    path.resolve(__dirname, "plugins", "query-parser.js"),
     ...plugins,
   ]
   const MIDDLEWARE_PATHS = [

@@ -37,11 +37,34 @@
  */
 
 module.exports = {
+  headers: {
+    type: "object",
+    required: ["content-type"],
+    properties: {
+      "content-type": {
+        enum: ["application/x-www-form-urlencoded"],
+      },
+    },
+  },
+
   params: {
     type: "object",
     additionalProperties: false,
     properties: {
       name: {
+        type: "string",
+      },
+    },
+  },
+
+  body: {
+    type: "object",
+    additionalProperties: false,
+    properties: {
+      parsed: {
+        type: "string",
+      },
+      another: {
         type: "string",
       },
     },

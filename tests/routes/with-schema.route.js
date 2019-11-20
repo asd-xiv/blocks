@@ -1,5 +1,5 @@
 module.exports = {
-  method: "GET",
+  method: "POST",
   path: "/with-schema/:name",
 
   /**
@@ -34,6 +34,7 @@ module.exports = {
       message: Good.getMessage(),
       params: ctx.params,
       query: ctx.query,
+      body: ctx.body,
     }
   },
 }

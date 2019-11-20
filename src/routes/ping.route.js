@@ -37,10 +37,11 @@ module.exports = {
    *
    * @return {mixed}
    */
-  action: ({ Config: { NAME, VERSION, ID, STARTUP_TIME } }) => async () => ({
-    name: is(ID) ? `${NAME}-${ID}` : NAME,
-    version: VERSION,
+  action: () => async () => ({
+    name: is(process.env.APP_NAME) ? process.env.APP_NAME : "blocks",
+    instance: is(process.env.pm_id) ? process.env.pm_id : "just me",
+    version: process.env.APP_VERSION,
     ping: "pong",
-    aliveFor: elapsedTime(STARTUP_TIME)(new Date()),
+    aliveFor: elapsedTime(process.env.STARTUP_TIME)(new Date()),
   }),
 }
