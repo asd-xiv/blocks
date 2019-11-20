@@ -12,5 +12,7 @@
       "lifetime": 5
     }
   },
-  "rules": {},
+  "rules": {
+    "promise/avoid-new": "off"
+  },
 }
