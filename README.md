@@ -29,7 +29,6 @@
   * [Custom route](#custom-route)
   * [Custom JSON schema](#custom-json-schema)
 * [Plugins](#plugins)
-  * [Default "Config" plugin](#default-config-plugin)
   * [Custom plugin](#custom-plugin)
 * [Develop](#develop)
 * [Commit messages](#commit-messages)
@@ -90,14 +89,11 @@ const app = block({
   plugins: glob.sync("./plugins/*.js", { cwd: __dirname, absolute: true }),
   routes: glob.sync("./**/*.route.js", { cwd: __dirname, absolute: true }),
 })
-
-// start node server
-app
   .then(({ Plugins, middlewarePipeline }) => {
     const server = http.createServer(middlewarePipeline)
 
     server.listen({
-      port: Plugins.Config.PORT,
+      port: process.env.PORT,
     })
 
     server.on("error", error => {
@@ -105,7 +101,7 @@ app
     })
 
     server.on("listening", () => {
-      console.log(`Server started on port ${Plugins.Config.PORT}`)
+      console.log(`Server started on port ${process.env.PORT}`)
     })
   })
   .catch(error => {
@@ -250,12 +246,6 @@ Separate code interfacing with 3rd party libraries or services. [pluginus](https
 
 Plugins are accesible in other plugins, middleware and routes.
 
-### Default "Config" plugin
-
-Contains values populated from `process.env`. Since all `process.env` values are strings, some `Config` values have transformations applied. Ex `CORS_METHODS` is `.split(,)`, boolean and number values are coerced etc.
-
-See [`_env`](_env) file for defaults and all config options.
-
 ### Custom plugin
 
 A plugin consists of a constructor function and a list of other plugins that is dependent on.
@@ -275,7 +265,7 @@ module.exports = {
    *
    * Ex. "test__name--BEM.plugin.js" => "TestNameBemPlugin"
    */
-  depend: ["Config"],
+  depend: ["Lorem"],
 
   /**
    * Constructor, return value will be considered the plugin's content exposed
@@ -286,7 +276,7 @@ module.exports = {
    *
    * @returns  {any|Promise<any>}  Plugin content
    */
-  create: (/* props */) => Config => {
+  create: (/* props */) => Lorem => {
     console.log("Checking DB connection")
 
     // Database connection, model loading etc
