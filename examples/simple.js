@@ -12,11 +12,11 @@ const app = block({
 
 // start node server
 app
-  .then(({ Plugins, middlewarePipeline }) => {
-    const server = http.createServer(middlewarePipeline)
+  .then(([middleware, { Config }]) => {
+    const server = http.createServer(middleware)
 
     server.listen({
-      port: Plugins.Config.PORT,
+      port: Config.PORT,
     })
 
     server.on("error", error => {
@@ -24,7 +24,7 @@ app
     })
 
     server.on("listening", () => {
-      console.log(`Server started on port ${Plugins.Config.PORT}`)
+      console.log(`Server started on port ${Config.PORT}`)
     })
   })
   .catch(error => {

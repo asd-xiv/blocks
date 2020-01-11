@@ -46,7 +46,7 @@ const block = ({
     "./middleware/res-goodbye",
   ]
 
-  return pluginus()(PLUGIN_PATHS).then(Plugins => {
+  return pluginus({ files: PLUGIN_PATHS }).then(Plugins => {
     forEach(item => {
       const route = typeof item === "string" ? require(item) : item
 
@@ -57,16 +57,18 @@ const block = ({
       })
     })(ROUTE_PATHS)
 
-    return {
-      middlewarePipeline: reduce((acc, item) => {
+    return [
+      // middleware
+      reduce((acc, item) => {
         const middle =
           typeof item === "string" ? require(item)(Plugins) : item(Plugins)
 
         return is(middle) ? acc.use(middle) : acc
       }, connect())(MIDDLEWARE_PATHS),
 
+      // plugins
       Plugins,
-    }
+    ]
   })
 }
 

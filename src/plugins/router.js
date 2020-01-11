@@ -7,7 +7,7 @@ import { InputValidationError } from "../errors/input"
 import { AuthorizationError } from "../errors/authorization"
 
 export default {
-  create: () => () => {
+  create: () => {
     const ALL_ERRORS = process.env.AJV_ALL_ERRORS
     const COERCE_TYPES = process.env.AJV_COERCE_TYPES
     const USE_DEFAULTS = process.env.AJV_USE_DEFAULTS
@@ -71,7 +71,7 @@ export default {
       add: ({ method = "GET", path, schema = {}, isAllowed, ...rest }) => {
         const keys = []
 
-        debug(`Add route: ${method}:${path}`)
+        debug(`Loading ${method}: ${path}`)
 
         routes = push({
           method,

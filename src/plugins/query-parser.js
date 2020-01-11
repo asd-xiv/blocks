@@ -4,7 +4,7 @@ import qs from "qs"
 import { is } from "@mutantlove/m"
 
 export default {
-  create: () => () => {
+  create: () => {
     const DELIMITER = process.env.QS_DELIMITER
     const ALLOW_DOTS = process.env.QS_ALLOW_DOTS
     const STRICT_NULL_HANDLING = process.env.QS_STRICT_NULL_HANDLING

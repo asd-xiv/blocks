@@ -12,7 +12,7 @@ const request = require("request-promise").defaults({
 })
 
 describe("blocks :: init with defaults", async assert => {
-  const { Plugins, middlewarePipeline } = await block({
+  const [middleware, plugins] = await block({
     plugins: [path.resolve(__dirname, "plugins", "good.js")],
     routes: [
       require("./routes/no-schema.route"),
@@ -25,27 +25,27 @@ describe("blocks :: init with defaults", async assert => {
   assert({
     given: "1 custom plugin",
     should: "load default plugins (Router, QueryParser) and custom",
-    actual: Object.keys(Plugins).sort(),
+    actual: Object.keys(plugins).sort(),
     expected: ["Good", "QueryParser", "Router"],
   })
 
   assert({
     given: "4 custom routes",
     should: "load default /ping and custom",
-    actual: Plugins.Router.count(),
+    actual: plugins.Router.count(),
     expected: 5,
   })
 
   assert({
     given: "no custom middleware",
     should: "contain 9 middleware",
-    actual: middlewarePipeline.stack.length,
+    actual: middleware.stack.length,
     expected: 9,
   })
 
   const PORT = 4567
   const API_URL = `http://localhost:${PORT}`
-  const server = http.createServer(middlewarePipeline).listen(PORT, "localhost")
+  const server = http.createServer(middleware).listen(PORT, "localhost")
 
   assert({
     given: "default route /ping",
