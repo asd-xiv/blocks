@@ -8,7 +8,7 @@
 
 > `request` |> `think hard` |> `response`.
 >
-> NodeJS API framework. Another one. Reduces boilerplate and increases usefulness.
+> NodeJS API framework. Another one.
 
 ![Request-Response cycle](docs/bin/req-res-cycle.svg "Request-Response cycle")
 
@@ -76,21 +76,19 @@ npm install @mutantlove/blocks
 ```js
 import http from "http"
 import glob from "glob"
-import dotenv from "dotenv"
 
 import { block } from "@mutantlove/blocks"
 
-// load config into process.env
-dotenv.config()
-
-// initialize application
+// initialize routes and plugins
 const app = block({
   // always scan relative to current folder
   plugins: glob.sync("./plugins/*.js", { cwd: __dirname, absolute: true }),
   routes: glob.sync("./**/*.route.js", { cwd: __dirname, absolute: true }),
 })
-  .then(({ Plugins, middlewarePipeline }) => {
-    const server = http.createServer(middlewarePipeline)
+
+// start node server using blocks middleware
+app.then(([middleware, plugins]) => {
+    const server = http.createServer(middleware)
 
     server.listen({
       port: process.env.PORT,
@@ -271,12 +269,9 @@ module.exports = {
    * Constructor, return value will be considered the plugin's content exposed
    * to routes, middleware and other plugins.
    *
-   * @param  {Object}  props  Initial settings object passed to the `blocks`
-   *                          constructor
-   *
-   * @returns  {any|Promise<any>}  Plugin content
+   * @returns  {Promise<any>}  Plugin content
    */
-  create: (/* props */) => Lorem => {
+  create: => Lorem => {
     console.log("Checking DB connection")
 
     // Database connection, model loading etc
