@@ -30,9 +30,9 @@ const block = ({
   ]
   const MIDDLEWARE_PATHS = [
     "./middleware/req-bootstrap",
+    "./middleware/req-cors",
     "./middleware/req-route-exists",
     "./middleware/req-jwt",
-    "./middleware/req-cors",
     "./middleware/req-query",
     "./middleware/req-body",
     ...beforeRoute,
