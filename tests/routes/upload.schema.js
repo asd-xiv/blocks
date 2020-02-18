@@ -42,7 +42,7 @@ module.exports = {
     required: ["x-content-type"],
     properties: {
       "x-content-type": {
-        enum: ["application/x-www-form-urlencoded"],
+        enum: ["multipart/form-data"],
       },
     },
   },
@@ -50,23 +50,20 @@ module.exports = {
   params: {
     type: "object",
     additionalProperties: false,
-    properties: {
-      name: {
-        type: "string",
-      },
-    },
+  },
+
+  query: {
+    type: "object",
+    additionalProperties: false,
   },
 
   body: {
     type: "object",
     additionalProperties: false,
+    required: ["field", "file"],
     properties: {
-      parsed: {
-        type: "string",
-      },
-      another: {
-        type: "string",
-      },
+      field: { type: "string" },
+      file: { type: "object" },
     },
   },
 }

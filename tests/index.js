@@ -1,15 +1,12 @@
+/* eslint-disable no-sync,new-cap */
+
 import http from "http"
 import path from "path"
+import fs from "fs"
 import { describe } from "riteway"
 
+import { GET, POST, FORM_DATA } from "./http.lib"
 import { block } from "../src"
-
-const request = require("request-promise").defaults({
-  json: true,
-  headers: {
-    "Content-Type": "application/json",
-  },
-})
 
 describe("blocks :: init with defaults", async assert => {
   const [middleware, plugins] = await block({
@@ -19,6 +16,7 @@ describe("blocks :: init with defaults", async assert => {
       require("./routes/with-schema.route"),
       require("./routes/no-allow.route"),
       require("./routes/return-undefined.route"),
+      require("./routes/upload.route"),
     ],
   })
 
@@ -30,10 +28,10 @@ describe("blocks :: init with defaults", async assert => {
   })
 
   assert({
-    given: "4 custom routes",
+    given: "5 custom routes",
     should: "load default /ping and custom",
     actual: plugins.Router.count(),
-    expected: 5,
+    expected: 6,
   })
 
   assert({
@@ -50,13 +48,9 @@ describe("blocks :: init with defaults", async assert => {
   assert({
     given: "default route /ping",
     should: "response with pong",
-    actual: await request(`${API_URL}/ping`, {
-      headers: {
-        "Content-Type": "application/json; charset=UTF-8",
-      },
-    }).then(body => ({
-      name: body.name,
-      ping: body.ping,
+    actual: await GET(`${API_URL}/ping`).then(({ name, ping }) => ({
+      name,
+      ping,
     })),
     expected: { name: "blocks", ping: "pong" },
   })
@@ -64,9 +58,9 @@ describe("blocks :: init with defaults", async assert => {
   assert({
     given: "route path does not exist",
     should: "return 404",
-    actual: await request(`${API_URL}/not-exist`).catch(res => ({
-      status: res.statusCode,
-      body: res.error,
+    actual: await GET(`${API_URL}/not-exist`).catch(({ status, body }) => ({
+      status,
+      body,
     })),
     expected: {
       status: 404,
@@ -85,17 +79,16 @@ describe("blocks :: init with defaults", async assert => {
   assert({
     given: "route that returns undefined",
     should: "return empty JSON object",
-    actual: await request(`${API_URL}/return-undefined`),
+    actual: await GET(`${API_URL}/return-undefined`),
     expected: {},
   })
 
   assert({
     given: "form encoded body and content type",
     should: "parse body with qs",
-    actual: await request(`${API_URL}/with-schema/mutant`, {
-      method: "POST",
+    actual: await POST(`${API_URL}/with-schema/mutant`, {
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "content-type": "application/x-www-form-urlencoded",
       },
       body: "parsed=with%20qs&another=value",
     }),
@@ -105,6 +98,18 @@ describe("blocks :: init with defaults", async assert => {
       query: {},
       body: { parsed: "with qs", another: "value" },
     },
+  })
+
+  assert({
+    given: "form data with file field",
+    should: "upload and save file localy",
+    actual: await FORM_DATA(`${API_URL}/upload`, {
+      body: {
+        field: "testField",
+        file: fs.createReadStream(`${__dirname}/index.js`),
+      },
+    }).then(({ file }) => fs.existsSync(file)),
+    expected: true,
   })
 
   server.close()
