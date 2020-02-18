@@ -1,8 +1,7 @@
-/* eslint-disable no-sync,new-cap */
-
 import http from "http"
 import path from "path"
 import fs from "fs"
+import jwt from "jsonwebtoken"
 import { describe } from "riteway"
 
 import { GET, POST, FORM_DATA } from "./http.lib"
@@ -178,4 +177,60 @@ describe("blocks :: init with defaults", async assert => {
   })
 
   server.close()
+
+  {
+    process.env.JWT_SECRET = "testing"
+
+    const PORT = 4567
+    const API_URL = `http://localhost:${PORT}`
+
+    const [middleware, plugins] = await block({
+      routes: [require("./routes/with-jwt.route")],
+    })
+    const server = http.createServer(middleware).listen(PORT, "localhost")
+
+    assert({
+      given: "invalid jwt in request headers",
+      should: "return 409",
+      actual: await GET(`${API_URL}/with-jwt`, {
+        headers: {
+          Authorization: "invalid-jwt",
+        },
+      }).catch(({ status, body }) => ({
+        status,
+        body,
+      })),
+      expected: {
+        status: 409,
+        body: {
+          error: "InputValidationError",
+          code: 409,
+          message: "Invalid JWT",
+          details: {
+            method: "GET",
+            path: "/with-jwt",
+          },
+        },
+      },
+    })
+
+    assert({
+      given: "valid jwt in request headers",
+      should: "verify, parse and expose content to route action",
+      actual: await GET(`${API_URL}/with-jwt`, {
+        headers: {
+          Authorization: jwt.sign(
+            { foo: "bar", jti: "id-123" },
+            process.env.JWT_SECRET
+          ),
+        },
+      }),
+      expected: {
+        foo: "bar",
+        jti: "id-123",
+      },
+    })
+
+    server.close()
+  }
 })
