@@ -1,10 +1,20 @@
 const debug = require("debug")("Blocks:RouterPlugin")
 
 import { pathToRegexp } from "path-to-regexp"
-import { count, push, reduce, find, merge, pick, is } from "@mutantlove/m"
+import {
+  count,
+  push,
+  reduce,
+  find,
+  merge,
+  pick,
+  is,
+  isEmpty,
+} from "@mutantlove/m"
 
 import { InputValidationError } from "../errors/input"
 import { AuthorizationError } from "../errors/authorization"
+import { NotFoundError } from "../errors/not-found"
 
 export default {
   create: () => {
@@ -41,19 +51,21 @@ export default {
           return isPathMatch && isMethodMatch
         })(routes)
 
-        let params = {}
-
-        if (route) {
-          const paramsList = route.pathRegExp.exec(pathname)
-
-          params = reduce(
-            (acc, element, index) => ({
-              ...acc,
-              [element.name]: paramsList[index + 1],
-            }),
-            {}
-          )(route.pathParamsKeys)
+        if (isEmpty(route)) {
+          throw new NotFoundError(`Endpoint ${method}:${pathname} not found`, {
+            method,
+            path: pathname,
+          })
         }
+
+        const paramsList = route.pathRegExp.exec(pathname)
+        const params = reduce(
+          (acc, element, index) => ({
+            ...acc,
+            [element.name]: paramsList[index + 1],
+          }),
+          {}
+        )(route.pathParamsKeys)
 
         return {
           route,
@@ -119,7 +131,10 @@ export default {
           Promise.resolve(route.isAllowed(req))
             .then(isAllowed => {
               if (!isAllowed) {
-                throw new AuthorizationError()
+                throw new AuthorizationError("Not allowed to access resource", {
+                  method: route.method,
+                  path: route.path,
+                })
               }
 
               return null
