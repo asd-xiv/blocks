@@ -1,10 +1,14 @@
 module.exports = {
   headers: {
     type: "object",
-    required: ["content-type"],
+    required: ["x-content-type"],
     properties: {
-      "content-type": {
-        enum: ["application/json; charset=UTF-8", "application/json"],
+      "x-content-type": {
+        enum: [
+          "application/json",
+          "application/x-www-form-urlencoded",
+          "multipart/form-data",
+        ],
       },
     },
   },
