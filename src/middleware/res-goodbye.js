@@ -1,6 +1,6 @@
 const debug = require("debug")("Blocks:GoodbyeMiddleware")
 
-import { get, isEmpty } from "@mutantlove/m"
+import { get, is } from "@mutantlove/m"
 import accepts from "accepts"
 
 const toNowInMs = start => {
@@ -16,12 +16,12 @@ const bodyByAccept = ({ accept, res }) => {
     case "json":
       res.setHeader("Content-Type", "application/json")
 
-      return JSON.stringify(isEmpty(payload) ? {} : payload)
+      return JSON.stringify(is(payload) ? payload : {})
     default:
       // the fallback is text/plain, so no need to specify it above
       res.setHeader("Content-Type", "text/plain")
 
-      return isEmpty(payload) ? "" : payload
+      return is(payload) ? payload : ""
   }
 }
 
