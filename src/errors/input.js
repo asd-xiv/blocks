@@ -1,7 +1,7 @@
 import { BaseError } from "./base"
 
 export class InputValidationError extends BaseError {
-  constructor(message, details = {}) {
+  constructor(message, details) {
     super(message, details)
 
     this.name = "InputValidationError"
