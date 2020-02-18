@@ -1,59 +1,110 @@
 const debug = require("debug")("Blocks:BodyMiddleware")
 
-import {
-  find,
-  get,
-  pipe,
-  when,
-  startsWith,
-  i,
-  is,
-  isEmpty,
-} from "@mutantlove/m"
+import fs from "fs"
+import cuid from "cuid"
+import Busboy from "busboy"
+import slugify from "@sindresorhus/slugify"
+import { tmpdir } from "os"
+import { pipe, isEmpty } from "@mutantlove/m"
+import { extname, basename, join } from "path"
+
 import { InputValidationError } from "../errors/input"
 
-const apply = args => fn => fn.apply(null, args)
+const handleText = (req, { onParse, onError }) => {
+  const chunks = []
 
-const parseBody = (req, parseFnByContentType) => {
-  const bodyChunks = []
+  req
+    .on("data", chunk => chunks.push(chunk))
+    .on("end", () => {
+      try {
+        pipe(Buffer.concat, buffer => buffer.toString(), onParse)(chunks)
+      } catch (error) {
+        onError(error)
+      }
+    })
+}
 
-  return new Promise((resolve, reject) => {
-    req
-      .on("data", chunk => {
-        bodyChunks.push(chunk)
-      })
-      .on("end", () => {
-        try {
-          const bodyString = Buffer.concat(bodyChunks).toString()
+const handleForm = (req, { onParse, onError }) => {
+  if (req.method !== "POST") {
+    throw new Error("Use POST method when sending multipart data")
+  }
 
-          resolve(
-            pipe(
-              find(([match]) =>
-                pipe(get(["headers", "content-type"]), startsWith(match))(req)
-              ),
-              when(
-                is,
-                ([, parseFn]) => parseFn,
-                () => i
-              ),
-              apply([bodyString])
-            )(parseFnByContentType)
-          )
-        } catch (error) {
-          reject(new InputValidationError("Body is not valid JSON"))
-        }
-      })
-  })
+  try {
+    const busboy = new Busboy({ headers: req.headers })
+    const fields = {}
+    const files = {}
+
+    busboy.on("field", (fieldname, val) => {
+      fields[fieldname] = val
+    })
+
+    busboy.on("file", (fieldname, file, filename) => {
+      const ext = extname(filename)
+      const fileSlug = slugify(basename(filename, ext))
+      const saveToPath = join(tmpdir(), `${fileSlug}-${cuid.slug()}${ext}`)
+
+      file.pipe(fs.createWriteStream(saveToPath))
+      files[fieldname] = { path: saveToPath, stream: file }
+    })
+
+    busboy.on("finish", () => {
+      onParse({ ...fields, ...files })
+    })
+
+    req.pipe(busboy)
+  } catch (error) {
+    onError(error)
+  }
 }
 
 module.exports = ({ QueryParser }) => (req, res, next) => {
-  parseBody(req, [
-    ["application/json", source => (isEmpty(source) ? {} : JSON.parse(source))],
-    ["application/x-www-form-urlencoded", QueryParser.parse],
-  ])
-    .then(body => {
-      req.ctx.body = body
-      next()
-    })
-    .catch(next)
+  switch (req.headers["x-content-type"]) {
+    case "application/json":
+      return handleText(req, {
+        onParse: source => {
+          req.ctx.body = isEmpty(source) ? {} : JSON.parse(source)
+          next()
+        },
+        onError: error =>
+          next(new InputValidationError("Invalid JSON string in body", error)),
+      })
+
+    //
+    case "application/x-www-form-urlencoded":
+      return handleText(req, {
+        next,
+        onParse: source => {
+          req.ctx.body = QueryParser.parse(source)
+          next()
+        },
+        onError: error =>
+          next(
+            new InputValidationError(
+              "Invalid URL encoded string in body",
+              error
+            )
+          ),
+      })
+
+    //
+    case "multipart/form-data":
+      return handleForm(req, {
+        onParse: source => {
+          req.ctx.body = source
+          next()
+        },
+        onError: error =>
+          next(new InputValidationError("Invalid form data in body", error)),
+      })
+
+    //
+    default:
+      next(
+        new InputValidationError(
+          `Can only parse request body for following content types: 'application/json', 'multipart/form-data' and 'application/x-www-form-urlencoded'. Received '${JSON.stringify(
+            req.headers["content-type-parsed"]
+          )}'`
+        )
+      )
+  }
 }
