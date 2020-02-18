@@ -1,6 +1,8 @@
+const debug = require("debug")("Blocks:CustomRoute")
+
 module.exports = {
   method: "GET",
-  path: "/no-schema",
+  path: "/dont-allow",
 
   /**
    * Permission checking, if allowed:
@@ -12,7 +14,7 @@ module.exports = {
    *
    * @return {boolean}
    */
-  isAllowed: () => () => true,
+  isAllowed: () => () => false,
 
   /**
    * After schema validation and permission checking, do route logic
@@ -22,9 +24,7 @@ module.exports = {
    *
    * @return {mixed}
    */
-  action: () => () => {
-    return {
-      message: "Default json schema works!",
-    }
-  },
+  action: () => () => ({
+    ping: "pong",
+  }),
 }

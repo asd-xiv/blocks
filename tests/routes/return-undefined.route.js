@@ -12,7 +12,7 @@ module.exports = {
    *
    * @return {boolean}
    */
-  isAllowed: (/* plugins */) => async () => true,
+  isAllowed: () => () => true,
 
   /**
    * After schema validation and permission checking, do route logic

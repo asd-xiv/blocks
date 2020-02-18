@@ -11,13 +11,23 @@ const REQ = (url, { method, query, headers, body }) => {
     headers: { "content-type": "application/json", ...headers },
     body,
   })
-    .then(res =>
-      res.json().then(data => {
-        res.data = data
+    .then(res => {
+      const contentType = res.headers.get("content-type")
+
+      if (contentType && contentType.indexOf("application/json") !== -1) {
+        return res.json().then(data => {
+          res.data = data
+
+          return res
+        })
+      }
+
+      return res.text().then(text => {
+        res.data = text
 
         return res
       })
-    )
+    })
     .then(res => {
       if (!res.ok) {
         const error = new Error(res.statusText)

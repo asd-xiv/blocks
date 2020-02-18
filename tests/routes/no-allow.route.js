@@ -12,7 +12,7 @@ module.exports = {
    *
    * @return {mixed}
    */
-  action: () => async () => ({
+  action: () => () => ({
     ping: "pong",
   }),
 }

@@ -31,7 +31,7 @@ module.exports = {
    *
    * @return {mixed}
    */
-  action: () => async ({ ctx: { body } }) => {
+  action: () => ({ ctx: { body } }) => {
     return {
       file: body.file.path,
     }

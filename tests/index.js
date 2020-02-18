@@ -15,6 +15,7 @@ describe("blocks :: init with defaults", async assert => {
       require("./routes/no-schema.route"),
       require("./routes/with-schema.route"),
       require("./routes/no-allow.route"),
+      require("./routes/dont-allow.route"),
       require("./routes/return-undefined.route"),
       require("./routes/upload.route"),
     ],
@@ -28,10 +29,10 @@ describe("blocks :: init with defaults", async assert => {
   })
 
   assert({
-    given: "5 custom routes",
-    should: "load default /ping and custom",
+    given: "6 custom routes",
+    should: "load default /ping and all custom",
     actual: plugins.Router.count(),
-    expected: 6,
+    expected: 7,
   })
 
   assert({
@@ -70,14 +71,78 @@ describe("blocks :: init with defaults", async assert => {
         message: "Endpoint GET:/not-exist not found",
         details: {
           method: "GET",
-          pathname: "/not-exist",
+          path: "/not-exist",
         },
       },
     },
   })
 
   assert({
-    given: "route that returns undefined",
+    given: "route without isAllowed defined",
+    should: "return 403",
+    actual: await GET(`${API_URL}/no-allow`).catch(({ status, body }) => ({
+      status,
+      body,
+    })),
+    expected: {
+      status: 403,
+      body: {
+        error: "AuthorizationError",
+        code: 403,
+        message: "Not allowed to access resource",
+        details: {
+          method: "GET",
+          path: "/no-allow",
+        },
+      },
+    },
+  })
+
+  assert({
+    given: "route returns false in isAllowed",
+    should: "return 403",
+    actual: await GET(`${API_URL}/dont-allow`).catch(({ status, body }) => ({
+      status,
+      body,
+    })),
+    expected: {
+      status: 403,
+      body: {
+        error: "AuthorizationError",
+        code: 403,
+        message: "Not allowed to access resource",
+        details: {
+          method: "GET",
+          path: "/dont-allow",
+        },
+      },
+    },
+  })
+
+  assert({
+    given: "accept app/json on route that returns undefined",
+    should: "return empty JSON object",
+    actual: await GET(`${API_URL}/return-undefined`, {
+      headers: {
+        Accepts: "application/json",
+      },
+    }),
+    expected: {},
+  })
+
+  assert({
+    given: "accept text/plain on route that returns undefined",
+    should: "return empty JSON object",
+    actual: await GET(`${API_URL}/return-undefined`, {
+      headers: {
+        Accept: "text/plain",
+      },
+    }),
+    expected: "",
+  })
+
+  assert({
+    given: "route that returns null",
     should: "return empty JSON object",
     actual: await GET(`${API_URL}/return-undefined`),
     expected: {},
@@ -101,7 +166,7 @@ describe("blocks :: init with defaults", async assert => {
   })
 
   assert({
-    given: "form data with file field",
+    given: "multipart/form-data with file field",
     should: "upload and save file localy",
     actual: await FORM_DATA(`${API_URL}/upload`, {
       body: {
