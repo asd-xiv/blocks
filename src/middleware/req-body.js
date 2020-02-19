@@ -1,11 +1,11 @@
 const debug = require("debug")("Blocks:BodyMiddleware")
 
-import fs from "fs"
 import cuid from "cuid"
 import Busboy from "busboy"
 import slugify from "@sindresorhus/slugify"
 import { tmpdir } from "os"
 import { pipe, isEmpty } from "@mutantlove/m"
+import { createWriteStream } from "fs"
 import { extname, basename, join } from "path"
 
 import { InputValidationError } from "../errors/input"
@@ -43,8 +43,8 @@ const handleForm = (req, { onParse, onError }) => {
       const fileSlug = slugify(basename(filename, ext))
       const saveToPath = join(tmpdir(), `${fileSlug}-${cuid.slug()}${ext}`)
 
-      file.pipe(fs.createWriteStream(saveToPath))
-      files[fieldname] = { path: saveToPath, stream: file }
+      file.pipe(createWriteStream(saveToPath))
+      files[fieldname] = saveToPath
     })
 
     busboy.on("finish", () => {
