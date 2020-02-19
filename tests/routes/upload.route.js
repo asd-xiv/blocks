@@ -33,7 +33,7 @@ module.exports = {
    */
   action: () => ({ ctx: { body } }) => {
     return {
-      file: body.file.path,
+      file: body.file,
     }
   },
 }

@@ -63,7 +63,7 @@ module.exports = {
     required: ["field", "file"],
     properties: {
       field: { type: "string" },
-      file: { type: "object" },
+      file: { type: "string" },
     },
   },
 }
