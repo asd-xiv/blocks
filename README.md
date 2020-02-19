@@ -56,6 +56,7 @@ If it returns false, an automatic `403 Forbidden` response will be sent.
 
 ### Other
 
+* File upload and form parsing for `multipart/form-data` - [`busboy`](https://github.com/mscdex/busboy)
 * Middleware support of existing package - [`connect`](https://github.com/senchalabs/connect)
 * JSON Web Token - [`jsonwebtoken`](https://github.com/auth0/node-jsonwebtoken)
 * Query string parsing - [`qs`](https://github.com/ljharb/qs)
@@ -155,7 +156,7 @@ module.exports = {
    *
    * @return {boolean}
    */
-  isAllowed: (/* pluginsObj */) => async ({ method, ctx }) => {
+  isAllowed: (/* pluginsObj */) => ({ method, ctx }) => {
     console.log(`${method}:${ctx.pathname} - isAllowed`)
 
     return true
@@ -169,7 +170,7 @@ module.exports = {
    *
    * @return {mixed}
    */
-  action: (/* pluginsObj */) => async req => {
+  action: (/* pluginsObj */) => req => {
     return {
       message: "This ${req.ctx.params.id} is something else!"
     }
