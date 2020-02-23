@@ -1,14 +1,14 @@
 {
-  "name": "@mutantlove/blocks",
-  "version": "0.7.0",
-  "description": "request |> think hard |> response",
-  "homepage": "https://github.com/mutantlove/blocks",
+  "name": "@mutant-ws/blocks",
+  "version": "0.0.1",
+  "description": "REST API framework for Node.js",
+  "homepage": "https://github.com/mutant-ws/blocks",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mutantlove/blocks.git"
+    "url": "git+https://github.com/mutant-ws/blocks.git"
   },
   "bugs": {
-    "url": "https://github.com/mutantlove/blocks/issues"
+    "url": "https://github.com/mutant-ws/blocks/issues"
   },
   "scripts": {
     "----UTIL": "",

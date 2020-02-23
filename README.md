@@ -1,14 +1,12 @@
 <!-- markdownlint-disable first-line-h1 line-length -->
 
-[![CircleCI](https://circleci.com/gh/mutantlove/blocks.svg?style=svg)](https://circleci.com/gh/mutantlove/blocks)
-[![npm package version](https://badge.fury.io/js/%40mutantlove%2Fblocks.svg)](https://badge.fury.io/js/%40mutantlove%2Fblocks)
-[![Coverage Status](https://coveralls.io/repos/github/mutantlove/blocks/badge.svg)](https://coveralls.io/github/mutantlove/blocks)
+[![CircleCI](https://circleci.com/gh/mutant-ws/blocks.svg?style=svg)](https://circleci.com/gh/mutant-ws/blocks)
+[![npm package version](https://badge.fury.io/js/%40mutant-ws%2Fblocks.svg)](https://badge.fury.io/js/%40mutant-ws%2Fblocks)
+[![Coverage Status](https://coveralls.io/repos/github/mutant-ws/blocks/badge.svg)](https://coveralls.io/github/mutant-ws/blocks)
 
 # blocks
 
-> `request` |> `think hard` |> `response`.
->
-> NodeJS API framework. Another one.
+> REST API framework for Node.js. `request` |> `think hard` |> `response`.
 
 ![Request-Response cycle](docs/bin/req-res-cycle.svg "Request-Response cycle")
 
@@ -67,7 +65,7 @@ If it returns false, an automatic `403 Forbidden` response will be sent.
 ## Install
 
 ```bash
-npm install @mutantlove/blocks
+npm install @mutant-ws/blocks
 ```
 
 ## Example
@@ -78,7 +76,7 @@ npm install @mutantlove/blocks
 import http from "http"
 import glob from "glob"
 
-import { block } from "@mutantlove/blocks"
+import { block } from "@mutant-ws/blocks"
 
 // initialize routes and plugins
 const app = block({
@@ -241,7 +239,7 @@ module.exports = {
 
 ## Plugins
 
-Separate code interfacing with 3rd party libraries or services. [pluginus](https://github.com/mutantlove/pluginus) dependency injection library is used.
+Separate code interfacing with 3rd party libraries or services. [pluginus](https://github.com/mutant-ws/pluginus) dependency injection library is used.
 
 Plugins are accesible in other plugins, middleware and routes.
 
@@ -288,7 +286,7 @@ module.exports = {
 ## Develop
 
 ```bash
-git clone git@github.com:mutantlove/blocks.git && \
+git clone git@github.com:mutant-ws/blocks.git && \
   cd blocks && \
   npm run setup
 ```
@@ -329,4 +327,4 @@ BREAKING CHANGE: Half of features not working anymore
 
 ## Changelog
 
-See the [releases section](https://github.com/mutantlove/blocks/releases) for details.
+See the [releases section](https://github.com/mutant-ws/blocks/releases) for details.
