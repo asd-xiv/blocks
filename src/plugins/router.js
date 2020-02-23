@@ -128,7 +128,13 @@ export default {
         }
 
         return (
-          Promise.resolve(route.isAllowed(req))
+          Promise.resolve()
+            .then(() => route.isAllowed(req))
+            .catch(error => {
+              debug(`isAllowed for ${route.method}:${route.path} threw`, error)
+
+              return false
+            })
             .then(isAllowed => {
               if (!isAllowed) {
                 throw new AuthorizationError("Not allowed to access resource", {
@@ -136,8 +142,6 @@ export default {
                   path: route.path,
                 })
               }
-
-              return null
             })
             // Route action logic
             .then(() => route.action(req))

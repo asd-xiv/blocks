@@ -18,6 +18,7 @@ describe("blocks :: init with defaults", async assert => {
         require("./routes/with-schema.route"),
         require("./routes/no-allow.route"),
         require("./routes/dont-allow.route"),
+        require("./routes/allow-throws.route"),
         require("./routes/return-undefined.route"),
         require("./routes/upload.route"),
       ],
@@ -31,10 +32,10 @@ describe("blocks :: init with defaults", async assert => {
     })
 
     assert({
-      given: "6 custom routes",
+      given: "7 custom routes",
       should: "load default /ping and all custom",
       actual: plugins.Router.count(),
-      expected: 7,
+      expected: 8,
     })
 
     assert({
@@ -116,6 +117,29 @@ describe("blocks :: init with defaults", async assert => {
           details: {
             method: "GET",
             path: "/dont-allow",
+          },
+        },
+      },
+    })
+
+    assert({
+      given: "route isAllowed throws error",
+      should: "return 403",
+      actual: await GET(`${API_URL}/allow-throws`).catch(
+        ({ status, body }) => ({
+          status,
+          body,
+        })
+      ),
+      expected: {
+        status: 403,
+        body: {
+          error: "AuthorizationError",
+          code: 403,
+          message: "Not allowed to access resource",
+          details: {
+            method: "GET",
+            path: "/allow-throws",
           },
         },
       },
