@@ -4,11 +4,7 @@ module.exports = {
     required: ["x-content-type"],
     properties: {
       "x-content-type": {
-        enum: [
-          "application/json",
-          "application/x-www-form-urlencoded",
-          "multipart/form-data",
-        ],
+        enum: ["application/json"],
       },
     },
   },
