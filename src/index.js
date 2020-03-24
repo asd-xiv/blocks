@@ -2,8 +2,8 @@ const debug = require("debug")("Blocks:Main")
 
 import connect from "connect"
 import path from "path"
-import { pluginus } from "@mutantlove/pluginus"
-import { is, forEach, reduce } from "@mutantlove/m"
+import { pluginus } from "@mutant-ws/pluginus"
+import { is, forEach, reduce } from "@mutant-ws/m"
 
 import { BaseError } from "./errors/base"
 import { NotFoundError } from "./errors/not-found"

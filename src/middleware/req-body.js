@@ -4,7 +4,7 @@ import cuid from "cuid"
 import Busboy from "busboy"
 import slugify from "@sindresorhus/slugify"
 import { tmpdir } from "os"
-import { pipe, isEmpty } from "@mutantlove/m"
+import { pipe, isEmpty } from "@mutant-ws/m"
 import { createWriteStream } from "fs"
 import { extname, basename, join } from "path"
 

@@ -2,7 +2,7 @@
 
 import FormData from "form-data"
 import fetch from "node-fetch"
-import { pipe, reduce } from "@mutantlove/m"
+import { pipe, reduce } from "@mutant-ws/m"
 
 const REQ = (url, { method, query, headers, body }) => {
   return fetch(url, {

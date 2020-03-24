@@ -1,6 +1,6 @@
 const debug = require("debug")("Blocks:GoodbyeMiddleware")
 
-import { get, is } from "@mutantlove/m"
+import { get, is } from "@mutant-ws/m"
 import accepts from "accepts"
 
 const toNowInMs = start => {

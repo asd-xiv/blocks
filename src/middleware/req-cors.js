@@ -1,7 +1,7 @@
 const debug = require("debug")("Blocks:CORSMiddleware")
 
 import cors from "cors"
-import { is, isEmpty } from "@mutantlove/m"
+import { is, isEmpty } from "@mutant-ws/m"
 
 module.exports = () => {
   const ORIGIN = process.env.CORS_ORIGIN

@@ -1,7 +1,7 @@
 const debug = require("debug")("Blocks:QueryParserPlugin")
 
 import qs from "qs"
-import { is } from "@mutantlove/m"
+import { is } from "@mutant-ws/m"
 
 export default {
   create: () => {

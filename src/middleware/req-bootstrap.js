@@ -2,7 +2,7 @@ const debug = require("debug")("Blocks:BootstrapMiddleware")
 
 import cuid from "cuid"
 import contentType from "content-type"
-import { pick } from "@mutantlove/m"
+import { pick } from "@mutant-ws/m"
 
 module.exports = () => (req, res, next) => {
   req.ctx = {

@@ -1,7 +1,7 @@
 const debug = require("debug")("blocks:JWTDecodeMiddleware")
 
 import jwt from "jsonwebtoken"
-import { is, isEmpty } from "@mutantlove/m"
+import { is, isEmpty } from "@mutant-ws/m"
 
 import { InputValidationError } from "../errors/input"
 

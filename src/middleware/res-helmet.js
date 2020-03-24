@@ -1,7 +1,7 @@
 const debug = require("debug")("Blocks:HelmetMiddleware")
 
 import helmet from "helmet"
-import { get, when, same, pipe, is } from "@mutantlove/m"
+import { get, when, same, pipe, is } from "@mutant-ws/m"
 
 const toBool = source => (is(source) ? source === "true" : null)
 

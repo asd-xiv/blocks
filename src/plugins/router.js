@@ -10,7 +10,7 @@ import {
   pick,
   is,
   isEmpty,
-} from "@mutantlove/m"
+} from "@mutant-ws/m"
 
 import { InputValidationError } from "../errors/input"
 import { AuthorizationError } from "../errors/authorization"
