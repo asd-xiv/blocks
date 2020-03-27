@@ -1,48 +1,53 @@
-<svg id="mermaid-1565793982303" width="100%" xmlns="http://www.w3.org/2000/svg" height="100%" style="max-width:850px;" viewBox="-50 -10 850 371"><style>
-
-
-#mermaid-1565793982303 .label {
+<svg id="mermaid-1585301863560" width="100%" xmlns="http://www.w3.org/2000/svg" height="100%" style="max-width:850px;" viewBox="-50 -10 850 509"><style>
+#mermaid-1585301863560 .label {
   font-family: 'trebuchet ms', verdana, arial;
+  font-family: var(--mermaid-font-family);
   color: #333; }
 
-#mermaid-1565793982303 .label text {
+#mermaid-1585301863560 .label text {
   fill: #333; }
 
-#mermaid-1565793982303 .node rect,
-#mermaid-1565793982303 .node circle,
-#mermaid-1565793982303 .node ellipse,
-#mermaid-1565793982303 .node polygon {
+#mermaid-1585301863560 .node rect,
+#mermaid-1585301863560 .node circle,
+#mermaid-1585301863560 .node ellipse,
+#mermaid-1585301863560 .node polygon,
+#mermaid-1585301863560 .node path {
   fill: #ECECFF;
   stroke: #9370DB;
   stroke-width: 1px; }
 
-#mermaid-1565793982303 .node.clickable {
+#mermaid-1585301863560 .node .label {
+  text-align: center; }
+
+#mermaid-1585301863560 .node.clickable {
   cursor: pointer; }
 
-#mermaid-1565793982303 .arrowheadPath {
+#mermaid-1585301863560 .arrowheadPath {
   fill: #333333; }
 
-#mermaid-1565793982303 .edgePath .path {
+#mermaid-1585301863560 .edgePath .path {
   stroke: #333333;
   stroke-width: 1.5px; }
 
-#mermaid-1565793982303 .edgeLabel {
-  background-color: #e8e8e8; }
+#mermaid-1585301863560 .edgeLabel {
+  background-color: #e8e8e8;
+  text-align: center; }
 
-#mermaid-1565793982303 .cluster rect {
+#mermaid-1585301863560 .cluster rect {
   fill: #ffffde;
   stroke: #aaaa33;
   stroke-width: 1px; }
 
-#mermaid-1565793982303 .cluster text {
+#mermaid-1585301863560 .cluster text {
   fill: #333; }
 
-#mermaid-1565793982303 div.mermaidTooltip {
+#mermaid-1585301863560 div.mermaidTooltip {
   position: absolute;
   text-align: center;
   max-width: 200px;
   padding: 2px;
   font-family: 'trebuchet ms', verdana, arial;
+  font-family: var(--mermaid-font-family);
   font-size: 12px;
   background: #ffffde;
   border: 1px solid #aaaa33;
@@ -50,345 +55,448 @@
   pointer-events: none;
   z-index: 100; }
 
-#mermaid-1565793982303 .actor {
+#mermaid-1585301863560 .actor {
   stroke: #CCCCFF;
   fill: #ECECFF; }
 
-#mermaid-1565793982303 text.actor {
+#mermaid-1585301863560 text.actor {
   fill: black;
   stroke: none; }
 
-#mermaid-1565793982303 .actor-line {
+#mermaid-1585301863560 .actor-line {
   stroke: grey; }
 
-#mermaid-1565793982303 .messageLine0 {
+#mermaid-1585301863560 .messageLine0 {
   stroke-width: 1.5;
   stroke-dasharray: '2 2';
   stroke: #333; }
 
-#mermaid-1565793982303 .messageLine1 {
+#mermaid-1585301863560 .messageLine1 {
   stroke-width: 1.5;
   stroke-dasharray: '2 2';
   stroke: #333; }
 
-#mermaid-1565793982303 #arrowhead {
+#mermaid-1585301863560 #arrowhead {
   fill: #333; }
 
-#mermaid-1565793982303 .sequenceNumber {
+#mermaid-1585301863560 .sequenceNumber {
   fill: white; }
 
-#mermaid-1565793982303 #sequencenumber {
+#mermaid-1585301863560 #sequencenumber {
   fill: #333; }
 
-#mermaid-1565793982303 #crosshead path {
+#mermaid-1585301863560 #crosshead path {
   fill: #333 !important;
   stroke: #333 !important; }
 
-#mermaid-1565793982303 .messageText {
+#mermaid-1585301863560 .messageText {
   fill: #333;
   stroke: none; }
 
-#mermaid-1565793982303 .labelBox {
+#mermaid-1585301863560 .labelBox {
   stroke: #CCCCFF;
   fill: #ECECFF; }
 
-#mermaid-1565793982303 .labelText {
+#mermaid-1585301863560 .labelText {
   fill: black;
   stroke: none; }
 
-#mermaid-1565793982303 .loopText {
+#mermaid-1585301863560 .loopText {
   fill: black;
   stroke: none; }
 
-#mermaid-1565793982303 .loopLine {
+#mermaid-1585301863560 .loopLine {
   stroke-width: 2;
   stroke-dasharray: '2 2';
   stroke: #CCCCFF; }
 
-#mermaid-1565793982303 .note {
+#mermaid-1585301863560 .note {
   stroke: #aaaa33;
   fill: #fff5ad; }
 
-#mermaid-1565793982303 .noteText {
+#mermaid-1585301863560 .noteText {
   fill: black;
   stroke: none;
   font-family: 'trebuchet ms', verdana, arial;
+  font-family: var(--mermaid-font-family);
   font-size: 14px; }
 
-#mermaid-1565793982303 .activation0 {
+#mermaid-1585301863560 .activation0 {
   fill: #f4f4f4;
   stroke: #666; }
 
-#mermaid-1565793982303 .activation1 {
+#mermaid-1585301863560 .activation1 {
   fill: #f4f4f4;
   stroke: #666; }
 
-#mermaid-1565793982303 .activation2 {
+#mermaid-1585301863560 .activation2 {
   fill: #f4f4f4;
   stroke: #666; }
 
 
-#mermaid-1565793982303 .section {
+#mermaid-1585301863560 .mermaid-main-font {
+  font-family: "trebuchet ms", verdana, arial;
+  font-family: var(--mermaid-font-family); }
+
+#mermaid-1585301863560 .section {
   stroke: none;
   opacity: 0.2; }
 
-#mermaid-1565793982303 .section0 {
+#mermaid-1585301863560 .section0 {
   fill: rgba(102, 102, 255, 0.49); }
 
-#mermaid-1565793982303 .section2 {
+#mermaid-1585301863560 .section2 {
   fill: #fff400; }
 
-#mermaid-1565793982303 .section1,
-#mermaid-1565793982303 .section3 {
+#mermaid-1585301863560 .section1,
+#mermaid-1585301863560 .section3 {
   fill: white;
   opacity: 0.2; }
 
-#mermaid-1565793982303 .sectionTitle0 {
+#mermaid-1585301863560 .sectionTitle0 {
   fill: #333; }
 
-#mermaid-1565793982303 .sectionTitle1 {
+#mermaid-1585301863560 .sectionTitle1 {
   fill: #333; }
 
-#mermaid-1565793982303 .sectionTitle2 {
+#mermaid-1585301863560 .sectionTitle2 {
   fill: #333; }
 
-#mermaid-1565793982303 .sectionTitle3 {
+#mermaid-1585301863560 .sectionTitle3 {
   fill: #333; }
 
-#mermaid-1565793982303 .sectionTitle {
+#mermaid-1585301863560 .sectionTitle {
   text-anchor: start;
   font-size: 11px;
-  text-height: 14px; }
+  text-height: 14px;
+  font-family: 'trebuchet ms', verdana, arial;
+  font-family: var(--mermaid-font-family); }
 
 
-#mermaid-1565793982303 .grid .tick {
+#mermaid-1585301863560 .grid .tick {
   stroke: lightgrey;
-  opacity: 0.3;
+  opacity: 0.8;
   shape-rendering: crispEdges; }
+#mermaid-1585301863560   .grid .tick text {
+    font-family: 'trebuchet ms', verdana, arial;
+    font-family: var(--mermaid-font-family); }
 
-#mermaid-1565793982303 .grid path {
+#mermaid-1585301863560 .grid path {
   stroke-width: 0; }
 
 
-#mermaid-1565793982303 .today {
+#mermaid-1585301863560 .today {
   fill: none;
   stroke: red;
   stroke-width: 2px; }
 
 
 
-#mermaid-1565793982303 .task {
+#mermaid-1585301863560 .task {
   stroke-width: 2; }
 
-#mermaid-1565793982303 .taskText {
+#mermaid-1585301863560 .taskText {
   text-anchor: middle;
+  font-family: 'trebuchet ms', verdana, arial;
+  font-family: var(--mermaid-font-family); }
+
+#mermaid-1585301863560 .taskText:not([font-size]) {
   font-size: 11px; }
 
-#mermaid-1565793982303 .taskTextOutsideRight {
+#mermaid-1585301863560 .taskTextOutsideRight {
   fill: black;
   text-anchor: start;
-  font-size: 11px; }
+  font-size: 11px;
+  font-family: 'trebuchet ms', verdana, arial;
+  font-family: var(--mermaid-font-family); }
 
-#mermaid-1565793982303 .taskTextOutsideLeft {
+#mermaid-1585301863560 .taskTextOutsideLeft {
   fill: black;
   text-anchor: end;
   font-size: 11px; }
 
 
-#mermaid-1565793982303 .task.clickable {
+#mermaid-1585301863560 .task.clickable {
   cursor: pointer; }
 
-#mermaid-1565793982303 .taskText.clickable {
+#mermaid-1585301863560 .taskText.clickable {
   cursor: pointer;
   fill: #003163 !important;
   font-weight: bold; }
 
-#mermaid-1565793982303 .taskTextOutsideLeft.clickable {
+#mermaid-1585301863560 .taskTextOutsideLeft.clickable {
   cursor: pointer;
   fill: #003163 !important;
   font-weight: bold; }
 
-#mermaid-1565793982303 .taskTextOutsideRight.clickable {
+#mermaid-1585301863560 .taskTextOutsideRight.clickable {
   cursor: pointer;
   fill: #003163 !important;
   font-weight: bold; }
 
 
-#mermaid-1565793982303 .taskText0,
-#mermaid-1565793982303 .taskText1,
-#mermaid-1565793982303 .taskText2,
-#mermaid-1565793982303 .taskText3 {
+#mermaid-1585301863560 .taskText0,
+#mermaid-1585301863560 .taskText1,
+#mermaid-1585301863560 .taskText2,
+#mermaid-1585301863560 .taskText3 {
   fill: white; }
 
-#mermaid-1565793982303 .task0,
-#mermaid-1565793982303 .task1,
-#mermaid-1565793982303 .task2,
-#mermaid-1565793982303 .task3 {
+#mermaid-1585301863560 .task0,
+#mermaid-1585301863560 .task1,
+#mermaid-1585301863560 .task2,
+#mermaid-1585301863560 .task3 {
   fill: #8a90dd;
   stroke: #534fbc; }
 
-#mermaid-1565793982303 .taskTextOutside0,
-#mermaid-1565793982303 .taskTextOutside2 {
+#mermaid-1585301863560 .taskTextOutside0,
+#mermaid-1585301863560 .taskTextOutside2 {
   fill: black; }
 
-#mermaid-1565793982303 .taskTextOutside1,
-#mermaid-1565793982303 .taskTextOutside3 {
+#mermaid-1585301863560 .taskTextOutside1,
+#mermaid-1585301863560 .taskTextOutside3 {
   fill: black; }
 
 
-#mermaid-1565793982303 .active0,
-#mermaid-1565793982303 .active1,
-#mermaid-1565793982303 .active2,
-#mermaid-1565793982303 .active3 {
+#mermaid-1585301863560 .active0,
+#mermaid-1585301863560 .active1,
+#mermaid-1585301863560 .active2,
+#mermaid-1585301863560 .active3 {
   fill: #bfc7ff;
   stroke: #534fbc; }
 
-#mermaid-1565793982303 .activeText0,
-#mermaid-1565793982303 .activeText1,
-#mermaid-1565793982303 .activeText2,
-#mermaid-1565793982303 .activeText3 {
+#mermaid-1585301863560 .activeText0,
+#mermaid-1585301863560 .activeText1,
+#mermaid-1585301863560 .activeText2,
+#mermaid-1585301863560 .activeText3 {
   fill: black !important; }
 
 
-#mermaid-1565793982303 .done0,
-#mermaid-1565793982303 .done1,
-#mermaid-1565793982303 .done2,
-#mermaid-1565793982303 .done3 {
+#mermaid-1585301863560 .done0,
+#mermaid-1585301863560 .done1,
+#mermaid-1585301863560 .done2,
+#mermaid-1585301863560 .done3 {
   stroke: grey;
   fill: lightgrey;
   stroke-width: 2; }
 
-#mermaid-1565793982303 .doneText0,
-#mermaid-1565793982303 .doneText1,
-#mermaid-1565793982303 .doneText2,
-#mermaid-1565793982303 .doneText3 {
+#mermaid-1585301863560 .doneText0,
+#mermaid-1585301863560 .doneText1,
+#mermaid-1585301863560 .doneText2,
+#mermaid-1585301863560 .doneText3 {
   fill: black !important; }
 
 
-#mermaid-1565793982303 .crit0,
-#mermaid-1565793982303 .crit1,
-#mermaid-1565793982303 .crit2,
-#mermaid-1565793982303 .crit3 {
+#mermaid-1585301863560 .crit0,
+#mermaid-1585301863560 .crit1,
+#mermaid-1585301863560 .crit2,
+#mermaid-1585301863560 .crit3 {
   stroke: #ff8888;
   fill: red;
   stroke-width: 2; }
 
-#mermaid-1565793982303 .activeCrit0,
-#mermaid-1565793982303 .activeCrit1,
-#mermaid-1565793982303 .activeCrit2,
-#mermaid-1565793982303 .activeCrit3 {
+#mermaid-1585301863560 .activeCrit0,
+#mermaid-1585301863560 .activeCrit1,
+#mermaid-1585301863560 .activeCrit2,
+#mermaid-1585301863560 .activeCrit3 {
   stroke: #ff8888;
   fill: #bfc7ff;
   stroke-width: 2; }
 
-#mermaid-1565793982303 .doneCrit0,
-#mermaid-1565793982303 .doneCrit1,
-#mermaid-1565793982303 .doneCrit2,
-#mermaid-1565793982303 .doneCrit3 {
+#mermaid-1585301863560 .doneCrit0,
+#mermaid-1585301863560 .doneCrit1,
+#mermaid-1585301863560 .doneCrit2,
+#mermaid-1585301863560 .doneCrit3 {
   stroke: #ff8888;
   fill: lightgrey;
   stroke-width: 2;
   cursor: pointer;
   shape-rendering: crispEdges; }
 
-#mermaid-1565793982303 .milestone {
+#mermaid-1585301863560 .milestone {
   transform: rotate(45deg) scale(0.8, 0.8); }
 
-#mermaid-1565793982303 .milestoneText {
+#mermaid-1585301863560 .milestoneText {
   font-style: italic; }
 
-#mermaid-1565793982303 .doneCritText0,
-#mermaid-1565793982303 .doneCritText1,
-#mermaid-1565793982303 .doneCritText2,
-#mermaid-1565793982303 .doneCritText3 {
+#mermaid-1585301863560 .doneCritText0,
+#mermaid-1585301863560 .doneCritText1,
+#mermaid-1585301863560 .doneCritText2,
+#mermaid-1585301863560 .doneCritText3 {
   fill: black !important; }
 
-#mermaid-1565793982303 .activeCritText0,
-#mermaid-1565793982303 .activeCritText1,
-#mermaid-1565793982303 .activeCritText2,
-#mermaid-1565793982303 .activeCritText3 {
+#mermaid-1585301863560 .activeCritText0,
+#mermaid-1585301863560 .activeCritText1,
+#mermaid-1585301863560 .activeCritText2,
+#mermaid-1585301863560 .activeCritText3 {
   fill: black !important; }
 
-#mermaid-1565793982303 .titleText {
+#mermaid-1585301863560 .titleText {
   text-anchor: middle;
   font-size: 18px;
-  fill: black; }
+  fill: black;
+  font-family: 'trebuchet ms', verdana, arial;
+  font-family: var(--mermaid-font-family); }
 
-#mermaid-1565793982303 g.classGroup text {
+#mermaid-1585301863560 g.classGroup text {
   fill: #9370DB;
   stroke: none;
   font-family: 'trebuchet ms', verdana, arial;
+  font-family: var(--mermaid-font-family);
   font-size: 10px; }
+#mermaid-1585301863560   g.classGroup text .title {
+    font-weight: bolder; }
 
-#mermaid-1565793982303 g.classGroup rect {
+#mermaid-1585301863560 g.clickable {
+  cursor: pointer; }
+
+#mermaid-1585301863560 g.classGroup rect {
   fill: #ECECFF;
   stroke: #9370DB; }
 
-#mermaid-1565793982303 g.classGroup line {
+#mermaid-1585301863560 g.classGroup line {
   stroke: #9370DB;
   stroke-width: 1; }
 
-#mermaid-1565793982303 .classLabel .box {
+#mermaid-1585301863560 .classLabel .box {
   stroke: none;
   stroke-width: 0;
   fill: #ECECFF;
   opacity: 0.5; }
 
-#mermaid-1565793982303 .classLabel .label {
+#mermaid-1585301863560 .classLabel .label {
   fill: #9370DB;
   font-size: 10px; }
 
-#mermaid-1565793982303 .relation {
+#mermaid-1585301863560 .relation {
   stroke: #9370DB;
   stroke-width: 1;
   fill: none; }
 
-#mermaid-1565793982303 #compositionStart {
+#mermaid-1585301863560 .dashed-line {
+  stroke-dasharray: 3; }
+
+#mermaid-1585301863560 #compositionStart {
   fill: #9370DB;
   stroke: #9370DB;
   stroke-width: 1; }
 
-#mermaid-1565793982303 #compositionEnd {
+#mermaid-1585301863560 #compositionEnd {
   fill: #9370DB;
   stroke: #9370DB;
   stroke-width: 1; }
 
-#mermaid-1565793982303 #aggregationStart {
+#mermaid-1585301863560 #aggregationStart {
   fill: #ECECFF;
   stroke: #9370DB;
   stroke-width: 1; }
 
-#mermaid-1565793982303 #aggregationEnd {
+#mermaid-1585301863560 #aggregationEnd {
   fill: #ECECFF;
   stroke: #9370DB;
   stroke-width: 1; }
 
-#mermaid-1565793982303 #dependencyStart {
+#mermaid-1585301863560 #dependencyStart {
   fill: #9370DB;
   stroke: #9370DB;
   stroke-width: 1; }
 
-#mermaid-1565793982303 #dependencyEnd {
+#mermaid-1585301863560 #dependencyEnd {
   fill: #9370DB;
   stroke: #9370DB;
   stroke-width: 1; }
 
-#mermaid-1565793982303 #extensionStart {
+#mermaid-1585301863560 #extensionStart {
   fill: #9370DB;
   stroke: #9370DB;
   stroke-width: 1; }
 
-#mermaid-1565793982303 #extensionEnd {
+#mermaid-1585301863560 #extensionEnd {
   fill: #9370DB;
   stroke: #9370DB;
   stroke-width: 1; }
 
-#mermaid-1565793982303 .commit-id,
-#mermaid-1565793982303 .commit-msg,
-#mermaid-1565793982303 .branch-label {
+#mermaid-1585301863560 .commit-id,
+#mermaid-1585301863560 .commit-msg,
+#mermaid-1585301863560 .branch-label {
   fill: lightgrey;
-  color: lightgrey; }
-</style><style>#mermaid-1565793982303 {
-    color: rgba(0, 0, 0, 0.65);
+  color: lightgrey;
+  font-family: 'trebuchet ms', verdana, arial;
+  font-family: var(--mermaid-font-family); }
+
+#mermaid-1585301863560 .pieTitleText {
+  text-anchor: middle;
+  font-size: 25px;
+  fill: black;
+  font-family: 'trebuchet ms', verdana, arial;
+  font-family: var(--mermaid-font-family); }
+
+#mermaid-1585301863560 .slice {
+  font-family: 'trebuchet ms', verdana, arial;
+  font-family: var(--mermaid-font-family); }
+
+#mermaid-1585301863560 g.stateGroup text {
+  fill: #9370DB;
+  stroke: none;
+  font-size: 10px;
+  font-family: 'trebuchet ms', verdana, arial;
+  font-family: var(--mermaid-font-family); }
+
+#mermaid-1585301863560 g.stateGroup text {
+  fill: #9370DB;
+  stroke: none;
+  font-size: 10px; }
+
+#mermaid-1585301863560 g.stateGroup .state-title {
+  font-weight: bolder;
+  fill: black; }
+
+#mermaid-1585301863560 g.stateGroup rect {
+  fill: #ECECFF;
+  stroke: #9370DB; }
+
+#mermaid-1585301863560 g.stateGroup line {
+  stroke: #9370DB;
+  stroke-width: 1; }
+
+#mermaid-1585301863560 .transition {
+  stroke: #9370DB;
+  stroke-width: 1;
+  fill: none; }
+
+#mermaid-1585301863560 .stateGroup .composit {
+  fill: white;
+  border-bottom: 1px; }
+
+#mermaid-1585301863560 .stateGroup .alt-composit {
+  fill: #e0e0e0;
+  border-bottom: 1px; }
+
+#mermaid-1585301863560 .state-note {
+  stroke: #aaaa33;
+  fill: #fff5ad; }
+#mermaid-1585301863560   .state-note text {
+    fill: black;
+    stroke: none;
+    font-size: 10px; }
+
+#mermaid-1585301863560 .stateLabel .box {
+  stroke: none;
+  stroke-width: 0;
+  fill: #ECECFF;
+  opacity: 0.5; }
+
+#mermaid-1585301863560 .stateLabel text {
+  fill: black;
+  font-size: 10px;
+  font-weight: bold;
+  font-family: 'trebuchet ms', verdana, arial;
+  font-family: var(--mermaid-font-family); }
+
+:root {
+  --mermaid-font-family: '"trebuchet ms", verdana, arial';
+  --mermaid-font-family: "Comic Sans MS", "Comic Sans", cursive; }
+
+:root { --mermaid-font-family: "trebuchet ms", verdana, arial;}</style><style>#mermaid-1585301863560 {
+    color: rgb(0, 0, 0);
     font: ;
-  }</style><g></g><g><line id="actor1179" x1="75" y1="5" x2="75" y2="360" class="actor-line" stroke-width="0.5px" stroke="#999"></line><rect x="0" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="75" y="32.5" style="text-anchor: middle; font-family: &quot;Open-Sans&quot;, &quot;sans-serif&quot;;" dominant-baseline="central" alignment-baseline="central" class="actor"><tspan x="75" dy="0">Client</tspan></text></g><g><line id="actor1180" x1="275" y1="5" x2="275" y2="360" class="actor-line" stroke-width="0.5px" stroke="#999"></line><rect x="200" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="275" y="32.5" style="text-anchor: middle; font-family: &quot;Open-Sans&quot;, &quot;sans-serif&quot;;" dominant-baseline="central" alignment-baseline="central" class="actor"><tspan x="275" dy="0">JSONSchema</tspan></text></g><g><line id="actor1181" x1="475" y1="5" x2="475" y2="360" class="actor-line" stroke-width="0.5px" stroke="#999"></line><rect x="400" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="475" y="32.5" style="text-anchor: middle; font-family: &quot;Open-Sans&quot;, &quot;sans-serif&quot;;" dominant-baseline="central" alignment-baseline="central" class="actor"><tspan x="475" dy="0">Permission</tspan></text></g><g><line id="actor1182" x1="675" y1="5" x2="675" y2="360" class="actor-line" stroke-width="0.5px" stroke="#999"></line><rect x="600" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="675" y="32.5" style="text-anchor: middle; font-family: &quot;Open-Sans&quot;, &quot;sans-serif&quot;;" dominant-baseline="central" alignment-baseline="central" class="actor"><tspan x="675" dy="0">Route logic</tspan></text></g><defs><marker id="arrowhead" refX="5" refY="2" markerWidth="6" markerHeight="4" orient="auto"><path d="M 0,0 V 4 L6,2 Z"></path></marker></defs><defs><marker id="crosshead" markerWidth="15" markerHeight="8" orient="auto" refX="16" refY="4"><path fill="black" stroke="#000000" style="stroke-dasharray: 0px, 0px;" stroke-width="1px" d="M 9,2 V 6 L16,4 Z"></path><path fill="none" stroke="#000000" style="stroke-dasharray: 0px, 0px;" stroke-width="1px" d="M 0,1 L 6,7 M 6,1 L 0,7"></path></marker></defs><defs><marker id="sequencenumber" refX="15" refY="15" markerWidth="60" markerHeight="40" orient="auto"><circle cx="15" cy="15" r="6"></circle></marker></defs><g><text x="175" y="93" style="text-anchor: middle;" class="messageText">I have some data</text><line x1="75" y1="100" x2="275" y2="100" class="messageLine0" stroke-width="2" stroke="black" style="fill: none;" marker-end="url(#arrowhead)"></line></g><g><rect x="270" y="102" fill="#EDF2AE" stroke="#666" width="10" height="33" rx="0" ry="0" class="activation0"></rect></g><g><text x="172.5" y="128" style="text-anchor: middle;" class="messageText">409: `drop_table` not allowed</text><line x1="270" y1="135" x2="75" y2="135" style="stroke-dasharray: 3px, 3px; fill: none;" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#crosshead)"></line></g><g><text x="375" y="163" style="text-anchor: middle;" class="messageText">Data is valid</text><line x1="275" y1="170" x2="475" y2="170" class="messageLine0" stroke-width="2" stroke="black" style="fill: none;" marker-end="url(#arrowhead)"></line></g><g><rect x="470" y="172" fill="#EDF2AE" stroke="#666" width="10" height="33" rx="0" ry="0" class="activation0"></rect></g><g><text x="272.5" y="198" style="text-anchor: middle;" class="messageText">403: YOU SHALL NOT PASS!</text><line x1="470" y1="205" x2="75" y2="205" style="stroke-dasharray: 3px, 3px; fill: none;" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#crosshead)"></line></g><g><text x="575" y="233" style="text-anchor: middle;" class="messageText">Data is valid and allowed</text><line x1="475" y1="240" x2="675" y2="240" class="messageLine0" stroke-width="2" stroke="black" style="fill: none;" marker-end="url(#arrowhead)"></line></g><g><rect x="670" y="242" fill="#EDF2AE" stroke="#666" width="10" height="33" rx="0" ry="0" class="activation0"></rect></g><g><text x="372.5" y="268" style="text-anchor: middle;" class="messageText">200: I'll take that data and give you other data</text><line x1="670" y1="275" x2="75" y2="275" class="messageLine0" stroke-width="2" stroke="black" style="fill: none;" marker-end="url(#arrowhead)"></line></g><g><rect x="0" y="295" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="75" y="327.5" style="text-anchor: middle; font-family: &quot;Open-Sans&quot;, &quot;sans-serif&quot;;" dominant-baseline="central" alignment-baseline="central" class="actor"><tspan x="75" dy="0">Client</tspan></text></g><g><rect x="200" y="295" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="275" y="327.5" style="text-anchor: middle; font-family: &quot;Open-Sans&quot;, &quot;sans-serif&quot;;" dominant-baseline="central" alignment-baseline="central" class="actor"><tspan x="275" dy="0">JSONSchema</tspan></text></g><g><rect x="400" y="295" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="475" y="327.5" style="text-anchor: middle; font-family: &quot;Open-Sans&quot;, &quot;sans-serif&quot;;" dominant-baseline="central" alignment-baseline="central" class="actor"><tspan x="475" dy="0">Permission</tspan></text></g><g><rect x="600" y="295" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="675" y="327.5" style="text-anchor: middle; font-family: &quot;Open-Sans&quot;, &quot;sans-serif&quot;;" dominant-baseline="central" alignment-baseline="central" class="actor"><tspan x="675" dy="0">Route logic</tspan></text></g></svg>
+  }</style><g></g><g><line id="actor10210" x1="75" y1="5" x2="75" y2="498" class="actor-line" stroke-width="0.5px" stroke="#999"></line><rect x="0" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="75" y="32.5" style="text-anchor: middle;" dominant-baseline="central" alignment-baseline="central" class="actor"><tspan x="75" dy="0">Client</tspan></text></g><g><line id="actor10211" x1="275" y1="5" x2="275" y2="498" class="actor-line" stroke-width="0.5px" stroke="#999"></line><rect x="200" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="275" y="32.5" style="text-anchor: middle;" dominant-baseline="central" alignment-baseline="central" class="actor"><tspan x="275" dy="0">.isValid</tspan></text></g><g><line id="actor10212" x1="475" y1="5" x2="475" y2="498" class="actor-line" stroke-width="0.5px" stroke="#999"></line><rect x="400" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="475" y="32.5" style="text-anchor: middle;" dominant-baseline="central" alignment-baseline="central" class="actor"><tspan x="475" dy="0">.isAllowed</tspan></text></g><g><line id="actor10213" x1="675" y1="5" x2="675" y2="498" class="actor-line" stroke-width="0.5px" stroke="#999"></line><rect x="600" y="0" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="675" y="32.5" style="text-anchor: middle;" dominant-baseline="central" alignment-baseline="central" class="actor"><tspan x="675" dy="0">Route</tspan></text></g><defs><marker id="arrowhead" refX="5" refY="2" markerWidth="6" markerHeight="4" orient="auto"><path d="M 0,0 V 4 L6,2 Z"></path></marker></defs><defs><marker id="crosshead" markerWidth="15" markerHeight="8" orient="auto" refX="16" refY="4"><path fill="black" stroke="#000000" style="stroke-dasharray: 0px, 0px;" stroke-width="1px" d="M 9,2 V 6 L16,4 Z"></path><path fill="none" stroke="#000000" style="stroke-dasharray: 0px, 0px;" stroke-width="1px" d="M 0,1 L 6,7 M 6,1 L 0,7"></path></marker></defs><defs><marker id="sequencenumber" refX="15" refY="15" markerWidth="60" markerHeight="40" orient="auto"><circle cx="15" cy="15" r="6"></circle></marker></defs><g><text x="175" y="93" style="text-anchor: middle;" class="messageText">I have some data</text><line x1="75" y1="100" x2="275" y2="100" class="messageLine0" stroke-width="2" stroke="black" style="fill: none;" marker-end="url(#arrowhead)" marker-start="url(#sequencenumber)"></line><text x="75" y="104" font-family="sans-serif" font-size="12px" text-anchor="middle" textLength="16px" class="sequenceNumber">1</text></g><g><rect x="270" y="102" fill="#EDF2AE" stroke="#666" width="10" height="33" rx="0" ry="0" class="activation0"></rect></g><g><text x="172.5" y="128" style="text-anchor: middle;" class="messageText">409: Conflict</text><line x1="270" y1="135" x2="75" y2="135" style="stroke-dasharray: 3px, 3px; fill: none;" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" marker-start="url(#sequencenumber)"></line><text x="270" y="139" font-family="sans-serif" font-size="12px" text-anchor="middle" textLength="16px" class="sequenceNumber">2</text></g><g><rect x="50" y="145" fill="#EDF2AE" stroke="#666" width="250" height="36" rx="0" ry="0" class="note"></rect><text x="46" y="169" class="noteText"><tspan x="66">Check against JSONSchema</tspan></text></g><g><text x="375" y="209" style="text-anchor: middle;" class="messageText">isValid</text><line x1="275" y1="216" x2="475" y2="216" class="messageLine0" stroke-width="2" stroke="black" style="fill: none;" marker-end="url(#arrowhead)" marker-start="url(#sequencenumber)"></line><text x="275" y="220" font-family="sans-serif" font-size="12px" text-anchor="middle" textLength="16px" class="sequenceNumber">3</text></g><g><rect x="470" y="218" fill="#EDF2AE" stroke="#666" width="10" height="33" rx="0" ry="0" class="activation0"></rect></g><g><text x="272.5" y="244" style="text-anchor: middle;" class="messageText">403: Forbidden</text><line x1="470" y1="251" x2="75" y2="251" style="stroke-dasharray: 3px, 3px; fill: none;" class="messageLine1" stroke-width="2" stroke="black" marker-end="url(#arrowhead)" marker-start="url(#sequencenumber)"></line><text x="470" y="255" font-family="sans-serif" font-size="12px" text-anchor="middle" textLength="16px" class="sequenceNumber">4</text></g><g><rect x="250" y="261" fill="#EDF2AE" stroke="#666" width="250" height="36" rx="0" ry="0" class="note"></rect><text x="246" y="285" class="noteText"><tspan x="266">Check JWT Authorization header</tspan></text></g><g><text x="575" y="325" style="text-anchor: middle;" class="messageText">isValid and isAllowed</text><line x1="475" y1="332" x2="675" y2="332" class="messageLine0" stroke-width="2" stroke="black" style="fill: none;" marker-end="url(#arrowhead)" marker-start="url(#sequencenumber)"></line><text x="475" y="336" font-family="sans-serif" font-size="12px" text-anchor="middle" textLength="16px" class="sequenceNumber">5</text></g><g><rect x="670" y="334" fill="#EDF2AE" stroke="#666" width="10" height="33" rx="0" ry="0" class="activation0"></rect></g><g><text x="372.5" y="360" style="text-anchor: middle;" class="messageText">2xx: Success</text><line x1="670" y1="367" x2="75" y2="367" class="messageLine0" stroke-width="2" stroke="black" style="fill: none;" marker-end="url(#arrowhead)" marker-start="url(#sequencenumber)"></line><text x="670" y="371" font-family="sans-serif" font-size="12px" text-anchor="middle" textLength="16px" class="sequenceNumber">6</text></g><g><rect x="450" y="377" fill="#EDF2AE" stroke="#666" width="250" height="36" rx="0" ry="0" class="note"></rect><text x="446" y="401" class="noteText"><tspan x="466">Use req data to return other data</tspan></text></g><g><rect x="0" y="433" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="75" y="465.5" style="text-anchor: middle;" dominant-baseline="central" alignment-baseline="central" class="actor"><tspan x="75" dy="0">Client</tspan></text></g><g><rect x="200" y="433" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="275" y="465.5" style="text-anchor: middle;" dominant-baseline="central" alignment-baseline="central" class="actor"><tspan x="275" dy="0">.isValid</tspan></text></g><g><rect x="400" y="433" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="475" y="465.5" style="text-anchor: middle;" dominant-baseline="central" alignment-baseline="central" class="actor"><tspan x="475" dy="0">.isAllowed</tspan></text></g><g><rect x="600" y="433" fill="#eaeaea" stroke="#666" width="150" height="65" rx="3" ry="3" class="actor"></rect><text x="675" y="465.5" style="text-anchor: middle;" dominant-baseline="central" alignment-baseline="central" class="actor"><tspan x="675" dy="0">Route</tspan></text></g></svg>

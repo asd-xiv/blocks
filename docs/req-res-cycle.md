@@ -1,19 +1,24 @@
 [`mermaid`](https://github.com/knsv/mermaid) sequence diagram. Use [`mermaid-live-editor`](https://mermaidjs.github.io/mermaid-live-editor) to visualize.
 
-```
+```mermaid
 sequenceDiagram
+    autonumber
     participant Client
-    participant JSONSchema
-    participant Permission
-    participant Route logic
+    participant .isValid
+    participant .isAllowed
+    participant Route
 
-    Client ->>+ JSONSchema: I have some data
-    JSONSchema --X- Client: 409: `drop_table` not allowed
+    Client ->>+ .isValid: I have some data
 
-    JSONSchema ->>+ Permission: Data is valid
-    Permission --X- Client: 403: YOU SHALL NOT PASS!
+    
+    .isValid -->>- Client: 409: Conflict
+    Note over Client,.isValid: Check against JSONSchema 
 
-    Permission ->>+ Route logic: Data is valid and allowed
-    Route logic ->>- Client: 200: I'll take that data and give you other data
+    .isValid ->>+ .isAllowed: isValid
+    .isAllowed -->>- Client: 403: Forbidden
+    Note over .isValid,.isAllowed: Check JWT Authorization header
+
+    .isAllowed ->>+ Route: isValid and isAllowed
+    Route ->>- Client: 2xx: Success
+    Note over .isAllowed,Route: Use req data to return other data
 ```
-
