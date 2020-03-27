@@ -8,9 +8,7 @@ sequenceDiagram
     participant .isAllowed
     participant Route
 
-    Client ->>+ .isValid: I have some data
-
-    
+    Client ->>+ .isValid: I have some data    
     .isValid -->>- Client: 409: Conflict
     Note over Client,.isValid: Check against JSONSchema 
 
