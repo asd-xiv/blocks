@@ -1,37 +1,17 @@
-const debug = require("debug")("mutant:UploadRoute")
-
 module.exports = {
   method: "POST",
   path: "/upload",
 
-  /**
-   * If req data is valid
-   *  -> continue to permissionn check
-   *  -> otherwise return 409
-   */
+  // 409 if invalid req.query, req.headers, req.params or req.body
   schema: require("./upload.schema"),
 
-  /**
-   * Permission checking, if allowed:
-   *  -> continue to action
-   *  -> otherwise return 403
-   *
-   * @param  {Object}  plugins  Plugins
-   * @param  {Object}  req      Node request
-   *
-   * @return {boolean}
-   */
-  isAllowed: () => () => true,
+  // 401 if returns false or throws
+  authenticate: (/* plugins */) => (/* req */) => true,
 
-  /**
-   * After schema validation and permission checking, do route logic
-   *
-   * @param  {Object}  plugins  Plugins
-   * @param  {Object}  req      Node request
-   *
-   * @return {mixed}
-   */
-  action: () => ({ ctx: { body } }) => {
+  // 403 if returns false or throws
+  authorize: (/* plugins */) => (/* req */) => true,
+
+  action: (/* plugins */) => ({ ctx: { body } }) => {
     return {
       file: body.file,
     }

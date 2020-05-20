@@ -1,15 +1,17 @@
 module.exports = {
   method: "GET",
-  path: "/return-undefined",
+  path: "/no-authenticate",
 
   // 409 if invalid req.query, req.headers, req.params or req.body
   // schema: require("./schema"),
 
   // 401 if returns false or throws
-  authenticate: (/* plugins */) => (/* req */) => true,
+  // authenticate: (/* plugins */) => (/* req*/) => true,
 
   // 403 if returns false or throws
-  authorize: (/* plugins */) => (/* req */) => true,
+  // authorize: (/* plugins */) => (/* req*/) => true,
 
-  action: (/* plugins */) => (/* req */) => {},
+  action: (/* plugins */) => (/* req */) => ({
+    ping: "pong",
+  }),
 }

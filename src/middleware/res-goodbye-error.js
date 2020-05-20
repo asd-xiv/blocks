@@ -1,4 +1,4 @@
-const debug = require("debug")("Blocks:GoodbyeErrorMiddleware")
+const debug = require("debug")("blocks:GoodbyeErrorMiddleware")
 
 module.exports = () => (error, req, res, next) => {
   /*

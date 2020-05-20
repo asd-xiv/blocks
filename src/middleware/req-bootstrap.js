@@ -1,8 +1,8 @@
-const debug = require("debug")("Blocks:BootstrapMiddleware")
+const debug = require("debug")("blocks:BootstrapMiddleware")
 
-import cuid from "cuid"
-import contentType from "content-type"
-import { pick } from "@mutant-ws/m"
+const cuid = require("cuid")
+const contentType = require("content-type")
+const { pick } = require("@mutant-ws/m")
 
 module.exports = () => (req, res, next) => {
   req.ctx = {

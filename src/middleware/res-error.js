@@ -1,4 +1,4 @@
-const debug = require("debug")("Blocks:ErrorMiddleware")
+const debug = require("debug")("blocks:ErrorMiddleware")
 
 module.exports = () => (error, req, res, next) => {
   debug(error)
@@ -6,9 +6,8 @@ module.exports = () => (error, req, res, next) => {
   res.ctx.status = error.statusCode || 500
   res.ctx.payload = {
     error: error.name,
-    code: res.ctx.status,
     message: error.message,
-    details: error.details || {},
+    details: error.details,
   }
 
   next(error)

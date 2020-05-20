@@ -1,14 +1,15 @@
-const debug = require("debug")("Blocks:Main")
+const debug = require("debug")("blocks:Main")
 
-import connect from "connect"
-import path from "path"
-import { pluginus } from "@mutant-ws/pluginus"
-import { is, forEach, reduce } from "@mutant-ws/m"
+const connect = require("connect")
+const path = require("path")
+const { pluginus } = require("@mutant-ws/pluginus")
+const { is, forEach, reduce } = require("@mutant-ws/m")
 
-import { BaseError } from "./errors/base"
-import { NotFoundError } from "./errors/not-found"
-import { InputValidationError } from "./errors/input"
-import { AuthorizationError } from "./errors/authorization"
+const { BaseError } = require("./errors/base")
+const { NotFoundError } = require("./errors/not-found")
+const { InputError } = require("./errors/input")
+const { AuthenticationError } = require("./errors/authentication")
+const { AuthorizationError } = require("./errors/authorization")
 
 const block = ({
   plugins = [],
@@ -32,7 +33,7 @@ const block = ({
     "./middleware/req-bootstrap",
     "./middleware/req-cors",
     "./middleware/req-route-exists",
-    "./middleware/req-jwt",
+    // "./middleware/req-jwt",
     "./middleware/req-query",
     "./middleware/req-body",
     ...beforeRoute,
@@ -48,12 +49,14 @@ const block = ({
 
   return pluginus({ files: PLUGIN_PATHS }).then(Plugins => {
     forEach(item => {
-      const route = typeof item === "string" ? require(item) : item
+      const { authenticate, authorize, action, ...rest } =
+        typeof item === "string" ? require(item) : item
 
       Plugins.Router.add({
-        ...route,
-        isAllowed: is(route.isAllowed) ? route.isAllowed(Plugins) : () => false,
-        action: route.action(Plugins),
+        ...rest,
+        authenticate: is(authenticate) ? authenticate(Plugins) : () => false,
+        authorize: is(authorize) ? authorize(Plugins) : () => false,
+        action: action(Plugins),
       })
     })(ROUTE_PATHS)
 
@@ -72,10 +75,11 @@ const block = ({
   })
 }
 
-export {
+module.exports = {
   block,
   BaseError,
-  AuthorizationError,
-  InputValidationError,
+  InputError,
   NotFoundError,
+  AuthenticationError,
+  AuthorizationError,
 }

@@ -1,7 +1,10 @@
-const debug = require("debug")("Blocks:RouterPlugin")
+/* eslint-disable promise/no-nesting */
 
-import { pathToRegexp } from "path-to-regexp"
-import {
+const debug = require("debug")("blocks:RouterPlugin")
+
+const { pathToRegexp } = require("path-to-regexp")
+
+const {
   count,
   push,
   reduce,
@@ -10,13 +13,14 @@ import {
   pick,
   is,
   isEmpty,
-} from "@mutant-ws/m"
+} = require("@mutant-ws/m")
 
-import { InputValidationError } from "../errors/input"
-import { AuthorizationError } from "../errors/authorization"
-import { NotFoundError } from "../errors/not-found"
+const { InputError } = require("../errors/input")
+const { AuthenticationError } = require("../errors/authentication")
+const { AuthorizationError } = require("../errors/authorization")
+const { NotFoundError } = require("../errors/not-found")
 
-export default {
+module.exports = {
   create: () => {
     const ALL_ERRORS = process.env.AJV_ALL_ERRORS
     const COERCE_TYPES = process.env.AJV_COERCE_TYPES
@@ -52,10 +56,7 @@ export default {
         })(routes)
 
         if (isEmpty(route)) {
-          throw new NotFoundError(`Endpoint ${method}:${pathname} not found`, {
-            method,
-            path: pathname,
-          })
+          throw new NotFoundError(`Endpoint ${method}:${pathname} not found`)
         }
 
         const paramsList = route.pathRegExp.exec(pathname)
@@ -80,7 +81,14 @@ export default {
        *
        * @return {undefined}
        */
-      add: ({ method = "GET", path, schema = {}, isAllowed, ...rest }) => {
+      add: ({
+        method = "GET",
+        path,
+        schema = {},
+        authenticate,
+        authorize,
+        ...rest
+      }) => {
         const keys = []
 
         debug(`Loading ${method}: ${path}`)
@@ -89,7 +97,8 @@ export default {
           method,
           path,
           schema,
-          isAllowed,
+          authenticate,
+          authorize,
           ...rest,
           pathParamsKeys: keys,
           pathRegExp: pathToRegexp(path, keys),
@@ -122,32 +131,50 @@ export default {
             body: req.ctx.body,
           })
         ) {
-          throw new InputValidationError("Invalid request data", {
+          throw new InputError("Invalid request data", {
             fieldErrors: route.validate.errors,
           })
         }
 
         return (
           Promise.resolve()
-            .then(() => route.isAllowed(req))
-            .catch(error => {
-              debug(`isAllowed for ${route.method}:${route.path} threw`, error)
-
-              return false
-            })
-            .then(isAllowed => {
-              if (!isAllowed) {
-                throw new AuthorizationError("Not allowed to access resource", {
-                  method: route.method,
-                  path: route.path,
+            // Authentication
+            .then(() =>
+              Promise.resolve()
+                .then(() => route.authenticate(req))
+                .catch(error => {
+                  throw new AuthenticationError({
+                    message: error.message,
+                    details: error.details,
+                  })
                 })
+            )
+            .then(isAuthenticated => {
+              if (isAuthenticated === false) {
+                throw new AuthenticationError()
               }
             })
-            // Route action logic
+            // Authorization
+            .then(() =>
+              Promise.resolve()
+                .then(() => route.authorize(req))
+                .catch(error => {
+                  throw new AuthorizationError({
+                    message: error.message,
+                    details: error.details,
+                  })
+                })
+            )
+            .then(isAuthorized => {
+              if (isAuthorized === false) {
+                throw new AuthorizationError()
+              }
+            })
+            // Route business logic
             .then(() => route.action(req))
-            .then(routePayloaad => ({
+            .then(payload => ({
               status: req.method === "POST" ? 201 : 200,
-              payload: routePayloaad,
+              payload,
             }))
         )
       },

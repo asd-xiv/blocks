@@ -1,9 +1,9 @@
-const debug = require("debug")("Blocks:QueryParserPlugin")
+const debug = require("debug")("blocks:QueryParserPlugin")
 
-import qs from "qs"
-import { is } from "@mutant-ws/m"
+const qs = require("qs")
+const { is } = require("@mutant-ws/m")
 
-export default {
+module.exports = {
   create: () => {
     const DELIMITER = process.env.QS_DELIMITER
     const ALLOW_DOTS = process.env.QS_ALLOW_DOTS

@@ -1,14 +1,14 @@
-const debug = require("debug")("Blocks:BodyMiddleware")
+const debug = require("debug")("blocks:BodyMiddleware")
 
-import cuid from "cuid"
-import Busboy from "busboy"
-import slugify from "@sindresorhus/slugify"
-import { tmpdir } from "os"
-import { pipe, isEmpty } from "@mutant-ws/m"
-import { createWriteStream } from "fs"
-import { extname, basename, join } from "path"
+const cuid = require("cuid")
+const Busboy = require("busboy")
+const slugify = require("@sindresorhus/slugify")
+const { tmpdir } = require("os")
+const { pipe, isEmpty } = require("@mutant-ws/m")
+const { createWriteStream } = require("fs")
+const { extname, basename, join } = require("path")
 
-import { InputValidationError } from "../errors/input"
+const { InputError } = require("../errors/input")
 
 const handleText = (req, { onParse, onError }) => {
   const chunks = []
@@ -66,7 +66,7 @@ module.exports = ({ QueryParser }) => (req, res, next) => {
           next()
         },
         onError: error =>
-          next(new InputValidationError("Invalid JSON string in body", error)),
+          next(new InputError("Invalid JSON string in body", error)),
       })
 
     //
@@ -78,12 +78,7 @@ module.exports = ({ QueryParser }) => (req, res, next) => {
           next()
         },
         onError: error =>
-          next(
-            new InputValidationError(
-              "Invalid URL encoded string in body",
-              error
-            )
-          ),
+          next(new InputError("Invalid URL encoded string in body", error)),
       })
 
     //
@@ -94,13 +89,13 @@ module.exports = ({ QueryParser }) => (req, res, next) => {
           next()
         },
         onError: error =>
-          next(new InputValidationError("Invalid form data in body", error)),
+          next(new InputError("Invalid form data in body", error)),
       })
 
     //
     default:
       next(
-        new InputValidationError(
+        new InputError(
           `Can only parse request body for following content types: 'application/json', 'multipart/form-data' and 'application/x-www-form-urlencoded'. Received '${JSON.stringify(
             req.headers["content-type-parsed"]
           )}'`

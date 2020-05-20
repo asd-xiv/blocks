@@ -1,7 +1,7 @@
-const debug = require("debug")("Blocks:GoodbyeMiddleware")
+const debug = require("debug")("blocks:GoodbyeMiddleware")
 
-import { get, is } from "@mutant-ws/m"
-import accepts from "accepts"
+const { get, is } = require("@mutant-ws/m")
+const accepts = require("accepts")
 
 const toNowInMs = start => {
   const end = process.hrtime(start)

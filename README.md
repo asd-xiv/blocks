@@ -29,7 +29,6 @@
 * [Plugins](#plugins)
   * [Custom plugin](#custom-plugin)
 * [Develop](#develop)
-* [Commit messages](#commit-messages)
 * [Changelog](#changelog)
 
 <!-- vim-markdown-toc -->
@@ -75,17 +74,16 @@ npm install @mutant-ws/blocks
 ```js
 import http from "http"
 import glob from "glob"
-
 import { block } from "@mutant-ws/blocks"
 
-// initialize routes and plugins
+// Initialize `block` app
 const app = block({
-  // always scan relative to current folder
   plugins: glob.sync("./plugins/*.js", { cwd: __dirname, absolute: true }),
   routes: glob.sync("./**/*.route.js", { cwd: __dirname, absolute: true }),
 })
 
-// start node server using blocks middleware
+
+// After plugins successfully initialize, start http server
 app.then(([middleware, plugins]) => {
     const server = http.createServer(middleware)
 
@@ -110,7 +108,7 @@ app.then(([middleware, plugins]) => {
 
 `blocks` uses a set of `process.env` variables for configuration. See [`_env`](_env) file for all available options and defaults.
 
-We recommend using [`dotenv`](https://github.com/motdotla/dotenv) for easy local development and CI deployments.
+Use [`dotenv`](https://github.com/motdotla/dotenv) for easy local development.
 
 ## Routes
 
@@ -137,40 +135,26 @@ module.exports = {
   method: "GET",
   path: "/something/:id",
 
-  /**
-   * If req data is valid
-   *  -> continue to permissionn check
-   *  -> otherwise return 409
-   */
+  // 409 if invalid req.query, req.headers, req.params or req.body
   schema: require("./something.schema"),
 
-  /**
-   * Permission checking, if allowed:
-   *  -> continue to action
-   *  -> otherwise return 403
-   *
-   * @param  {Object}  plugins  Plugins
-   * @param  {Object}  req      Node request
-   *
-   * @return {boolean}
-   */
-  isAllowed: (/* pluginsObj */) => ({ method, ctx }) => {
-    console.log(`${method}:${ctx.pathname} - isAllowed`)
+  // 401 if returns false or throws
+  authenticate: (/* plugins */) => (/* req */) => true,
 
-    return true
-  },
+  // 403 if returns false or throws
+  authorize: (/* plugins */) => (/* req */) => true,
 
   /**
-   * After schema validation and permission checking, do route logic
+   * After schema validation and permission checking
    *
    * @param  {Object}  plugins  Plugins
    * @param  {Object}  req      Node request
    *
    * @return {mixed}
    */
-  action: (/* pluginsObj */) => req => {
+  action: (/* plugins */) => req => {
     return {
-      message: "This ${req.ctx.params.id} is something else!"
+      message: req.ctx.params.id
     }
   },
 }
@@ -302,28 +286,6 @@ Watch `src` and `tests` folders and re-run tests
 ```bash
 npm run tdd
 ```
-
-## Commit messages
-
-Using Angular's [conventions](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines).
-
-```text
-<type>(<scope>): <subject>
-<BLANK LINE>
-<body>
-<BLANK LINE>
-<footer>
-BREAKING CHANGE: Half of features not working anymore
-```
-
-* **feat**: A new feature
-* **fix**: A bug fix
-* **docs**: Documentation only changes
-* **style**: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
-* **refactor**: A code change that neither fixes a bug nor adds a feature
-* **perf**: A code change that improves performance
-* **test**: Adding missing or correcting existing tests
-* **chore**: Changes to the build process or auxiliary tools and libraries such as documentation generation
 
 ## Changelog
 

@@ -1,6 +1,4 @@
-const debug = require("debug")("Blocks:GoodPlugin")
-
-export default {
+module.exports = {
   depend: [],
 
   create: () => {

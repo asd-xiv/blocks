@@ -1,4 +1,4 @@
-const debug = require("debug")("Blocks:RouteExistsMiddleware")
+const debug = require("debug")("blocks:RouteExistsMiddleware")
 
 module.exports = ({ Router }) => (req, res, next) => {
   try {

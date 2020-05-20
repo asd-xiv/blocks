@@ -10,7 +10,7 @@ version: 2
 job_defaults: &job_defaults
   working_directory: ~/blocks
   docker:
-    - image: circleci/node:10
+    - image: circleci/node:12
 
 job_filter: &job_filter
   filters:
@@ -54,18 +54,12 @@ jobs:
           name: "blocks: Install npm packages"
           command: "npm run setup:ci"
 
-      - run:
-          name: "blocks: Babel compile"
-          command: "npm run build"
-
       - save_cache:
           paths:
             - node_modules
-            - dist
             - src
             - tests
             - .git
-            - .babelrc
             - .eslintrc
             - .gitignore
             - .nycrc

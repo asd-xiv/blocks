@@ -2,17 +2,14 @@ module.exports = {
   method: "GET",
   path: "/no-schema",
 
-  /**
-   * Permission checking, if allowed:
-   *  -> continue to action
-   *  -> otherwise return 403
-   *
-   * @param  {Object}  plugins  Plugins
-   * @param  {Object}  req      Node request
-   *
-   * @return {boolean}
-   */
-  isAllowed: () => () => true,
+  // 409 if invalid req.query, req.headers, req.params or req.body
+  // schema: require("./schema"),
+
+  // 401 if returns false or throws
+  authenticate: (/* plugins */) => (/* req */) => false,
+
+  // 403 if returns false or throws
+  authorize: (/* plugins */) => (/* req */) => true,
 
   /**
    * After schema validation and permission checking, do route logic
@@ -22,9 +19,8 @@ module.exports = {
    *
    * @return {mixed}
    */
-  action: () => () => {
-    return {
-      message: "Default json schema works!",
-    }
-  },
+
+  action: (/* plugins */) => (/* req */) => ({
+    message: "Default json schema works!",
+  }),
 }

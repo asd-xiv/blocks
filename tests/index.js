@@ -1,13 +1,13 @@
 /* eslint-disable new-cap,no-sync */
 
-import http from "http"
-import path from "path"
-import jwt from "jsonwebtoken"
-import { describe } from "riteway"
-import { createReadStream, existsSync } from "fs"
+const http = require("http")
+const path = require("path")
+const jwt = require("jsonwebtoken")
+const { describe } = require("riteway")
+const { createReadStream, existsSync } = require("fs")
+const { GET, POST, MULTIPART, set } = require("@mutant-ws/fetch-node")
 
-import { GET, POST, FORM_DATA } from "./http.lib"
-import { block } from "../src"
+const { block } = require("../src")
 
 describe("blocks :: init with defaults", async assert => {
   {
@@ -16,9 +16,12 @@ describe("blocks :: init with defaults", async assert => {
       routes: [
         require("./routes/no-schema.route"),
         require("./routes/with-schema.route"),
-        require("./routes/no-allow.route"),
-        require("./routes/dont-allow.route"),
-        require("./routes/allow-throws.route"),
+        require("./routes/no-authenticate.route"),
+        require("./routes/no-authorize.route"),
+        require("./routes/dont-authenticate.route"),
+        require("./routes/dont-authorize.route"),
+        require("./routes/authenticate-throws.route"),
+        require("./routes/authorize-throws.route"),
         require("./routes/return-undefined.route"),
         require("./routes/upload.route"),
       ],
@@ -32,10 +35,10 @@ describe("blocks :: init with defaults", async assert => {
     })
 
     assert({
-      given: "7 custom routes",
+      given: "10 custom routes",
       should: "load default /ping and all custom",
       actual: plugins.Router.count(),
-      expected: 8,
+      expected: 11,
     })
 
     assert({
@@ -70,62 +73,33 @@ describe("blocks :: init with defaults", async assert => {
         status: 404,
         body: {
           error: "NotFoundError",
-          code: 404,
           message: "Endpoint GET:/not-exist not found",
-          details: {
-            method: "GET",
-            path: "/not-exist",
-          },
         },
       },
     })
 
     assert({
-      given: "route without isAllowed defined",
-      should: "return 403",
-      actual: await GET(`${API_URL}/no-allow`).catch(({ status, body }) => ({
-        status,
-        body,
-      })),
+      given: "route without isAuthenticated defined",
+      should: "return 401",
+      actual: await GET(`${API_URL}/no-authenticate`).catch(
+        ({ status, body }) => ({
+          status,
+          body,
+        })
+      ),
       expected: {
-        status: 403,
+        status: 401,
         body: {
-          error: "AuthorizationError",
-          code: 403,
-          message: "Not allowed to access resource",
-          details: {
-            method: "GET",
-            path: "/no-allow",
-          },
+          error: "AuthenticationError",
+          message: "Need to be authenticated to access resource",
         },
       },
     })
 
     assert({
-      given: "route returns false in isAllowed",
+      given: "route without isAuthorized defined",
       should: "return 403",
-      actual: await GET(`${API_URL}/dont-allow`).catch(({ status, body }) => ({
-        status,
-        body,
-      })),
-      expected: {
-        status: 403,
-        body: {
-          error: "AuthorizationError",
-          code: 403,
-          message: "Not allowed to access resource",
-          details: {
-            method: "GET",
-            path: "/dont-allow",
-          },
-        },
-      },
-    })
-
-    assert({
-      given: "route isAllowed throws error",
-      should: "return 403",
-      actual: await GET(`${API_URL}/allow-throws`).catch(
+      actual: await GET(`${API_URL}/no-authorize`).catch(
         ({ status, body }) => ({
           status,
           body,
@@ -135,12 +109,43 @@ describe("blocks :: init with defaults", async assert => {
         status: 403,
         body: {
           error: "AuthorizationError",
-          code: 403,
-          message: "Not allowed to access resource",
-          details: {
-            method: "GET",
-            path: "/allow-throws",
-          },
+          message: "Need permission to access resource",
+        },
+      },
+    })
+
+    assert({
+      given: "route isAuthenticated returns false",
+      should: "return 401",
+      actual: await GET(`${API_URL}/dont-authenticate`).catch(
+        ({ status, body }) => ({
+          status,
+          body,
+        })
+      ),
+      expected: {
+        status: 401,
+        body: {
+          error: "AuthenticationError",
+          message: "Need to be authenticated to access resource",
+        },
+      },
+    })
+
+    assert({
+      given: "route isAuthenticated throws error",
+      should: "return 401",
+      actual: await GET(`${API_URL}/is-authenticated-throws`).catch(
+        ({ status, body }) => ({
+          status,
+          body,
+        })
+      ),
+      expected: {
+        status: 401,
+        body: {
+          error: "AuthenticationError",
+          message: "Trololo",
         },
       },
     })
@@ -194,7 +199,7 @@ describe("blocks :: init with defaults", async assert => {
     assert({
       given: "multipart/form-data with file field",
       should: "upload and save file localy",
-      actual: await FORM_DATA(`${API_URL}/upload`, {
+      actual: await MULTIPART(`${API_URL}/upload`, {
         body: {
           field: "testField",
           file: createReadStream(`${__dirname}/index.js`),
@@ -210,17 +215,19 @@ describe("blocks :: init with defaults", async assert => {
     process.env.JWT_SECRET = "testing"
 
     const PORT = 4567
-    const API_URL = `http://localhost:${PORT}`
-
     const [middleware] = await block({
       routes: [require("./routes/with-jwt.route")],
     })
     const server = http.createServer(middleware).listen(PORT, "localhost")
 
+    set({
+      baseURL: `http://localhost:${PORT}`,
+    })
+
     assert({
       given: "invalid jwt in request headers",
-      should: "return 409",
-      actual: await GET(`${API_URL}/with-jwt`, {
+      should: "return 401",
+      actual: await GET(`/with-jwt`, {
         headers: {
           Authorization: "invalid-jwt",
         },
@@ -229,15 +236,10 @@ describe("blocks :: init with defaults", async assert => {
         body,
       })),
       expected: {
-        status: 409,
+        status: 401,
         body: {
-          error: "InputValidationError",
-          code: 409,
-          message: "Invalid JWT",
-          details: {
-            method: "GET",
-            path: "/with-jwt",
-          },
+          error: "AuthenticationError",
+          message: "jwt malformed",
         },
       },
     })
@@ -245,7 +247,7 @@ describe("blocks :: init with defaults", async assert => {
     assert({
       given: "valid jwt in request headers",
       should: "verify, parse and expose content to route action",
-      actual: await GET(`${API_URL}/with-jwt`, {
+      actual: await GET(`/with-jwt`, {
         headers: {
           Authorization: jwt.sign(
             { foo: "bar", jti: "id-123" },

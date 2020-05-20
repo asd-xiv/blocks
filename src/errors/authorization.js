@@ -1,10 +1,15 @@
-import { BaseError } from "./base"
+const { BaseError } = require("./base")
 
-export class AuthorizationError extends BaseError {
-  constructor(message, details) {
+class AuthorizationError extends BaseError {
+  constructor({
+    message = "Need permission to access resource",
+    details,
+  } = {}) {
     super(message, details)
 
     this.name = "AuthorizationError"
     this.statusCode = 403
   }
 }
+
+module.exports = { AuthorizationError }

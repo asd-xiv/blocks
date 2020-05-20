@@ -1,4 +1,4 @@
-const debug = require("debug")("Blocks:RouteMiddleware")
+const debug = require("debug")("blocks:RouteMiddleware")
 
 module.exports = ({ Router }) => (req, res, next) => {
   Router.answer({

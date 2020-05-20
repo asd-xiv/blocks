@@ -1,9 +1,9 @@
 const debug = require("debug")("blocks:JWTDecodeMiddleware")
 
-import jwt from "jsonwebtoken"
-import { is, isEmpty } from "@mutant-ws/m"
+const jwt = require("jsonwebtoken")
+const { is, isEmpty } = require("@mutant-ws/m")
 
-import { InputValidationError } from "../errors/input"
+const { InputError } = require("../errors/input")
 
 module.exports = () =>
   // only active middleware if JWT_SECRET present
@@ -21,7 +21,7 @@ module.exports = () =>
             )
           } catch (error) {
             next(
-              new InputValidationError("Invalid JWT", {
+              new InputError("Invalid JWT", {
                 method: req.method,
                 path: req.ctx.pathname,
               })

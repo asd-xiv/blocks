@@ -1,10 +1,12 @@
-import { BaseError } from "./base"
+const { BaseError } = require("./base")
 
-export class InputValidationError extends BaseError {
+class InputError extends BaseError {
   constructor(message, details) {
     super(message, details)
 
-    this.name = "InputValidationError"
+    this.name = "InputError"
     this.statusCode = 409
   }
 }
+
+module.exports = { InputError }
