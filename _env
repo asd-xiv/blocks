@@ -35,19 +35,10 @@ QS_ARRAY_FORMAT=comma
 ## github.com/helmetjs/helmet
 ##
 HELMET_CONTENT_SECURITY_POLICY=false
-HELMET_DNS_PREFETCH_CONTROL=true
 HELMET_EXPECT_CT=false
-HELMET_FEATURE_POLICY=false
-HELMET_FRAMEGUARD=true
 # we doesnt set X-Powered-By header
 HELMET_HIDE_POWER_BY=false
-HELMET_HSTS=true
-HELMET_IE_NO_OPEN=true
-HELMET_NO_CACHE=true
-HELMET_NO_SNIFF=true
-HELMET_CROSSDOMAIN=true
 HELMET_REFERER_POLICY=false
-HELMET_XSS_FILTER=true
 
 ##
 ## Request data validation with ajv
