@@ -3,12 +3,10 @@
 const debug = require("debug")("blocks:RouterPlugin")
 
 const { pathToRegexp } = require("path-to-regexp")
-
 const {
   count,
-  push,
   reduce,
-  find,
+  findWith,
   merge,
   pick,
   is,
@@ -32,8 +30,7 @@ module.exports = {
       useDefaults: is(USE_DEFAULTS) ? USE_DEFAULTS === "true" : true,
     })
     const defaultRouteSchema = require("./route-default.schema")
-
-    let routes = []
+    const routes = []
 
     return {
       count: () => count(routes),
@@ -48,12 +45,14 @@ module.exports = {
        * @return {Object}
        */
       find: ({ method, pathname }) => {
-        const route = find(element => {
-          const isPathMatch = element.pathRegExp.test(pathname)
-          const isMethodMatch = method === element.method
-
-          return isPathMatch && isMethodMatch
-        })(routes)
+        const route = findWith(
+          {
+            method,
+            pathRegExp: field => field.test(pathname),
+          },
+          {},
+          routes
+        )
 
         if (isEmpty(route)) {
           throw new NotFoundError(`Endpoint ${method}:${pathname} not found`)
@@ -65,8 +64,9 @@ module.exports = {
             ...acc,
             [element.name]: paramsList[index + 1],
           }),
-          {}
-        )(route.pathParamsKeys)
+          {},
+          route.pathParamsKeys
+        )
 
         return {
           route,
@@ -93,7 +93,7 @@ module.exports = {
 
         debug(`Loading ${method}: ${path}`)
 
-        routes = push({
+        routes.push({
           method,
           path,
           schema,
@@ -109,7 +109,7 @@ module.exports = {
               pick(["headers", "params", "query", "body"])(schema)
             ),
           }),
-        })(routes)
+        })
       },
 
       /**

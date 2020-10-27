@@ -9,7 +9,7 @@ module.exports = () => (req, res, next) => {
     id: cuid(),
     startAt: process.hrtime(),
     body: {},
-    ...pick(["query", "pathname"])(req._parsedUrl),
+    ...pick(["query", "pathname"], req._parsedUrl),
   }
 
   try {
