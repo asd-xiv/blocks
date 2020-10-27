@@ -5,7 +5,7 @@ const path = require("path")
 const jwt = require("jsonwebtoken")
 const { describe } = require("riteway")
 const { createReadStream, existsSync } = require("fs")
-const { GET, POST, MULTIPART, set } = require("@mutant-ws/fetch-node")
+const { GET, POST, MULTIPART, set } = require("@asd14/fetch-node")
 
 const { block } = require("../src")
 

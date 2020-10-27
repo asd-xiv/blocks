@@ -13,7 +13,7 @@ const {
   pick,
   is,
   isEmpty,
-} = require("@mutant-ws/m")
+} = require("@asd14/m")
 
 const { InputError } = require("../errors/input")
 const { AuthenticationError } = require("../errors/authentication")

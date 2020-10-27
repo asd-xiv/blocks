@@ -2,8 +2,8 @@ const debug = require("debug")("blocks:Main")
 
 const connect = require("connect")
 const path = require("path")
-const { pluginus } = require("@mutant-ws/pluginus")
-const { is, forEach, reduce } = require("@mutant-ws/m")
+const { pluginus } = require("@asd14/pluginus")
+const { is, forEach, reduce } = require("@asd14/m")
 
 const { BaseError } = require("./errors/base")
 const { NotFoundError } = require("./errors/not-found")
@@ -47,7 +47,7 @@ const block = ({
     "./middleware/res-goodbye",
   ]
 
-  return pluginus({ files: PLUGIN_PATHS }).then(Plugins => {
+  return pluginus({ source: PLUGIN_PATHS }).then(Plugins => {
     forEach(item => {
       const { authenticate, authorize, action, ...rest } =
         typeof item === "string" ? require(item) : item

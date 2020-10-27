@@ -1,7 +1,7 @@
 const debug = require("debug")("blocks:JWTDecodeMiddleware")
 
 const jwt = require("jsonwebtoken")
-const { is, isEmpty } = require("@mutant-ws/m")
+const { is, isEmpty } = require("@asd14/m")
 
 const { InputError } = require("../errors/input")
 

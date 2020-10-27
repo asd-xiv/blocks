@@ -16,7 +16,7 @@ app
     const server = http.createServer(middleware)
 
     server.listen({
-      port: Config.PORT,
+      port: process.env.PORT,
     })
 
     server.on("error", error => {

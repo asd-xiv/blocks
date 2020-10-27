@@ -1,7 +1,7 @@
 const debug = require("debug")("blocks:QueryParserPlugin")
 
 const qs = require("qs")
-const { is } = require("@mutant-ws/m")
+const { is } = require("@asd14/m")
 
 module.exports = {
   create: () => {

@@ -4,7 +4,7 @@ const cuid = require("cuid")
 const Busboy = require("busboy")
 const slugify = require("@sindresorhus/slugify")
 const { tmpdir } = require("os")
-const { pipe, isEmpty } = require("@mutant-ws/m")
+const { pipe, isEmpty } = require("@asd14/m")
 const { createWriteStream } = require("fs")
 const { extname, basename, join } = require("path")
 

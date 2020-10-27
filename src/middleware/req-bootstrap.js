@@ -2,7 +2,7 @@ const debug = require("debug")("blocks:BootstrapMiddleware")
 
 const cuid = require("cuid")
 const contentType = require("content-type")
-const { pick } = require("@mutant-ws/m")
+const { pick } = require("@asd14/m")
 
 module.exports = () => (req, res, next) => {
   req.ctx = {

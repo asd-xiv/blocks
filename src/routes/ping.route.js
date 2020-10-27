@@ -1,4 +1,4 @@
-const { elapsedTime, is } = require("@mutant-ws/m")
+const { elapsedTime, is } = require("@asd14/m")
 
 module.exports = {
   method: "GET",

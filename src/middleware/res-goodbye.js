@@ -1,6 +1,6 @@
 const debug = require("debug")("blocks:GoodbyeMiddleware")
 
-const { get, is } = require("@mutant-ws/m")
+const { get, is } = require("@asd14/m")
 const accepts = require("accepts")
 
 const toNowInMs = start => {
