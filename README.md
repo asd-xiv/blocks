@@ -1,8 +1,8 @@
 <!-- markdownlint-disable first-line-h1 line-length -->
 
-[![CircleCI](https://circleci.com/gh/mutant-ws/blocks.svg?style=svg)](https://circleci.com/gh/mutant-ws/blocks)
-[![npm package version](https://badge.fury.io/js/%40mutant-ws%2Fblocks.svg)](https://badge.fury.io/js/%40mutant-ws%2Fblocks)
-[![Coverage Status](https://coveralls.io/repos/github/mutant-ws/blocks/badge.svg)](https://coveralls.io/github/mutant-ws/blocks)
+[![CircleCI](https://circleci.com/gh/asd-xiv/blocks.svg?style=svg)](https://circleci.com/gh/asd-xiv/blocks)
+[![npm package version](https://badge.fury.io/js/%40asd14%2Fblocks.svg)](https://badge.fury.io/js/%40asd14%2Fblocks)
+[![Coverage Status](https://coveralls.io/repos/github/asd-xiv/blocks/badge.svg)](https://coveralls.io/github/asd-xiv/blocks)
 
 # blocks
 
@@ -64,7 +64,7 @@ If it returns false, an automatic `403 Forbidden` response will be sent.
 ## Install
 
 ```bash
-npm install @mutant-ws/blocks
+npm install @asd14/blocks
 ```
 
 ## Example
@@ -74,7 +74,7 @@ npm install @mutant-ws/blocks
 ```js
 import http from "http"
 import glob from "glob"
-import { block } from "@mutant-ws/blocks"
+import { block } from "@asd14/blocks"
 
 // Initialize `block` app
 const app = block({
@@ -223,7 +223,7 @@ module.exports = {
 
 ## Plugins
 
-Separate code interfacing with 3rd party libraries or services. [pluginus](https://github.com/mutant-ws/pluginus) dependency injection library is used.
+Separate code interfacing with 3rd party libraries or services. [pluginus](https://github.com/asd-xiv/pluginus) dependency injection library is used.
 
 Plugins are accesible in other plugins, middleware and routes.
 
@@ -270,7 +270,7 @@ module.exports = {
 ## Develop
 
 ```bash
-git clone git@github.com:mutant-ws/blocks.git && \
+git clone git@github.com:asd-xiv/blocks.git && \
   cd blocks && \
   npm run setup
 ```
@@ -289,4 +289,4 @@ npm run tdd
 
 ## Changelog
 
-See the [releases section](https://github.com/mutant-ws/blocks/releases) for details.
+See the [releases section](https://github.com/asd-xiv/blocks/releases) for details.
