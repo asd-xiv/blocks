@@ -4,7 +4,7 @@ const cuid = require("cuid")
 const Busboy = require("busboy")
 const slugify = require("@sindresorhus/slugify")
 const { tmpdir } = require("os")
-const { pipe, isEmpty } = require("@asd14/m")
+const { pipe, is, isEmpty, clone } = require("@asd14/m")
 const { createWriteStream } = require("fs")
 const { extname, basename, join } = require("path")
 
@@ -59,15 +59,23 @@ const handleForm = (req, { onParse, onError }) => {
 
 module.exports = ({ QueryParser }) => (req, res, next) => {
   switch (req.headers["x-content-type"]) {
+    //
     case "application/json":
-      return handleText(req, {
-        onParse: source => {
-          req.ctx.body = isEmpty(source) ? {} : JSON.parse(source)
-          next()
-        },
-        onError: error =>
-          next(new InputError("Invalid JSON string in body", error)),
-      })
+      if (is(req.body)) {
+        req.ctx.body = clone(req.body)
+        next()
+      } else {
+        handleText(req, {
+          onParse: source => {
+            req.ctx.body = isEmpty(source) ? {} : JSON.parse(source)
+            next()
+          },
+          onError: error =>
+            next(new InputError("Invalid JSON string in body", error)),
+        })
+      }
+
+      break
 
     //
     case "application/x-www-form-urlencoded":
