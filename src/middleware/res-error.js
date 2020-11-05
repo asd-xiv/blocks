@@ -1,6 +1,12 @@
 const debug = require("debug")("blocks:ErrorMiddleware")
 
-module.exports = () => (error, req, res, next) => {
+const { is } = require("@asd14/m")
+
+module.exports = ({ ErrorPlugin }) => (error, req, res, next) => {
+  if (is(ErrorPlugin)) {
+    ErrorPlugin.error(error)
+  }
+
   debug(error)
 
   res.ctx.status = error.statusCode || 500
