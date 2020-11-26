@@ -13,6 +13,7 @@
     }
   },
   "rules": {
-    "promise/avoid-new": "off"
+    "promise/avoid-new": "off",
+    "valid-jsdoc": "off"
   },
 }

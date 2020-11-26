@@ -38,11 +38,11 @@ module.exports = {
       /**
        * Searches for the first match.
        *
-       * @param  {Object}  arg1           Props
-       * @param  {string}  arg1.method    HTTP method
-       * @param  {string}  arg1.pathname  URL pathname
+       * @param {object} arg1          Props
+       * @param {string} arg1.method   HTTP method
+       * @param {string} arg1.pathname URL pathname
        *
-       * @return {Object}
+       * @returns {object}
        */
       find: ({ method, pathname }) => {
         const route = findWith(
@@ -77,9 +77,14 @@ module.exports = {
       /**
        * { function_description }
        *
-       * @param  {Object}  newRoute  Route
+       * @param {object}   props
+       * @param {string}   props.method
+       * @param {string}   props.path
+       * @param {object}   props.schema
+       * @param {Function} props.authenticate
+       * @param {Function} props.authorize
        *
-       * @return {undefined}
+       * @returns {undefined}
        */
       add: ({
         method = "GET",
@@ -115,11 +120,11 @@ module.exports = {
       /**
        * { function_description }
        *
-       * @param  {Object}  arg1        The argument 1
-       * @param  {Object}  arg1.route  The route
-       * @param  {Object}  arg1.req    The request
+       * @param {object} arg1       The argument 1
+       * @param {object} arg1.route The route
+       * @param {object} arg1.req   The request
        *
-       * @return {Object}
+       * @returns {object}
        */
       answer: ({ route, req }) => {
         // Input validation check
