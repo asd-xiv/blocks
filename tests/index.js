@@ -12,7 +12,10 @@ const { block } = require("../src")
 describe("blocks :: init with defaults", async assert => {
   {
     const [middleware, plugins] = await block({
-      plugins: [path.resolve(__dirname, "plugins", "good.js")],
+      plugins: [
+        path.resolve(__dirname, "plugins", "good.js"),
+        path.resolve(__dirname, "plugins", "error.js"),
+      ],
       routes: [
         require("./routes/no-schema.route"),
         require("./routes/with-schema.route"),
@@ -31,7 +34,7 @@ describe("blocks :: init with defaults", async assert => {
       given: "1 custom plugin",
       should: "load default plugins (Router, QueryParser) and custom",
       actual: Object.keys(plugins).sort(),
-      expected: ["Good", "QueryParser", "Router"],
+      expected: ["ErrorPlugin", "Good", "QueryParser", "Router"],
     })
 
     assert({
@@ -182,7 +185,7 @@ describe("blocks :: init with defaults", async assert => {
     assert({
       given: "form encoded body and content type",
       should: "parse body with qs",
-      actual: await POST(`${API_URL}/with-schema/mutant`, {
+      actual: await POST(`${API_URL}/with-schema/mutant?v=1`, {
         headers: {
           "content-type": "application/x-www-form-urlencoded",
         },
@@ -191,7 +194,7 @@ describe("blocks :: init with defaults", async assert => {
       expected: {
         message: "Hello Plugin World!",
         params: { name: "mutant" },
-        query: {},
+        query: { v: 1 },
         body: { parsed: "with qs", another: "value" },
       },
     })

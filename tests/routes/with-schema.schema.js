@@ -47,6 +47,16 @@ module.exports = {
     },
   },
 
+  query: {
+    type: "object",
+    additionalProperties: false,
+    properties: {
+      v: {
+        type: "number",
+      },
+    },
+  },
+
   params: {
     type: "object",
     additionalProperties: false,
