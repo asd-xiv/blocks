@@ -18,7 +18,7 @@ const bodyByRequestAccept = ({ accept, res }) => {
     case "json": {
       const payload = read(["ctx", "payload"], {}, res)
 
-      res.setHeader("Content-Type", "application/json")
+      res.setHeader("Content-Type", "application/json; charset=utf-8")
 
       return JSON.stringify(payload)
     }
@@ -26,7 +26,7 @@ const bodyByRequestAccept = ({ accept, res }) => {
     default: {
       const payload = read(["ctx", "payload"], "", res)
 
-      res.setHeader("Content-Type", "text/plain")
+      res.setHeader("Content-Type", "text/plain; charset=utf-8")
 
       return payload
     }
