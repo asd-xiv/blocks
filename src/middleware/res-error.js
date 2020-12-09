@@ -1,6 +1,6 @@
 const debug = require("debug")("blocks:ErrorMiddleware")
 
-const { pick, is } = require("@asd14/m")
+const { pluck, is } = require("@asd14/m")
 
 module.exports = ({ ErrorPlugin }) => (error, req, res, next) => {
   res.ctx.status = error.statusCode || 500
@@ -13,8 +13,8 @@ module.exports = ({ ErrorPlugin }) => (error, req, res, next) => {
   if (is(ErrorPlugin)) {
     ErrorPlugin.error(error, {
       request: {
-        ...pick(["method", "path"], req.ctx.route),
-        ...pick(["body", "query", "params", "jwt"], req.ctx),
+        ...pluck(["method", "path"], req.ctx.route),
+        ...pluck(["body", "query", "params", "jwt"], req.ctx),
         headers: req.headers,
       },
       response: res.ctx,

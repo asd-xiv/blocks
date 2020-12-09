@@ -2,14 +2,14 @@ const debug = require("debug")("blocks:BootstrapMiddleware")
 
 const cuid = require("cuid")
 const contentType = require("content-type")
-const { pick } = require("@asd14/m")
+const { pluck } = require("@asd14/m")
 
 module.exports = () => (req, res, next) => {
   req.ctx = {
     id: cuid(),
     startAt: process.hrtime(),
     body: {},
-    ...pick(["query", "pathname"], req._parsedUrl),
+    ...pluck(["query", "pathname"], req._parsedUrl),
   }
 
   try {

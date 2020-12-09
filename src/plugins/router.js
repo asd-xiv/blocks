@@ -8,7 +8,7 @@ const {
   reduce,
   findWith,
   merge,
-  pick,
+  pluck,
   is,
   isEmpty,
 } = require("@asd14/m")
@@ -111,7 +111,7 @@ module.exports = {
             type: "object",
             properties: merge(
               defaultRouteSchema,
-              pick(["headers", "params", "query", "body"])(schema)
+              pluck(["headers", "params", "query", "body"])(schema)
             ),
           }),
         })
