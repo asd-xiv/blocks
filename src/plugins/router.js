@@ -1,7 +1,7 @@
 /* eslint-disable promise/no-nesting */
 
 const debug = require("debug")("blocks:RouterPlugin")
-
+const Ajv = require("ajv").default
 const { pathToRegexp } = require("path-to-regexp")
 const {
   count,
@@ -24,7 +24,7 @@ module.exports = {
     const COERCE_TYPES = process.env.AJV_COERCE_TYPES
     const USE_DEFAULTS = process.env.AJV_USE_DEFAULTS
 
-    const ajv = require("ajv")({
+    const ajv = new Ajv({
       allErrors: is(ALL_ERRORS) ? ALL_ERRORS === "true" : true,
       coerceTypes: is(COERCE_TYPES) ? COERCE_TYPES === "true" : true,
       useDefaults: is(USE_DEFAULTS) ? USE_DEFAULTS === "true" : true,
@@ -148,10 +148,7 @@ module.exports = {
               Promise.resolve()
                 .then(() => route.authenticate(req))
                 .catch(error => {
-                  throw new AuthenticationError({
-                    message: error.message,
-                    details: error.details,
-                  })
+                  throw new AuthenticationError(error.message, error.details)
                 })
             )
             .then(isAuthenticated => {
@@ -164,10 +161,7 @@ module.exports = {
               Promise.resolve()
                 .then(() => route.authorize(req))
                 .catch(error => {
-                  throw new AuthorizationError({
-                    message: error.message,
-                    details: error.details,
-                  })
+                  throw new AuthorizationError(error.message, error.details)
                 })
             )
             .then(isAuthorized => {

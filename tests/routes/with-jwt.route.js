@@ -19,7 +19,7 @@ module.exports = {
 
       req.ctx.jwt = jwtData
     } catch (error) {
-      throw new AuthenticationError({ message: error.message })
+      throw new AuthenticationError(error.message)
     }
   },
 

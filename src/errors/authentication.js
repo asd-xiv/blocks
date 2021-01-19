@@ -1,10 +1,10 @@
 const { BaseError } = require("./base")
 
 class AuthenticationError extends BaseError {
-  constructor({
+  constructor(
     message = "Need to be authenticated to access resource",
-    details,
-  } = {}) {
+    details
+  ) {
     super(message, details)
 
     this.name = "AuthenticationError"
