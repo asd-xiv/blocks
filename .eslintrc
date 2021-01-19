@@ -13,6 +13,7 @@
     }
   },
   "rules": {
+    "unicorn/consistent-function-scoping": "warn",
     "promise/avoid-new": "off",
     "valid-jsdoc": "off"
   },
