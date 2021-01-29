@@ -17,7 +17,7 @@
 * [Features](#features)
   * [Validate input](#validate-input)
   * [Permissions](#permissions)
-  * [Plugins](#plugins)
+  * [Plugin / Dependency Injection](#plugin--dependency-injection)
   * [Promises](#promises)
   * [Other](#other)
 * [Install](#install)
@@ -28,7 +28,7 @@
   * [Definition](#definition)
   * [JSON schemas](#json-schemas)
   * [Data formats](#data-formats)
-* [Plugins](#plugins-1)
+* [Plugins](#plugins)
   * [Custom plugin](#custom-plugin)
 * [Develop](#develop)
 * [Changelog](#changelog)
@@ -46,7 +46,7 @@ If validation fails, an automatic `409 Conflict` response will be sent.
 
 > Function outside of main route logic. If it returns false, an automatic `403 Forbidden` response will be sent.
 
-### Plugins
+### Plugin / Dependency Injection
 
 > Separate 3rd party systems logic or splitting code for better [SOC](https://en.wikipedia.org/wiki/Separation_of_concerns)
 
