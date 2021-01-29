@@ -6,7 +6,7 @@
 
 # blocks
 
-> REST API framework for Node.js 
+> REST API framework for Node.js
 
 ![Request-Response cycle](docs/bin/req-res-cycle.svg "Request-Response cycle")
 
@@ -241,16 +241,16 @@ module.exports = {
 
 ### Data formats
 
-- _date_: full-date according to [RFC3339](http://tools.ietf.org/html/rfc3339#section-5.6)
-- _time_: time with optional time-zone
-- _date-time_: date-time from the same source (time-zone is mandatory)
-- _duration_: duration from [RFC3339](https://tools.ietf.org/html/rfc3339#appendix-A)
-- _uri_: full URI
-- _email_: email address
-- _ipv4_: IP address v4
-- _ipv6_: IP address v6
-- _regex_: tests whether a string is a valid regular expression by passing it to RegExp constructor
-- _uuid_: Universally Unique IDentifier according to [RFC4122](http://tools.ietf.org/html/rfc4122)
+* _date_: full-date according to [RFC3339](http://tools.ietf.org/html/rfc3339#section-5.6)
+* _time_: time with optional time-zone
+* _date-time_: date-time from the same source (time-zone is mandatory)
+* _duration_: duration from [RFC3339](https://tools.ietf.org/html/rfc3339#appendix-A)
+* _uri_: full URI
+* _email_: email address
+* _ipv4_: IP address v4
+* _ipv6_: IP address v6
+* _regex_: tests whether a string is a valid regular expression by passing it to RegExp constructor
+* _uuid_: Universally Unique IDentifier according to [RFC4122](http://tools.ietf.org/html/rfc4122)
 
 ```js
 {
