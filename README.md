@@ -17,6 +17,7 @@
 * [Features](#features)
   * [Validate input](#validate-input)
   * [Permissions](#permissions)
+  * [Plugins](#plugins)
   * [Promises](#promises)
   * [Other](#other)
 * [Install](#install)
@@ -27,7 +28,7 @@
   * [Definition](#definition)
   * [JSON schemas](#json-schemas)
   * [Data formats](#data-formats)
-* [Plugins](#plugins)
+* [Plugins](#plugins-1)
   * [Custom plugin](#custom-plugin)
 * [Develop](#develop)
 * [Changelog](#changelog)
@@ -41,12 +42,13 @@
 > Pass request data (headers, body, query parameters, URL parameters) through custom JSON Schemas defined for each route. Make sure no unwanted data gets in, de-clutter the route logic and make the API behave more consistent.  
 If validation fails, an automatic `409 Conflict` response will be sent.
 
-See [`ajv`](https://github.com/epoberezkin/ajv) and [JSON Schema docs](https://json-schema.org) for more on data validation.
-
 ### Permissions
 
-> Simple function outside of main route logic.  
-If it returns false, an automatic `403 Forbidden` response will be sent.
+> Function outside of main route logic. If it returns false, an automatic `403 Forbidden` response will be sent.
+
+### Plugins
+
+> Separate 3rd party systems logic or splitting code for better [SOC](https://en.wikipedia.org/wiki/Separation_of_concerns)
 
 ### Promises
 
@@ -88,7 +90,7 @@ app.then(([middleware, plugins]) => {
     const server = http.createServer(middleware)
 
     server.listen({
-      port: process.env.PORT,
+      port: 4269 
     })
 
     server.on("error", error => {
@@ -180,7 +182,7 @@ module.exports = {
 
 ### JSON schemas
 
-Input validation is the first step in the processing pipeline. It's meant to validate that incoming data corresponds with what the route expects in order to do it's job properly.
+Input validation is the first step in the processing pipeline. It's meant to validate that incoming data corresponds with what the route expects in order to do it's job properly. See [`ajv`](https://github.com/epoberezkin/ajv) and [JSON Schema docs](https://json-schema.org) for more on data validation.
 
 Schemas can contain only 4 (optional) keys. Each key must be a [ajv](https://github.com/epoberezkin/ajv) compatible object.
 
