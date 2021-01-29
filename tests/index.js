@@ -3,11 +3,41 @@
 const http = require("http")
 const path = require("path")
 const jwt = require("jsonwebtoken")
+const { stringify } = require("qs")
 const { describe } = require("riteway")
 const { createReadStream, existsSync } = require("fs")
-const { GET, POST, MULTIPART, set } = require("@asd14/fetch-node")
+const {
+  GET,
+  PATCH,
+  POST,
+  MULTIPART,
+  set: setHTTPProps,
+} = require("@asd14/fetch-node")
 
 const { block } = require("../src")
+
+const PORT = 4567
+const API_URL = `http://localhost:${PORT}`
+
+setHTTPProps({
+  // Prefix request urls with API_URL
+  baseURL: API_URL,
+
+  /**
+   * Transform query object into string with `qs`
+   *
+   * @param {object} source Request query object
+   *
+   * @returns {string} String appended to the URL
+   */
+  queryStringifyFn: source =>
+    stringify(source, {
+      allowDots: true,
+      encode: false,
+      arrayFormat: "brackets",
+      strictNullHandling: true,
+    }),
+})
 
 describe("blocks :: init with defaults", async assert => {
   {
@@ -27,6 +57,7 @@ describe("blocks :: init with defaults", async assert => {
         require("./routes/authorize-throws.route"),
         require("./routes/return-undefined.route"),
         require("./routes/upload.route"),
+        require("./routes/custom-validator-fields.route"),
       ],
     })
 
@@ -38,10 +69,10 @@ describe("blocks :: init with defaults", async assert => {
     })
 
     assert({
-      given: "10 custom routes",
+      given: "11 custom routes",
       should: "load default /ping and all custom",
       actual: plugins.Router.count(),
-      expected: 11,
+      expected: 12,
     })
 
     assert({
@@ -51,8 +82,6 @@ describe("blocks :: init with defaults", async assert => {
       expected: 9,
     })
 
-    const PORT = 4567
-    const API_URL = `http://localhost:${PORT}`
     const server = http.createServer(middleware).listen(PORT, "localhost")
 
     assert({
@@ -63,6 +92,35 @@ describe("blocks :: init with defaults", async assert => {
         ping,
       })),
       expected: { name: "blocks", ping: "pong" },
+    })
+
+    assert({
+      given: "route with custom validator in schema and valid req data",
+      should: "respond with mirrored data",
+      actual: await PATCH(
+        `${API_URL}/custom-validator/f81d4fae-7dec-11d0-a765-00a0c91e6bf6`,
+        {
+          query: {
+            email: "foo@bar.com",
+          },
+          body: {
+            thumbnailURL: "https://foo.bar.com",
+            createdAt: "2021-01-29T09:50:31.840Z",
+          },
+        }
+      ),
+      expected: {
+        params: {
+          id: "f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
+        },
+        query: {
+          email: "foo@bar.com",
+        },
+        body: {
+          thumbnailURL: "https://foo.bar.com",
+          createdAt: "2021-01-29T09:50:31.840Z",
+        },
+      },
     })
 
     assert({
@@ -217,15 +275,10 @@ describe("blocks :: init with defaults", async assert => {
   {
     process.env.JWT_SECRET = "testing"
 
-    const PORT = 4567
     const [middleware] = await block({
       routes: [require("./routes/with-jwt.route")],
     })
     const server = http.createServer(middleware).listen(PORT, "localhost")
-
-    set({
-      baseURL: `http://localhost:${PORT}`,
-    })
 
     assert({
       given: "invalid jwt in request headers",

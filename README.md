@@ -6,7 +6,7 @@
 
 # blocks
 
-> REST API framework for Node.js. `request` |> `think hard` |> `response`.
+> REST API framework for Node.js 
 
 ![Request-Response cycle](docs/bin/req-res-cycle.svg "Request-Response cycle")
 
@@ -23,9 +23,10 @@
 * [Example](#example)
 * [Configuration](#configuration)
 * [Routes](#routes)
-  * [Default "/ping" route](#default-ping-route)
-  * [Custom route](#custom-route)
-  * [Custom JSON schema](#custom-json-schema)
+  * [Default "/ping"](#default-ping)
+  * [Definition](#definition)
+  * [JSON schemas](#json-schemas)
+  * [Data formats](#data-formats)
 * [Plugins](#plugins)
   * [Custom plugin](#custom-plugin)
 * [Develop](#develop)
@@ -57,7 +58,7 @@ If it returns false, an automatic `403 Forbidden` response will be sent.
 * Middleware support of existing package - [`connect`](https://github.com/senchalabs/connect)
 * JSON Web Token - [`jsonwebtoken`](https://github.com/auth0/node-jsonwebtoken)
 * Query string parsing - [`qs`](https://github.com/ljharb/qs)
-* Route param parsing - [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp)
+* Route parameter parsing - [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp)
 * Cross-origin resource sharing - [`cors`](https://github.com/expressjs/cors)
 * Secure your API with various HTTP headers - [`helmet`](https://github.com/helmetjs/helmet)
 
@@ -78,10 +79,9 @@ import { block } from "@asd14/blocks"
 
 // Initialize `block` app
 const app = block({
-  plugins: glob.sync("./plugins/*.js", { cwd: __dirname, absolute: true }),
-  routes: glob.sync("./**/*.route.js", { cwd: __dirname, absolute: true }),
+  plugins: glob.sync("src/plugins/*.js", { absolute: true }),
+  routes: glob.sync("src/**/*.route.js", { absolute: true }),
 })
-
 
 // After plugins successfully initialize, start http server
 app.then(([middleware, plugins]) => {
@@ -112,7 +112,7 @@ Use [`dotenv`](https://github.com/motdotla/dotenv) for easy local development.
 
 ## Routes
 
-### Default "/ping" route
+### Default "/ping"
 
 `GET: /ping`
 
@@ -126,7 +126,7 @@ Use [`dotenv`](https://github.com/motdotla/dotenv) for easy local development.
 }
 ```
 
-### Custom route
+### Definition
 
 `src/something.route.js`
 
@@ -135,22 +135,40 @@ module.exports = {
   method: "GET",
   path: "/something/:id",
 
-  // 409 if invalid req.query, req.headers, req.params or req.body
+  /**
+   * Check "req.query", "req.header", "req.params" and "req.body"
+   * against a JSON Schema. If check fails, respond with 409,
+   * otherwise continue to ".authenticate".
+   */
   schema: require("./something.schema"),
 
-  // 401 if returns false or throws
+
+  /**
+   * Check for valid JWT.
+   *
+   * @param {object} plugins 
+   *
+   * @returns {(object) => Promise<boolean>}
+   * If false, responds with 401, otherwise continue to ".authorize".
+   */
   authenticate: (/* plugins */) => (/* req */) => true,
 
-  // 403 if returns false or throws
+  /**
+   * Check if is allowed to access underlying resource.
+   *
+   * @param {object} plugins 
+   *
+   * @returns {(object) => Promise<boolean>}
+   * If false, respond with 403, otherwise continue to ".action".
+   */
   authorize: (/* plugins */) => (/* req */) => true,
 
   /**
-   * After schema validation and permission checking
+   * Route/Controller logic
    *
-   * @param  {Object}  plugins  Plugins
-   * @param  {Object}  req      Node request
+   * @param {object} plugins 
    *
-   * @return {mixed}
+   * @returns {(object) => Promise<*>} 500 if throws, 201 if POST, 200 otherwise
    */
   action: (/* plugins */) => req => {
     return {
@@ -160,9 +178,11 @@ module.exports = {
 }
 ```
 
-### Custom JSON schema
+### JSON schemas
 
-A schema can contain only 4 (optional) keys:
+Input validation is the first step in the processing pipeline. It's meant to validate that incoming data corresponds with what the route expects in order to do it's job properly.
+
+Schemas can contain only 4 (optional) keys. Each key must be a [ajv](https://github.com/epoberezkin/ajv) compatible object.
 
 * `headers` validates `req.headers`
 * `params` validates `req.ctx.params` parsed from URL with [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp)
@@ -170,8 +190,6 @@ A schema can contain only 4 (optional) keys:
 * `body` validates `req.ctx.body` parsed from `req` with `JSON.parse`
 
 See [`src/plugins/route-default.schema.js`](src/plugins/route-default.schema.js) for default values.
-
-Each key needs to be a [`ajv`](https://github.com/epoberezkin/ajv) compatible schema object.
 
 `src/something.schema.js`
 
@@ -221,11 +239,65 @@ module.exports = {
 }
 ```
 
+### Data formats
+
+- _date_: full-date according to [RFC3339](http://tools.ietf.org/html/rfc3339#section-5.6)
+- _time_: time with optional time-zone
+- _date-time_: date-time from the same source (time-zone is mandatory)
+- _duration_: duration from [RFC3339](https://tools.ietf.org/html/rfc3339#appendix-A)
+- _uri_: full URI
+- _email_: email address
+- _ipv4_: IP address v4
+- _ipv6_: IP address v6
+- _regex_: tests whether a string is a valid regular expression by passing it to RegExp constructor
+- _uuid_: Universally Unique IDentifier according to [RFC4122](http://tools.ietf.org/html/rfc4122)
+
+```js
+{
+  "params": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      }
+    }
+  },
+
+  "query": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "email": {
+        "type": "string",
+        "format": "email"
+      }
+    }
+  },
+
+  "body": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "thumbnailURL": {
+        "type": "string",
+        "format": "uri"
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      }
+    }
+  }
+}
+```
+
 ## Plugins
 
 Separate code interfacing with 3rd party libraries or services. [pluginus](https://github.com/asd-xiv/pluginus) dependency injection library is used.
 
-Plugins are accesible in other plugins, middleware and routes.
+Plugins are accessible in other plugins, middleware and routes.
 
 ### Custom plugin
 

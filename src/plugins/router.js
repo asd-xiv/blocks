@@ -2,6 +2,7 @@
 
 const debug = require("debug")("blocks:RouterPlugin")
 const Ajv = require("ajv").default
+const addFormats = require("ajv-formats")
 const { pathToRegexp } = require("path-to-regexp")
 const {
   count,
@@ -29,6 +30,22 @@ module.exports = {
       coerceTypes: is(COERCE_TYPES) ? COERCE_TYPES === "true" : true,
       useDefaults: is(USE_DEFAULTS) ? USE_DEFAULTS === "true" : true,
     })
+
+    addFormats(ajv, {
+      formats: [
+        "date",
+        "time",
+        "date-time",
+        "duration",
+        "email",
+        "uuid",
+        "uri",
+        "ipv4",
+        "ipv6",
+        "regex",
+      ],
+    })
+
     const defaultRouteSchema = require("./route-default.schema")
     const routes = []
 
