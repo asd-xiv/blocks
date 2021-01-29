@@ -43,11 +43,12 @@
     "coverage:ci": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
   "dependencies": {
-    "@asd14/m": "^4.4.1",
+    "@asd14/m": "^4.7.0",
     "@asd14/pluginus": "^2.1.0",
     "@sindresorhus/slugify": "^1.1.0",
     "accepts": "^1.3.7",
     "ajv": "^7.0.3",
+    "ajv-formats": "^1.5.1",
     "busboy": "^0.3.1",
     "connect": "^3.7.0",
     "content-type": "^1.0.4",
@@ -59,19 +60,19 @@
     "qs": "^6.9.6"
   },
   "devDependencies": {
-    "@asd14/eslint-config": "^5.20.0",
+    "@asd14/eslint-config": "^5.22.0",
     "@asd14/fetch-node": "^1.2.2",
     "babel-eslint": "^10.1.0",
     "coveralls": "^3.1.0",
     "eslint": "^7.18.0",
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsdoc": "^31.0.7",
+    "eslint-plugin-jsdoc": "^31.4.0",
     "eslint-plugin-json": "^2.1.2",
     "eslint-plugin-no-inferred-method-name": "^2.0.0",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-unicorn": "^26.0.1",
+    "eslint-plugin-unicorn": "^27.0.0",
     "jsonwebtoken": "^8.5.1",
     "markdownlint-cli": "^0.26.0",
     "nodemon": "^2.0.7",
@@ -79,7 +80,7 @@
     "nyc": "^15.1.0",
     "prettier": "^2.2.1",
     "riteway": "^6.2.1",
-    "semantic-release": "^17.3.3",
+    "semantic-release": "^17.3.7",
     "tap-nirvana": "^1.1.0"
   }
 }
