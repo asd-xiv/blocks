@@ -32,7 +32,7 @@
     "update": "npm-check -u",
     "----BUILD": "",
     "----LINT": "",
-    "lint:js": "eslint --ext .js src/",
+    "lint:js": "eslint --quiet --ext .js src/",
     "lint:md": "markdownlint *.md",
     "lint": "npm run lint:md && npm run lint:js",
     "----TEST": "",
