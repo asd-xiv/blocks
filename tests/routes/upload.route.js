@@ -11,9 +11,11 @@ module.exports = {
   // 403 if returns false or throws
   authorize: (/* plugins */) => (/* req */) => true,
 
-  action: (/* plugins */) => ({ ctx: { body } }) => {
-    return {
-      file: body.file,
-    }
-  },
+  action:
+    (/* plugins */) =>
+    ({ ctx: { body } }) => {
+      return {
+        file: body.file,
+      }
+    },
 }

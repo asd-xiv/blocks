@@ -10,14 +10,14 @@ module.exports = {
   // schema: require("./schema"),
 
   // 401 if returns false or throws
-  authenticate: (/* plugins */) => req => {
+  authenticate: (/* plugins */) => request => {
     try {
       const jwtData = jwt.verify(
-        req.headers.authorization,
+        request.headers.authorization,
         process.env.JWT_SECRET
       )
 
-      req.ctx.jwt = jwtData
+      request.ctx.jwt = jwtData
     } catch (error) {
       throw new AuthenticationError(error.message)
     }
@@ -26,14 +26,16 @@ module.exports = {
   // 403 if returns false or throws
   authorize: (/* plugins */) => (/* req */) => true,
 
-  action: (/* plugins */) => ({
-    ctx: {
-      jwt: { jti, foo },
+  action:
+    (/* plugins */) =>
+    ({
+      ctx: {
+        jwt: { jti, foo },
+      },
+    }) => {
+      return {
+        jti,
+        foo,
+      }
     },
-  }) => {
-    return {
-      jti,
-      foo,
-    }
-  },
 }
