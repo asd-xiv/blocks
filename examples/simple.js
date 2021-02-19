@@ -6,8 +6,8 @@ const { block } = require("../src")
 // initialize application
 const app = block({
   // always scan relative to current folder
-  plugins: glob.sync("./plugins/*.js", { cwd: __dirname, absolute: true }),
-  routes: glob.sync("./**/*.route.js", { cwd: __dirname, absolute: true }),
+  plugins: glob.sync("../src/plugins/*.js", { absolute: true }),
+  routes: glob.sync("../src/**/*.route.js", { absolute: true }),
 })
 
 // start node server

@@ -1,14 +1,14 @@
 const debug = require("debug")("blocks:RouteExistsMiddleware")
 
-module.exports = ({ Router }) => (req, res, next) => {
+module.exports = ({ Router }) => (request, response, next) => {
   try {
     const { route, params } = Router.find({
-      method: req.method,
-      pathname: req.ctx.pathname,
+      method: request.method,
+      pathname: request.ctx.pathname,
     })
 
-    req.ctx.params = params
-    req.ctx.route = route
+    request.ctx.params = params
+    request.ctx.route = route
 
     next()
   } catch (error) {

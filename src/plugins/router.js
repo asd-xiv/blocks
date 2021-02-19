@@ -55,9 +55,9 @@ module.exports = {
       /**
        * Searches for the first match.
        *
-       * @param {object} arg1          Props
-       * @param {string} arg1.method   HTTP method
-       * @param {string} arg1.pathname URL pathname
+       * @param   {object} arg1          Props
+       * @param   {string} arg1.method   HTTP method
+       * @param   {string} arg1.pathname URL pathname
        *
        * @returns {object}
        */
@@ -75,11 +75,11 @@ module.exports = {
           throw new NotFoundError(`Endpoint ${method}:${pathname} not found`)
         }
 
-        const paramsList = route.pathRegExp.exec(pathname)
-        const params = reduce(
-          (acc, element, index) => ({
-            ...acc,
-            [element.name]: paramsList[index + 1],
+        const parametersList = route.pathRegExp.exec(pathname)
+        const parameters = reduce(
+          (accumulator, item, index) => ({
+            ...accumulator,
+            [item.name]: parametersList[index + 1],
           }),
           {},
           route.pathParamsKeys
@@ -87,19 +87,17 @@ module.exports = {
 
         return {
           route,
-          params,
+          params: parameters,
         }
       },
 
       /**
-       * { function_description }
-       *
-       * @param {object}   props
-       * @param {string}   props.method
-       * @param {string}   props.path
-       * @param {object}   props.schema
-       * @param {Function} props.authenticate
-       * @param {Function} props.authorize
+       * @param   {object}    props
+       * @param   {string}    props.method
+       * @param   {string}    props.path
+       * @param   {object}    props.schema
+       * @param   {Function}  props.authenticate
+       * @param   {Function}  props.authorize
        *
        * @returns {undefined}
        */
@@ -137,9 +135,9 @@ module.exports = {
       /**
        * { function_description }
        *
-       * @param {object} arg1       The argument 1
-       * @param {object} arg1.route The route
-       * @param {object} arg1.req   The request
+       * @param   {object} arg1       The argument 1
+       * @param   {object} arg1.route The route
+       * @param   {object} arg1.req   The request
        *
        * @returns {object}
        */

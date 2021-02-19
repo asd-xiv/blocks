@@ -11,7 +11,7 @@ const {
   PATCH,
   POST,
   MULTIPART,
-  set: setHTTPProps,
+  set: setHTTPProperties,
 } = require("@asd14/fetch-node")
 
 const { block } = require("../src")
@@ -19,16 +19,16 @@ const { block } = require("../src")
 const PORT = 4567
 const API_URL = `http://localhost:${PORT}`
 
-setHTTPProps({
+setHTTPProperties({
   // Prefix request urls with API_URL
   baseURL: API_URL,
 
   /**
    * Transform query object into string with `qs`
    *
-   * @param {object} source Request query object
+   * @param   {object} source Request query object
    *
-   * @returns {string} String appended to the URL
+   * @returns {string}        String appended to the URL
    */
   queryStringifyFn: source =>
     stringify(source, {

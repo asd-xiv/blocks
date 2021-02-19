@@ -12,7 +12,7 @@ const { AuthenticationError } = require("./errors/authentication")
 const { AuthorizationError } = require("./errors/authorization")
 
 const block = ({
-  plugins = [],
+  plugins: pluginPaths = [],
   routes = [],
   middleware: {
     beforeRoute = [],
@@ -27,9 +27,9 @@ const block = ({
     source: [
       path.resolve(__dirname, "plugins", "router.js"),
       path.resolve(__dirname, "plugins", "query-parser.js"),
-      ...plugins,
+      ...pluginPaths,
     ],
-  }).then(resolvedPlugins => {
+  }).then(plugins => {
     /*
      * Register routes
      */
@@ -38,17 +38,15 @@ const block = ({
         const { authenticate, authorize, action, ...rest } =
           typeof item === "string" ? require(item) : item
 
-        resolvedPlugins.Router.add({
+        plugins.Router.add({
           ...rest,
           authenticate:
             typeof authenticate === "function"
-              ? authenticate(resolvedPlugins)
+              ? authenticate(plugins)
               : () => false,
           authorize:
-            typeof authorize === "function"
-              ? authorize(resolvedPlugins)
-              : () => false,
-          action: action(resolvedPlugins),
+            typeof authorize === "function" ? authorize(plugins) : () => false,
+          action: action(plugins),
         })
       },
       ["./routes/ping.route.js", ...routes]
@@ -59,35 +57,33 @@ const block = ({
        * Middleware `connect` pipeline
        */
       reduce(
-        (acc, item) => {
-          const middle =
-            typeof item === "string"
-              ? require(item)(resolvedPlugins)
-              : item(resolvedPlugins)
+        (accumulator, item) => {
+          const middleware =
+            typeof item === "string" ? require(item)(plugins) : item(plugins)
 
-          return is(middle) ? acc.use(middle) : acc
+          return is(middleware) ? accumulator.use(middleware) : accumulator
         },
         connect(),
         [
-          "./middleware/req-bootstrap",
-          "./middleware/req-cors",
-          "./middleware/req-route-exists",
+          "./middleware/request-bootstrap",
+          "./middleware/request-cors",
+          "./middleware/request-route-exists",
           // "./middleware/req-jwt",
-          "./middleware/req-query",
-          "./middleware/req-body",
+          "./middleware/request-query",
+          "./middleware/request-body",
           ...beforeRoute,
-          "./middleware/res-route",
+          "./middleware/response-route",
           ...afterRoute,
-          "./middleware/res-error",
+          "./middleware/response-error",
           ...afterError,
-          "./middleware/res-goodbye-error",
+          "./middleware/response-goodbye-error",
           ...beforeSend,
-          "./middleware/res-helmet",
-          "./middleware/res-goodbye",
+          "./middleware/response-helmet",
+          "./middleware/response-goodbye",
         ]
       ),
 
-      resolvedPlugins,
+      plugins,
     ]
   })
 }

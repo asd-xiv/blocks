@@ -6,24 +6,24 @@ const { is, isEmpty } = require("@asd14/m")
 const { InputError } = require("../errors/input")
 
 module.exports = () =>
-  // only active middleware if JWT_SECRET present
+  // Active middleware if JWT_SECRET present
   isEmpty(process.env.JWT_SECRET)
-    ? null
-    : (req, res, next) => {
-        // safe destructuring in route methods
-        req.ctx.jwt = {}
+    ? undefined
+    : (request, response, next) => {
+        // Safe destructuring in route methods
+        request.ctx.jwt = {}
 
-        if (is(req.headers.authorization)) {
+        if (is(request.headers.authorization)) {
           try {
-            req.ctx.jwt = jwt.verify(
-              req.headers.authorization,
+            request.ctx.jwt = jwt.verify(
+              request.headers.authorization,
               process.env.JWT_SECRET
             )
-          } catch (error) {
+          } catch {
             next(
               new InputError("Invalid JWT", {
-                method: req.method,
-                path: req.ctx.pathname,
+                method: request.method,
+                path: request.ctx.pathname,
               })
             )
           }

@@ -6,14 +6,14 @@ const slugify = require("@sindresorhus/slugify")
 const { tmpdir } = require("os")
 const { pipe, is, isEmpty, clone } = require("@asd14/m")
 const { createWriteStream } = require("fs")
-const { extname, basename, join } = require("path")
+const path = require("path")
 
 const { InputError } = require("../errors/input")
 
-const handleText = (req, { onParse, onError }) => {
+const handleText = (request, { onParse, onError }) => {
   const chunks = []
 
-  req
+  request
     .on("data", chunk => chunks.push(chunk))
     .on("end", () => {
       try {
@@ -24,24 +24,27 @@ const handleText = (req, { onParse, onError }) => {
     })
 }
 
-const handleForm = (req, { onParse, onError }) => {
-  if (req.method !== "POST") {
+const handleForm = (request, { onParse, onError }) => {
+  if (request.method !== "POST") {
     throw new Error("Use POST method when sending multipart data")
   }
 
   try {
-    const busboy = new Busboy({ headers: req.headers })
+    const busboy = new Busboy({ headers: request.headers })
     const fields = {}
     const files = {}
 
-    busboy.on("field", (fieldname, val) => {
-      fields[fieldname] = val
+    busboy.on("field", (fieldname, value) => {
+      fields[fieldname] = value
     })
 
     busboy.on("file", (fieldname, file, filename) => {
-      const ext = extname(filename)
-      const fileSlug = slugify(basename(filename, ext))
-      const saveToPath = join(tmpdir(), `${fileSlug}-${cuid.slug()}${ext}`)
+      const extension = path.extname(filename)
+      const fileSlug = slugify(path.basename(filename, extension))
+      const saveToPath = path.join(
+        tmpdir(),
+        `${fileSlug}-${cuid.slug()}${extension}`
+      )
 
       file.pipe(createWriteStream(saveToPath))
       files[fieldname] = saveToPath
@@ -51,23 +54,23 @@ const handleForm = (req, { onParse, onError }) => {
       onParse({ ...fields, ...files })
     })
 
-    req.pipe(busboy)
+    request.pipe(busboy)
   } catch (error) {
     onError(error)
   }
 }
 
-module.exports = ({ QueryParser }) => (req, res, next) => {
-  switch (req.headers["x-content-type"]) {
+module.exports = ({ QueryParser }) => (request, response, next) => {
+  switch (request.headers["x-content-type"]) {
     //
     case "application/json":
-      if (is(req.body)) {
-        req.ctx.body = clone(req.body)
+      if (is(request.body)) {
+        request.ctx.body = clone(request.body)
         next()
       } else {
-        handleText(req, {
+        handleText(request, {
           onParse: source => {
-            req.ctx.body = isEmpty(source) ? {} : JSON.parse(source)
+            request.ctx.body = isEmpty(source) ? {} : JSON.parse(source)
             next()
           },
           onError: error =>
@@ -79,10 +82,10 @@ module.exports = ({ QueryParser }) => (req, res, next) => {
 
     //
     case "application/x-www-form-urlencoded":
-      return handleText(req, {
+      return handleText(request, {
         next,
         onParse: source => {
-          req.ctx.body = QueryParser.parse(source)
+          request.ctx.body = QueryParser.parse(source)
           next()
         },
         onError: error =>
@@ -91,9 +94,9 @@ module.exports = ({ QueryParser }) => (req, res, next) => {
 
     //
     case "multipart/form-data":
-      return handleForm(req, {
+      return handleForm(request, {
         onParse: source => {
-          req.ctx.body = source
+          request.ctx.body = source
           next()
         },
         onError: error =>
@@ -105,7 +108,7 @@ module.exports = ({ QueryParser }) => (req, res, next) => {
       next(
         new InputError(
           `Can only parse request body for following content types: 'application/json', 'multipart/form-data' and 'application/x-www-form-urlencoded'. Received '${JSON.stringify(
-            req.headers["content-type-parsed"]
+            request.headers["content-type-parsed"]
           )}'`
         )
       )
