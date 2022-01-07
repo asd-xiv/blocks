@@ -83,7 +83,11 @@
     "nyc": "^15.1.0",
     "prettier": "^2.2.1",
     "riteway": "^6.3.1",
+<<<<<<< HEAD
     "semantic-release": "^19.0",
+=======
+    "semantic-release": "^17.3.9",
+>>>>>>> 4f377eb (chore: package.json)
     "tap-nirvana": "^1.1.0"
   }
 }
