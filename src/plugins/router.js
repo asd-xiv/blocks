@@ -116,27 +116,18 @@ module.exports = {
 
         debug(`Loading ${method}: ${path}`)
 
-        let schemaToValidate
-
         // If conditional schemas or other complex scenarios are found,
         // defer to the schema itself instead of trying to expect certain keys
-        if (is(schema.properties) && is(schema.if)) {
-          schemaToValidate = pluck([
-            "properties",
-            "type",
-            "if",
-            "then",
-            "else",
-          ])(schema)
-        } else {
-          schemaToValidate = {
-            type: "object",
-            properties: merge(
-              defaultRouteSchema,
-              pluck(["headers", "params", "query", "body"])(schema)
-            ),
-          }
-        }
+        const schemaToValidate =
+          is(schema.properties) && is(schema.if)
+            ? pluck(["properties", "type", "if", "then", "else"])(schema)
+            : {
+                type: "object",
+                properties: merge(
+                  defaultRouteSchema,
+                  pluck(["headers", "params", "query", "body"])(schema)
+                ),
+              }
 
         routes.push({
           method,
