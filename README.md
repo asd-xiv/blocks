@@ -1,8 +1,8 @@
 <!-- markdownlint-disable first-line-h1 line-length -->
 
-[![CircleCI](https://circleci.com/gh/asd-xiv/blocks.svg?style=svg)](https://circleci.com/gh/asd-xiv/blocks)
+[![CircleCI](https://circleci.com/gh/heartsradiant/blocks.svg?style=svg)](https://circleci.com/gh/heartsradiant/blocks)
 [![npm package version](https://badge.fury.io/js/%40asd14%2Fblocks.svg)](https://badge.fury.io/js/%40asd14%2Fblocks)
-[![Coverage Status](https://coveralls.io/repos/github/asd-xiv/blocks/badge.svg)](https://coveralls.io/github/asd-xiv/blocks)
+[![Coverage Status](https://coveralls.io/repos/github/heartsradiant/blocks/badge.svg)](https://coveralls.io/github/heartsradiant/blocks)
 
 # blocks
 
@@ -14,24 +14,24 @@
 
 <!-- vim-markdown-toc GFM -->
 
-* [Features](#features)
-  * [Validate input](#validate-input)
-  * [Permissions](#permissions)
-  * [Plugin / Dependency Injection](#plugin--dependency-injection)
-  * [Promises](#promises)
-  * [Other](#other)
-* [Install](#install)
-* [Example](#example)
-* [Configuration](#configuration)
-* [Routes](#routes)
-  * [Default "/ping"](#default-ping)
-  * [Definition](#definition)
-  * [JSON schemas](#json-schemas)
-  * [Data formats](#data-formats)
-* [Plugins](#plugins)
-  * [Custom plugin](#custom-plugin)
-* [Develop](#develop)
-* [Changelog](#changelog)
+- [Features](#features)
+  - [Validate input](#validate-input)
+  - [Permissions](#permissions)
+  - [Plugin / Dependency Injection](#plugin--dependency-injection)
+  - [Promises](#promises)
+  - [Other](#other)
+- [Install](#install)
+- [Example](#example)
+- [Configuration](#configuration)
+- [Routes](#routes)
+  - [Default "/ping"](#default-ping)
+  - [Definition](#definition)
+  - [JSON schemas](#json-schemas)
+  - [Data formats](#data-formats)
+- [Plugins](#plugins)
+  - [Custom plugin](#custom-plugin)
+- [Develop](#develop)
+- [Changelog](#changelog)
 
 <!-- vim-markdown-toc -->
 
@@ -39,8 +39,8 @@
 
 ### Validate input
 
-> Pass request data (headers, body, query parameters, URL parameters) through custom JSON Schemas defined for each route. Make sure no unwanted data gets in, de-clutter the route logic and make the API behave more consistent.  
-If validation fails, an automatic `409 Conflict` response will be sent.
+> Pass request data (headers, body, query parameters, URL parameters) through custom JSON Schemas defined for each route. Make sure no unwanted data gets in, de-clutter the route logic and make the API behave more consistent.
+> If validation fails, an automatic `409 Conflict` response will be sent.
 
 ### Permissions
 
@@ -56,13 +56,13 @@ If validation fails, an automatic `409 Conflict` response will be sent.
 
 ### Other
 
-* File upload and form parsing for `multipart/form-data` - [`busboy`](https://github.com/mscdex/busboy)
-* Middleware support of existing package - [`connect`](https://github.com/senchalabs/connect)
-* JSON Web Token - [`jsonwebtoken`](https://github.com/auth0/node-jsonwebtoken)
-* Query string parsing - [`qs`](https://github.com/ljharb/qs)
-* Route parameter parsing - [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp)
-* Cross-origin resource sharing - [`cors`](https://github.com/expressjs/cors)
-* Secure your API with various HTTP headers - [`helmet`](https://github.com/helmetjs/helmet)
+- File upload and form parsing for `multipart/form-data` - [`busboy`](https://github.com/mscdex/busboy)
+- Middleware support of existing package - [`connect`](https://github.com/senchalabs/connect)
+- JSON Web Token - [`jsonwebtoken`](https://github.com/auth0/node-jsonwebtoken)
+- Query string parsing - [`qs`](https://github.com/ljharb/qs)
+- Route parameter parsing - [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp)
+- Cross-origin resource sharing - [`cors`](https://github.com/expressjs/cors)
+- Secure your API with various HTTP headers - [`helmet`](https://github.com/helmetjs/helmet)
 
 ## Install
 
@@ -86,11 +86,12 @@ const app = block({
 })
 
 // After plugins successfully initialize, start http server
-app.then(([middleware, plugins]) => {
+app
+  .then(([middleware, plugins]) => {
     const server = http.createServer(middleware)
 
     server.listen({
-      port: 4269 
+      port: 4269,
     })
 
     server.on("error", error => {
@@ -144,11 +145,10 @@ module.exports = {
    */
   schema: require("./something.schema"),
 
-
   /**
    * Check for valid JWT.
    *
-   * @param {object} plugins 
+   * @param {object} plugins
    *
    * @returns {(object) => Promise<boolean>}
    * If false, responds with 401, otherwise continue to ".authorize".
@@ -158,7 +158,7 @@ module.exports = {
   /**
    * Check if is allowed to access underlying resource.
    *
-   * @param {object} plugins 
+   * @param {object} plugins
    *
    * @returns {(object) => Promise<boolean>}
    * If false, respond with 403, otherwise continue to ".action".
@@ -168,13 +168,13 @@ module.exports = {
   /**
    * Route/Controller logic
    *
-   * @param {object} plugins 
+   * @param {object} plugins
    *
    * @returns {(object) => Promise<*>} 500 if throws, 201 if POST, 200 otherwise
    */
   action: (/* plugins */) => req => {
     return {
-      message: req.ctx.params.id
+      message: req.ctx.params.id,
     }
   },
 }
@@ -186,10 +186,10 @@ Input validation is the first step in the processing pipeline. It's meant to val
 
 Schemas can contain only 4 (optional) keys. Each key must be a [ajv](https://github.com/epoberezkin/ajv) compatible object.
 
-* `headers` validates `req.headers`
-* `params` validates `req.ctx.params` parsed from URL with [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp)
-* `query`: validates `req.ctx.query` parsed from URL with [`qs`](https://github.com/ljharb/qs)
-* `body` validates `req.ctx.body` parsed from `req` with `JSON.parse`
+- `headers` validates `req.headers`
+- `params` validates `req.ctx.params` parsed from URL with [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp)
+- `query`: validates `req.ctx.query` parsed from URL with [`qs`](https://github.com/ljharb/qs)
+- `body` validates `req.ctx.body` parsed from `req` with `JSON.parse`
 
 See [`src/plugins/route-default.schema.js`](src/plugins/route-default.schema.js) for default values.
 
@@ -217,8 +217,8 @@ module.exports = {
         pattern: "^[a-z0-9-]+$",
         maxLength: 25,
         minLength: 25,
-      }
-    }
+      },
+    },
   },
 
   query: {
@@ -243,16 +243,16 @@ module.exports = {
 
 ### Data formats
 
-* _date_: full-date according to [RFC3339](http://tools.ietf.org/html/rfc3339#section-5.6)
-* _time_: time with optional time-zone
-* _date-time_: date-time from the same source (time-zone is mandatory)
-* _duration_: duration from [RFC3339](https://tools.ietf.org/html/rfc3339#appendix-A)
-* _uri_: full URI
-* _email_: email address
-* _ipv4_: IP address v4
-* _ipv6_: IP address v6
-* _regex_: tests whether a string is a valid regular expression by passing it to RegExp constructor
-* _uuid_: Universally Unique IDentifier according to [RFC4122](http://tools.ietf.org/html/rfc4122)
+- _date_: full-date according to [RFC3339](http://tools.ietf.org/html/rfc3339#section-5.6)
+- _time_: time with optional time-zone
+- _date-time_: date-time from the same source (time-zone is mandatory)
+- _duration_: duration from [RFC3339](https://tools.ietf.org/html/rfc3339#appendix-A)
+- _uri_: full URI
+- _email_: email address
+- _ipv4_: IP address v4
+- _ipv6_: IP address v6
+- _regex_: tests whether a string is a valid regular expression by passing it to RegExp constructor
+- _uuid_: Universally Unique IDentifier according to [RFC4122](http://tools.ietf.org/html/rfc4122)
 
 ```js
 {
@@ -344,7 +344,7 @@ module.exports = {
 ## Develop
 
 ```bash
-git clone git@github.com:asd-xiv/blocks.git && \
+git clone git@github.com:heartsradiant/blocks.git && \
   cd blocks && \
   npm run setup
 ```
@@ -363,4 +363,4 @@ npm run tdd
 
 ## Changelog
 
-See the [releases section](https://github.com/asd-xiv/blocks/releases) for details.
+See the [releases section](https://github.com/heartsradiant/blocks/releases) for details.

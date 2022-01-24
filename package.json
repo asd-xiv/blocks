@@ -1,15 +1,15 @@
 {
-  "name": "@asd14/blocks",
-  "version": "0.0.1",
+  "name": "@heartsradiant/blocks",
+  "version": "4.2.0",
   "description": "REST API framework for Node.js",
-  "homepage": "https://github.com/asd-xiv/blocks",
+  "homepage": "https://github.com/heartsradiant/blocks",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/asd-xiv/blocks.git"
+    "url": "git+https://github.com/heartsradiant/blocks.git"
   },
   "bugs": {
-    "url": "https://github.com/asd-xiv/blocks/issues"
+    "url": "https://github.com/heartsradiant/blocks/issues"
   },
   "author": {
     "name": "Andrei Dumitrescu",
