@@ -1,15 +1,17 @@
 const debug = require("debug")("blocks:RouteMiddleware")
 
-module.exports = ({ Router }) => (request, response, next) => {
-  Router.answer({
-    req: request,
-    route: request.ctx.route,
-  })
-    .then(answer => {
-      response.ctx.status = answer.status
-      response.ctx.payload = answer.payload
-
-      return next()
+module.exports =
+  ({ Router }) =>
+  (request, response, next) => {
+    Router.answer({
+      req: request,
+      route: request.ctx.route,
     })
-    .catch(next)
-}
+      .then(answer => {
+        response.ctx.status = answer.status
+        response.ctx.payload = answer.payload
+
+        return next()
+      })
+      .catch(next)
+  }

@@ -11,8 +11,8 @@ module.exports = {
     const ARRAY_FORMAT = process.env.QS_ARRAY_FORMAT
 
     return {
-      parse: source =>
-        qs.parse(source, {
+      parse: input =>
+        qs.parse(input, {
           delimiter: is(DELIMITER) ? DELIMITER : "&",
           allowDots: is(ALLOW_DOTS) ? ALLOW_DOTS === "true" : true,
           strictNullHandling: is(STRICT_NULL_HANDLING)

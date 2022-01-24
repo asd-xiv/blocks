@@ -35,6 +35,7 @@
     "build": "babel src --out-dir dist --source-maps",
     "----LINT": "",
     "lint:js": "eslint --quiet --ext .js src/",
+    "lint:js-fix": "eslint --quiet --fix --ext .js src/",
     "lint:md": "markdownlint *.md",
     "lint": "npm run lint:md && npm run lint:js",
     "----TEST": "",
