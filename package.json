@@ -45,7 +45,9 @@
     "test": "node tests/index.js | tap-nirvana",
     "tdd": "nodemon --watch src --watch tests --watch examples --exec \"npm test\"",
     "coverage:report": "nyc npm test && nyc report --reporter=html",
-    "coverage:ci": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
+    "coverage:ci": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
+    "----PUBLISH": "",
+    "publish": "semantic-release"
   },
   "dependencies": {
     "@asd14/m": "^6.6.0",
