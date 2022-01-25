@@ -1,15 +1,9 @@
-const debug = require("debug")("blocks:Index")
+// const debug = require("debug")("blocks:Index")
 
-const connect = require("connect")
-const path = require("path")
-const { pluginus } = require("@asd14/pluginus")
-const { is, forEach, reduce } = require("@asd14/m")
-
-const { BaseError } = require("./errors/base.js")
-const { NotFoundError } = require("./errors/not-found.js")
-const { InputError } = require("./errors/input.js")
-const { AuthenticationError } = require("./errors/authentication.js")
-const { AuthorizationError } = require("./errors/authorization.js")
+import connect from "connect"
+import path from "path"
+import { pluginus } from "@asd14/pluginus"
+import { is, forEach, reduce } from "@asd14/m"
 
 const block = ({
   plugins: pluginPaths = [],
@@ -23,10 +17,12 @@ const block = ({
 } = {}) => {
   process.env.STARTUP_TIME = new Date()
 
+  const __dirname = path.resolve()
+
   return pluginus({
     source: [
-      path.resolve(__dirname, "plugins", "router.js"),
-      path.resolve(__dirname, "plugins", "query-parser.js"),
+      path.resolve(__dirname, "src", "plugins", "router.js"),
+      path.resolve(__dirname, "src", "plugins", "query-parser.js"),
       ...pluginPaths,
     ],
   }).then(plugins => {
@@ -36,7 +32,7 @@ const block = ({
     forEach(
       item => {
         const { authenticate, authorize, action, ...rest } =
-          typeof item === "string" ? require(item) : item
+          typeof item === "string" ? import(item) : item
 
         plugins.Router.add({
           ...rest,
@@ -88,11 +84,10 @@ const block = ({
   })
 }
 
-module.exports = {
-  block,
-  BaseError,
-  InputError,
-  NotFoundError,
-  AuthenticationError,
-  AuthorizationError,
-}
+export { block }
+
+export { BaseError } from "./errors/base.js"
+export { InputError } from "./errors/input.js"
+export { NotFoundError } from "./errors/not-found.js"
+export { AuthorizationError } from "./errors/authorization.js"
+export { AuthenticationError } from "./errors/authentication.js"

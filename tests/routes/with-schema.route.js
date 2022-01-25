@@ -1,9 +1,9 @@
-module.exports = {
+const exports = {
   method: "POST",
   path: "/with-schema/:name",
 
   // 409 if invalid req.query, req.headers, req.params or req.body
-  schema: require("./with-schema.schema"),
+  schema: import("./with-schema.schema.js"),
 
   // 401 if returns false or throws
   authenticate: (/* plugins */) => (/* req */) => true,
@@ -11,12 +11,16 @@ module.exports = {
   // 403 if returns false or throws
   authorize: (/* plugins */) => (/* req */) => true,
 
-  action: ({ Good }) => ({ ctx }) => {
-    return {
-      message: Good.getMessage(),
-      params: ctx.params,
-      query: ctx.query,
-      body: ctx.body,
-    }
-  },
+  action:
+    ({ Good }) =>
+    ({ ctx }) => {
+      return {
+        message: Good.getMessage(),
+        params: ctx.params,
+        query: ctx.query,
+        body: ctx.body,
+      }
+    },
 }
+
+export default exports

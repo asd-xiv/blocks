@@ -1,13 +1,13 @@
-const jwt = require("jsonwebtoken")
+const jwt = import("jsonwebtoken")
 
-const { AuthenticationError } = require("../../src/errors/authentication")
+const { AuthenticationError } = import("../../src/errors/authentication.js")
 
-module.exports = {
+const exports = {
   method: "GET",
   path: "/with-jwt",
 
   // 409 if invalid req.query, req.headers, req.params or req.body
-  // schema: require("./schema"),
+  // schema: import("./schema"),
 
   // 401 if returns false or throws
   authenticate: (/* plugins */) => request => {
@@ -39,3 +39,5 @@ module.exports = {
       }
     },
 }
+
+export default exports

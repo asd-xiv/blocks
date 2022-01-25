@@ -2,8 +2,6 @@
  * @typedef { import("../users.model").UsersPlugin} UsersPlugin
  */
 
-const debug = require("debug")("mutant:CustomValidatorRoute")
-
 /**
  *
  *
@@ -16,7 +14,7 @@ const debug = require("debug")("mutant:CustomValidatorRoute")
  *
  * @example
  */
-module.exports = {
+const exports = {
   method: "PATCH",
   path: "/custom-validator/:id",
 
@@ -25,7 +23,7 @@ module.exports = {
    * against a JSON Schema. If check fails, respond with 409,
    * otherwise continue to ".authenticate".
    */
-  schema: require("./custom-validator-fields.schema"),
+  schema: "./custom-validator-fields.schema",
 
   /**
    * Check for valid JWT.
@@ -56,11 +54,15 @@ module.exports = {
    *
    * @returns {(Object) => Promise<*>} 500 if throws, 201 if POST, 200 otherwise
    */
-  action: (/* plugins */) => ({ ctx: { query, params, body } }) => {
-    return {
-      query,
-      params,
-      body,
-    }
-  },
+  action:
+    (/* plugins */) =>
+    ({ ctx: { query, params, body } }) => {
+      return {
+        query,
+        params,
+        body,
+      }
+    },
 }
+
+export default exports

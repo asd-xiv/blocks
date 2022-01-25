@@ -1,7 +1,7 @@
-const debug = require("debug")("blocks:QueryParserPlugin")
+// const debug = require("debug")("blocks:QueryParserPlugin")
 
-const qs = require("qs")
-const { is } = require("@asd14/m")
+import qs  from "qs"
+import { is } from "@asd14/m"
 
 module.exports = {
   create: () => {

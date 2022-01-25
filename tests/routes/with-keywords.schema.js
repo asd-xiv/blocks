@@ -1,4 +1,4 @@
-module.exports = {
+const exports = {
   headers: {
     type: "object",
     required: ["x-content-type"],
@@ -24,3 +24,5 @@ module.exports = {
     },
   },
 }
+
+export default exports

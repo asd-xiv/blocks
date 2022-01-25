@@ -49,7 +49,7 @@
     "lint": "npm run lint:md && npm run lint:js",
     "----TEST": "",
     "start": "nodemon examples/simple.js",
-    "test": "node tests/index.js | tap-nirvana",
+    "test": "tape -r @babel/register tests/index.js | tap-nirvana",
     "tdd": "nodemon --watch src --watch tests --watch examples --exec \"npm test\"",
     "coverage:report": "nyc npm test && nyc report --reporter=html",
     "coverage:ci": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
@@ -84,6 +84,7 @@
     "@semantic-release/git": "^10.0",
     "@babel/plugin-transform-runtime": "^7.16.10",
     "@babel/preset-env": "^7.16.11",
+    "@babel/register": "^7.16.9",
     "coveralls": "^3.1.0",
     "eslint": "^8.6.0",
     "jsonwebtoken": "^8.5.1",
@@ -94,6 +95,7 @@
     "prettier": "^2.2.1",
     "riteway": "^6.3.1",
     "semantic-release": "^19.0",
-    "tap-nirvana": "^1.1.0"
+    "tap-nirvana": "^1.1.0",
+    "tape": "^5.4.1"
   }
 }
