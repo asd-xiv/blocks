@@ -68,3 +68,7 @@ typings/
 
 # Vim ctags
 tags
+
+tests
+docs
+.circleci
