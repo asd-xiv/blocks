@@ -1,19 +1,23 @@
 /* eslint-disable new-cap,no-sync */
 
-const http = require("http")
+import http from "http"
 
-const path = require("path")
-const jwt = require("jsonwebtoken")
-const { stringify } = require("qs")
+import path from "path"
+import jwt from "jsonwebtoken"
+import { stringify } from "qs"
 
-const { describe } = require("riteway")
-const { createReadStream, existsSync } = require("fs")
-const { GET, PATCH, POST, MULTIPART, set } = require("@asd14/fetch-node")
+// import { describe } from "riteway"
+import test from "tape"
 
-const { block } = require("../src")
+import { createReadStream, existsSync } from "fs"
+import { GET, PATCH, POST, MULTIPART, set } from "@asd14/fetch-node"
+
+import { block } from "../src/index.js"
 
 const PORT = 4567
 const API_URL = `http://localhost:${PORT}`
+
+const __dirname = path.resolve()
 
 set({
   // Prefix request urls with API_URL
@@ -22,9 +26,9 @@ set({
   /**
    * Transform query object into string with `qs`
    *
-   * @param   {object} source Request query object
+   * @param {object} source Request query object
    *
-   * @param            input
+   * @param          input
    * @returns {string}        String appended to the URL
    */
   queryStringifyFn: input =>
@@ -36,66 +40,75 @@ set({
     }),
 })
 
-describe("blocks :: init with defaults", async assert => {
+test("blocks :: init with defaults", async t => {
   {
+    const routes = [
+      "./routes/no-schema.route.js",
+      "./routes/with-schema.route.js",
+      "./routes/with-keywords.route.js",
+      "./routes/no-authenticate.route.js",
+      "./routes/no-authorize.route.js",
+      "./routes/dont-authenticate.route.js",
+      "./routes/dont-authorize.route.js",
+      "./routes/authenticate-throws.route.js",
+      "./routes/authorize-throws.route.js",
+      "./routes/return-undefined.route.js",
+      "./routes/upload.route.js",
+      "./routes/custom-validator-fields.route.js",
+    ].map(_path => import(_path))
     const [middleware, plugins] = await block({
       plugins: [
         path.resolve(__dirname, "plugins", "good.js"),
         path.resolve(__dirname, "plugins", "error.js"),
       ],
-      routes: [
-        require("./routes/no-schema.route"),
-        require("./routes/with-schema.route"),
-        require("./routes/with-keywords.route"),
-        require("./routes/no-authenticate.route"),
-        require("./routes/no-authorize.route"),
-        require("./routes/dont-authenticate.route"),
-        require("./routes/dont-authorize.route"),
-        require("./routes/authenticate-throws.route"),
-        require("./routes/authorize-throws.route"),
-        require("./routes/return-undefined.route"),
-        require("./routes/upload.route"),
-        require("./routes/custom-validator-fields.route"),
-      ],
+      routes,
+      // [
+      //  require("./routes/no-schema.route.js"),
+      //  require("./routes/with-schema.route.js"),
+      //  require("./routes/with-keywords.route.js"),
+      //  require("./routes/no-authenticate.route.js"),
+      //  require("./routes/no-authorize.route.js"),
+      //  require("./routes/dont-authenticate.route.js"),
+      //  require("./routes/dont-authorize.route.js"),
+      //  require("./routes/authenticate-throws.route.js"),
+      //  require("./routes/authorize-throws.route.js"),
+      //  require("./routes/return-undefined.route.js"),
+      //  require("./routes/upload.route.js"),
+      //  require("./routes/custom-validator-fields.route.js"),
+      // ],
     })
 
-    assert({
-      given: "1 custom plugin",
-      should: "load default plugins (Router, QueryParser) and custom",
-      actual: Object.keys(plugins).sort(),
-      expected: ["ErrorPlugin", "Good", "QueryParser", "Router"],
-    })
+    t.equal(
+      Object.keys(plugins).sort(),
+      ["ErrorPlugin", "Good", "QueryParser", "Router"],
+      "Given 1 custom plugin, it should load default plugins (Router, QueryParser) and custom"
+    )
 
-    assert({
-      given: "13 custom routes",
-      should: "load default /ping and all custom",
-      actual: plugins.Router.count(),
-      expected: 13,
-    })
+    t.equal(
+      plugins.Router.count(),
+      13,
+      "Given 13 custom routes, it should load default /ping and all custom"
+    )
 
-    assert({
-      given: "no custom middleware",
-      should: "contain 9 middleware",
-      actual: middleware.stack.length,
-      expected: 9,
-    })
+    t.equal(
+      middleware.stack.length,
+      9,
+      "Given no custom middleware, it should contain 9 middleware"
+    )
 
     const server = http.createServer(middleware).listen(PORT, "localhost")
 
-    assert({
-      given: "default route /ping",
-      should: "response with pong",
-      actual: await GET(`${API_URL}/ping`).then(({ name, ping }) => ({
+    t.equal(
+      await GET(`${API_URL}/ping`).then(({ name, ping }) => ({
         name,
         ping,
       })),
-      expected: { name: "blocks", ping: "pong" },
-    })
+      { name: "blocks", ping: "pong" },
+      "Given default route /ping, it should response with pong"
+    )
 
-    assert({
-      given: "route with custom validator in schema and valid req data",
-      should: "respond with mirrored data",
-      actual: await PATCH(
+    t.equal(
+      await PATCH(
         `${API_URL}/custom-validator/f81d4fae-7dec-11d0-a765-00a0c91e6bf6`,
         {
           query: {
@@ -107,7 +120,7 @@ describe("blocks :: init with defaults", async assert => {
           },
         }
       ),
-      expected: {
+      {
         params: {
           id: "f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
         },
@@ -119,170 +132,154 @@ describe("blocks :: init with defaults", async assert => {
           createdAt: "2021-01-29T09:50:31.840Z",
         },
       },
-    })
+      "Given route with custom validator in schema and valid req data, it should respond with mirrored data"
+    )
 
-    assert({
-      given: "route path does not exist",
-      should: "return 404",
-      actual: await GET(`${API_URL}/not-exist`).catch(({ status, body }) => ({
+    t.equal(
+      await GET(`${API_URL}/not-exist`).catch(({ status, body }) => ({
         status,
         body,
       })),
-      expected: {
+      {
         status: 404,
         body: {
           error: "NotFoundError",
           message: "Endpoint GET:/not-exist not found",
         },
       },
-    })
+      "Given route path does not exist, it should return 404"
+    )
 
-    assert({
-      given: "route without isAuthenticated defined",
-      should: "return 401",
-      actual: await GET(`${API_URL}/no-authenticate`).catch(
-        ({ status, body }) => ({
-          status,
-          body,
-        })
-      ),
-      expected: {
+    t.equal(
+      await GET(`${API_URL}/no-authenticate`).catch(({ status, body }) => ({
+        status,
+        body,
+      })),
+      {
         status: 401,
         body: {
           error: "AuthenticationError",
           message: "Need to be authenticated to access resource",
         },
       },
-    })
+      "Given route without isAuthenticated defined, it should return 401"
+    )
 
-    assert({
-      given: "route without isAuthorized defined",
-      should: "return 403",
-      actual: await GET(`${API_URL}/no-authorize`).catch(
-        ({ status, body }) => ({
-          status,
-          body,
-        })
-      ),
-      expected: {
+    t.equal(
+      await GET(`${API_URL}/no-authorize`).catch(({ status, body }) => ({
+        status,
+        body,
+      })),
+      {
         status: 403,
         body: {
           error: "AuthorizationError",
           message: "Need permission to access resource",
         },
       },
-    })
+      "Given route without isAuthorized defined, it should return 403"
+    )
 
-    assert({
-      given: "route isAuthenticated returns false",
-      should: "return 401",
-      actual: await GET(`${API_URL}/dont-authenticate`).catch(
-        ({ status, body }) => ({
-          status,
-          body,
-        })
-      ),
-      expected: {
+    t.equal(
+      await GET(`${API_URL}/dont-authenticate`).catch(({ status, body }) => ({
+        status,
+        body,
+      })),
+      {
         status: 401,
         body: {
           error: "AuthenticationError",
           message: "Need to be authenticated to access resource",
         },
       },
-    })
+      "Given route isAuthenticated returns false, it should return 401"
+    )
 
-    assert({
-      given: "route isAuthenticated throws error",
-      should: "return 401",
-      actual: await GET(`${API_URL}/is-authenticated-throws`).catch(
+    t.equal(
+      await GET(`${API_URL}/is-authenticated-throws`).catch(
         ({ status, body }) => ({
           status,
           body,
         })
       ),
-      expected: {
+      {
         status: 401,
         body: {
           error: "AuthenticationError",
           message: "Trololo",
         },
       },
-    })
+      "Given route isAuthenticated throws error, it should return 401"
+    )
 
-    assert({
-      given: "accept app/json on route that returns undefined",
-      should: "return empty JSON object",
-      actual: await GET(`${API_URL}/return-undefined`, {
+    t.equal(
+      await GET(`${API_URL}/return-undefined`, {
         headers: {
           Accepts: "application/json",
         },
       }),
-      expected: {},
-    })
+      {},
+      "Given accept app/json on route that returns undefined, it should return empty JSON object"
+    )
 
-    assert({
-      given: "accept text/plain on route that returns undefined",
-      should: "return empty JSON object",
-      actual: await GET(`${API_URL}/return-undefined`, {
+    t.equal(
+      await GET(`${API_URL}/return-undefined`, {
         headers: {
           Accept: "text/plain",
         },
       }),
-      expected: "",
-    })
+      "",
+      "Given accept text/plain on route that returns undefined, it should return empty JSON object"
+    )
 
-    assert({
-      given: "route that returns null",
-      should: "return empty JSON object",
-      actual: await GET(`${API_URL}/return-undefined`),
-      expected: {},
-    })
+    t.equal(
+      await GET(`${API_URL}/return-undefined`),
+      {},
+      "Given route that returns null, it should return empty JSON object"
+    )
 
-    assert({
-      given: "form encoded body and content type",
-      should: "parse body with qs",
-      actual: await POST(`${API_URL}/with-schema/mutant?v=1`, {
+    t.equal(
+      await POST(`${API_URL}/with-schema/mutant?v=1`, {
         headers: {
           "content-type": "application/x-www-form-urlencoded",
         },
         body: "parsed=with%20qs&another=value",
       }),
-      expected: {
+      {
         message: "Hello Plugin World!",
         params: { name: "mutant" },
         query: { v: 1 },
         body: { parsed: "with qs", another: "value" },
       },
-    })
+      "Given form encoded body and content type, it should parse body with qs"
+    )
 
-    assert({
-      given: "form encoded with custom keywords",
-      should: "validate input",
-      actual: await POST(`${API_URL}/with-keywords`, {
+    t.equal(
+      await POST(`${API_URL}/with-keywords`, {
         headers: {
           "content-type": "application/x-www-form-urlencoded",
         },
         body: "title=%20UP%20CASED%20&foo=foobar",
       }),
-      expected: {
+      {
         message: "Hello Plugin World!",
         query: {},
         params: {},
         body: { foo: "foobar", title: "up cased" },
       },
-    })
+      "Given form encoded with custom keywords, it should validate input"
+    )
 
-    assert({
-      given: "multipart/form-data with file field",
-      should: "upload and save file localy",
-      actual: await MULTIPART(`${API_URL}/upload`, {
+    t.equal(
+      await MULTIPART(`${API_URL}/upload`, {
         body: {
           field: "testField",
           file: createReadStream(`${__dirname}/index.js`),
         },
       }).then(({ file }) => existsSync(file)),
-      expected: true,
-    })
+      true,
+      "Given multipart/form-data with file field, it should upload and save file localy"
+    )
 
     server.close()
   }
@@ -291,14 +288,12 @@ describe("blocks :: init with defaults", async assert => {
     process.env.JWT_SECRET = "testing"
 
     const [middleware] = await block({
-      routes: [require("./routes/with-jwt.route")],
+      routes: [require("./routes/with-jwt.route.js")],
     })
     const server = http.createServer(middleware).listen(PORT, "localhost")
 
-    assert({
-      given: "invalid jwt in request headers",
-      should: "return 401",
-      actual: await GET(`/with-jwt`, {
+    t.equal(
+      await GET(`/with-jwt`, {
         headers: {
           Authorization: "invalid-jwt",
         },
@@ -306,19 +301,18 @@ describe("blocks :: init with defaults", async assert => {
         status,
         body,
       })),
-      expected: {
+      {
         status: 401,
         body: {
           error: "AuthenticationError",
           message: "jwt malformed",
         },
       },
-    })
+      "Given invalid jwt in request headers, it should return 401"
+    )
 
-    assert({
-      given: "valid jwt in request headers",
-      should: "verify, parse and expose content to route action",
-      actual: await GET(`/with-jwt`, {
+    t.equal(
+      await GET(`/with-jwt`, {
         headers: {
           Authorization: jwt.sign(
             { foo: "bar", jti: "id-123" },
@@ -326,11 +320,12 @@ describe("blocks :: init with defaults", async assert => {
           ),
         },
       }),
-      expected: {
+      {
         foo: "bar",
         jti: "id-123",
       },
-    })
+      "Given valid jwt in request headers, it should verify, parse and expose content to route action"
+    )
 
     server.close()
   }

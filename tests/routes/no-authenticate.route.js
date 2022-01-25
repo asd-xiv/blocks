@@ -1,9 +1,9 @@
-module.exports = {
+const exports = {
   method: "GET",
   path: "/no-authenticate",
 
   // 409 if invalid req.query, req.headers, req.params or req.body
-  // schema: require("./schema"),
+  // schema: import("./schema"),
 
   // 401 if returns false or throws
   // authenticate: (/* plugins */) => (/* req*/) => true,
@@ -15,3 +15,5 @@ module.exports = {
     ping: "pong",
   }),
 }
+
+export default exports

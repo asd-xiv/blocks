@@ -1,4 +1,4 @@
-module.exports = {
+const exports = {
   headers: {
     type: "object",
     required: ["x-content-type"],
@@ -19,8 +19,10 @@ module.exports = {
       },
       title: {
         type: "string",
-        transform: ["trim", "toLowerCase"]
+        transform: ["trim", "toLowerCase"],
       },
     },
   },
 }
+
+export default exports

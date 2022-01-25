@@ -1,23 +1,23 @@
-const jwt = require("jsonwebtoken")
+const jwt = import("jsonwebtoken")
 
-const { AuthenticationError } = require("../../src/errors/authentication")
+const { AuthenticationError } = import("../../src/errors/authentication.js")
 
-module.exports = {
+const exports = {
   method: "GET",
   path: "/with-jwt",
 
   // 409 if invalid req.query, req.headers, req.params or req.body
-  // schema: require("./schema"),
+  // schema: import("./schema"),
 
   // 401 if returns false or throws
-  authenticate: (/* plugins */) => req => {
+  authenticate: (/* plugins */) => request => {
     try {
       const jwtData = jwt.verify(
-        req.headers.authorization,
+        request.headers.authorization,
         process.env.JWT_SECRET
       )
 
-      req.ctx.jwt = jwtData
+      request.ctx.jwt = jwtData
     } catch (error) {
       throw new AuthenticationError(error.message)
     }
@@ -26,14 +26,18 @@ module.exports = {
   // 403 if returns false or throws
   authorize: (/* plugins */) => (/* req */) => true,
 
-  action: (/* plugins */) => ({
-    ctx: {
-      jwt: { jti, foo },
+  action:
+    (/* plugins */) =>
+    ({
+      ctx: {
+        jwt: { jti, foo },
+      },
+    }) => {
+      return {
+        jti,
+        foo,
+      }
     },
-  }) => {
-    return {
-      jti,
-      foo,
-    }
-  },
 }
+
+export default exports

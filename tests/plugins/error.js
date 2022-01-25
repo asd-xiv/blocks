@@ -1,4 +1,4 @@
-module.exports = {
+export {
   name: "ErrorPlugin",
 
   depend: [],

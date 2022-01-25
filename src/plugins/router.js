@@ -1,26 +1,18 @@
 /* eslint-disable promise/no-nesting */
 
-const debug = require("debug")("blocks:RouterPlugin")
-const Ajv = require("ajv").default
-const addFormats = require("ajv-formats")
-const addKeywords = require("ajv-keywords")
-const { pathToRegexp } = require("path-to-regexp")
-const {
-  count,
-  reduce,
-  findWith,
-  merge,
-  pluck,
-  is,
-  isEmpty,
-} = require("@asd14/m")
+// const debug = require("debug")("blocks:RouterPlugin")
+import Ajv from "ajv"
+import addFormats from "ajv-formats"
+import addKeywords from "ajv-keywords"
+import * as pathToRegexp from "path-to-regexp"
+import { count, reduce, findWith, merge, pluck, is, isEmpty } from "@asd14/m"
 
-const { InputError } = require("../errors/input.js")
-const { AuthenticationError } = require("../errors/authentication.js")
-const { AuthorizationError } = require("../errors/authorization.js")
-const { NotFoundError } = require("../errors/not-found.js")
+import { InputError } from "../errors/input.js"
+import { AuthenticationError } from "../errors/authentication.js"
+import { AuthorizationError } from "../errors/authorization.js"
+import { NotFoundError } from "../errors/not-found.js"
 
-module.exports = {
+const exports = {
   create: () => {
     const ALL_ERRORS = process.env.AJV_ALL_ERRORS
     const COERCE_TYPES = process.env.AJV_COERCE_TYPES
@@ -49,7 +41,7 @@ module.exports = {
 
     addKeywords(ajv)
 
-    const defaultRouteSchema = require("./route-default.schema.js")
+    const defaultRouteSchema = import("./route-default.schema.js")
     const routes = []
 
     return {
@@ -114,7 +106,7 @@ module.exports = {
       }) => {
         const keys = []
 
-        debug(`Loading ${method}: ${path}`)
+        // debug(`Loading ${method}: ${path}`)
 
         // If conditional schemas or other complex scenarios are found,
         // defer to the schema itself instead of trying to expect certain keys
@@ -205,3 +197,5 @@ module.exports = {
     }
   },
 }
+
+export default exports
