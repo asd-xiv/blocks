@@ -1,25 +1,21 @@
 /* eslint-disable new-cap,no-sync */
 
 const http = require("http")
+
 const path = require("path")
 const jwt = require("jsonwebtoken")
 const { stringify } = require("qs")
+
 const { describe } = require("riteway")
 const { createReadStream, existsSync } = require("fs")
-const {
-  GET,
-  PATCH,
-  POST,
-  MULTIPART,
-  set: setHTTPProperties,
-} = require("@asd14/fetch-node")
+const { GET, PATCH, POST, MULTIPART, set } = require("@asd14/fetch-node")
 
 const { block } = require("../src")
 
 const PORT = 4567
 const API_URL = `http://localhost:${PORT}`
 
-setHTTPProperties({
+set({
   // Prefix request urls with API_URL
   baseURL: API_URL,
 
@@ -28,10 +24,11 @@ setHTTPProperties({
    *
    * @param   {object} source Request query object
    *
+   * @param            input
    * @returns {string}        String appended to the URL
    */
-  queryStringifyFn: source =>
-    stringify(source, {
+  queryStringifyFn: input =>
+    stringify(input, {
       allowDots: true,
       encode: false,
       arrayFormat: "brackets",

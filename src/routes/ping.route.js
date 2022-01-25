@@ -1,4 +1,4 @@
-import { elapsedTime, is } from "@asd14/m"
+const { elapsedTime, is } = require("@asd14/m")
 
 module.exports = {
   method: "GET",
