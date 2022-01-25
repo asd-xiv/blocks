@@ -1,6 +1,6 @@
 {
   "name": "@heartsradiant/blocks",
-  "version": "4.2.2",
+  "version": "4.2.3",
   "description": "REST API framework for Node.js - Hearts Radiant fork",
   "homepage": "https://github.com/heartsradiant/blocks",
   "license": "MIT",
@@ -84,7 +84,9 @@
     "nyc": "^15.1.0",
     "prettier": "^2.2.1",
     "riteway": "^6.3.1",
-    "semantic-release": "^17.3.9",
+    "semantic-release": "^19.0",
+    "@semantic-release/changelog": "^6.0",
+    "@semantic-release/git": "^10.0",
     "tap-nirvana": "^1.1.0"
   }
 }
