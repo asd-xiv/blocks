@@ -15,10 +15,10 @@ const {
   isEmpty,
 } = require("@asd14/m")
 
-const { InputError } = require("../errors/input")
-const { AuthenticationError } = require("../errors/authentication")
-const { AuthorizationError } = require("../errors/authorization")
-const { NotFoundError } = require("../errors/not-found")
+const { InputError } = require("../errors/input.js")
+const { AuthenticationError } = require("../errors/authentication.js")
+const { AuthorizationError } = require("../errors/authorization.js")
+const { NotFoundError } = require("../errors/not-found.js")
 
 module.exports = {
   create: () => {
@@ -49,7 +49,7 @@ module.exports = {
 
     addKeywords(ajv)
 
-    const defaultRouteSchema = require("./route-default.schema")
+    const defaultRouteSchema = require("./route-default.schema.js")
     const routes = []
 
     return {

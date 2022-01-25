@@ -1,4 +1,4 @@
-const { BaseError } = require("./base")
+const { BaseError } = require("./base.js")
 
 class InputError extends BaseError {
   constructor(message, details) {

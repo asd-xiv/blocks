@@ -1,4 +1,4 @@
-const { BaseError } = require("./base")
+const { BaseError } = require("./base.js")
 
 class AuthenticationError extends BaseError {
   constructor(
