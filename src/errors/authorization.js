@@ -1,4 +1,4 @@
-const { BaseError } = require("./base")
+const { BaseError } = require("./base.js")
 
 class AuthorizationError extends BaseError {
   constructor(message = "Need permission to access resource", details) {

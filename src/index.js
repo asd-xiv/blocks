@@ -5,11 +5,11 @@ const path = require("path")
 const { pluginus } = require("@asd14/pluginus")
 const { is, forEach, reduce } = require("@asd14/m")
 
-const { BaseError } = require("./errors/base")
-const { NotFoundError } = require("./errors/not-found")
-const { InputError } = require("./errors/input")
-const { AuthenticationError } = require("./errors/authentication")
-const { AuthorizationError } = require("./errors/authorization")
+const { BaseError } = require("./errors/base.js")
+const { NotFoundError } = require("./errors/not-found.js")
+const { InputError } = require("./errors/input.js")
+const { AuthenticationError } = require("./errors/authentication.js")
+const { AuthorizationError } = require("./errors/authorization.js")
 
 const block = ({
   plugins: pluginPaths = [],

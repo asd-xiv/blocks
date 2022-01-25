@@ -3,7 +3,7 @@ const debug = require("debug")("blocks:JWTDecodeMiddleware")
 const jwt = require("jsonwebtoken")
 const { is, isEmpty } = require("@asd14/m")
 
-const { InputError } = require("../errors/input")
+const { InputError } = require("../errors/input.js")
 
 module.exports = () =>
   // Active middleware if JWT_SECRET present

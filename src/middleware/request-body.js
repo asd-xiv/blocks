@@ -8,7 +8,7 @@ const { pipe, is, isEmpty, clone } = require("@asd14/m")
 const { createWriteStream } = require("fs")
 const path = require("path")
 
-const { InputError } = require("../errors/input")
+const { InputError } = require("../errors/input.js")
 
 const handleText = (request, { onParse, onError }) => {
   const chunks = []
