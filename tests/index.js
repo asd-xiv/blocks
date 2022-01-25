@@ -288,7 +288,7 @@ test("blocks :: init with defaults", async t => {
     process.env.JWT_SECRET = "testing"
 
     const [middleware] = await block({
-      routes: [require("./routes/with-jwt.route.js")],
+      routes: [import("./routes/with-jwt.route.js")],
     })
     const server = http.createServer(middleware).listen(PORT, "localhost")
 
