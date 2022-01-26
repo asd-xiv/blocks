@@ -66,6 +66,7 @@ test("blocks :: init with defaults", async t => {
       //  require("./routes/no-schema.route.js"),
       //  require("./routes/with-schema.route.js"),
       //  require("./routes/with-keywords.route.js"),
+      //  require("./routes/with-conditional-schema.route.js"),
       //  require("./routes/no-authenticate.route.js"),
       //  require("./routes/no-authorize.route.js"),
       //  require("./routes/dont-authenticate.route.js"),
@@ -86,8 +87,8 @@ test("blocks :: init with defaults", async t => {
 
     t.equal(
       plugins.Router.count(),
-      13,
-      "Given 13 custom routes, it should load default /ping and all custom"
+      14,
+      "Given 14 custom routes, it should load default /ping and all custom"
     )
 
     t.equal(
@@ -271,6 +272,40 @@ test("blocks :: init with defaults", async t => {
     )
 
     t.equal(
+      await POST(`${API_URL}/with-conditional-schema`, {
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          "x-api-version": "1.0.0",
+        },
+        body: "foo=1",
+      }),
+      {
+        message: "Hello Plugin World!",
+        query: {},
+        params: {},
+        body: { foo: "1" },
+      },
+      "Given a versioned schema based on header, it should use one schema or the other based on the API header value",
+    )
+
+    t.equal(
+      await POST(`${API_URL}/with-conditional-schema`, {
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          "x-api-version": "2.4.0",
+        },
+        body: "foo=1",
+      }),
+      {
+        message: "Hello Plugin World!",
+        query: {},
+        params: {},
+        body: { foo: 1 },
+      },
+      "Given a versioned schema based on header, it should use one schema or the other based on the API header value",
+    )
+
+    t.equal(
       await MULTIPART(`${API_URL}/upload`, {
         body: {
           field: "testField",
@@ -280,6 +315,42 @@ test("blocks :: init with defaults", async t => {
       true,
       "Given multipart/form-data with file field, it should upload and save file localy"
     )
+
+    assert({
+      given: "a versioned schema based on header",
+      should: "use one schema or the other based on the API header value",
+      actual: await POST(`${API_URL}/with-conditional-schema`, {
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          "x-api-version": "1.0.0",
+        },
+        body: "foo=1",
+      }),
+      expected: {
+        message: "Hello Plugin World!",
+        query: {},
+        params: {},
+        body: { foo: "1" },
+      },
+    })
+
+    assert({
+      given: "a versioned schema based on header",
+      should: "use one schema or the other based on the API header value",
+      actual: await POST(`${API_URL}/with-conditional-schema`, {
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          "x-api-version": "2.4.0",
+        },
+        body: "foo=1",
+      }),
+      expected: {
+        message: "Hello Plugin World!",
+        query: {},
+        params: {},
+        body: { foo: 1 },
+      },
+    })
 
     server.close()
   }
