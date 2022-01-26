@@ -19,7 +19,7 @@ module.exports = {
       },
       title: {
         type: "string",
-        transform: ["trim", "toLowerCase"]
+        transform: ["trim", "toLowerCase"],
       },
     },
   },
