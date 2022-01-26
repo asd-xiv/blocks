@@ -13,8 +13,10 @@
     }
   },
   "rules": {
+    "import/extensions": "off",
     "unicorn/consistent-function-scoping": "warn",
+    "unicorn/prefer-module": "off",
     "promise/avoid-new": "off",
     "valid-jsdoc": "off"
-  },
+  }
 }

@@ -6,7 +6,7 @@ const accepts = require("accepts")
 const toNowInMs = start => {
   const end = process.hrtime(start)
 
-  return end[0] * 1000 + end[1] / 1000000
+  return end[0] * 1000 + end[1] / 1_000_000
 }
 
 const acceptedContentTypes = ["json", "text"]

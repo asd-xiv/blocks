@@ -55,9 +55,9 @@ module.exports = {
       /**
        * Searches for the first match.
        *
-       * @param   {object} arg1          Props
-       * @param   {string} arg1.method   HTTP method
-       * @param   {string} arg1.pathname URL pathname
+       * @param {object} arg1          Props
+       * @param {string} arg1.method   HTTP method
+       * @param {string} arg1.pathname URL pathname
        *
        * @returns {object}
        */
@@ -92,12 +92,12 @@ module.exports = {
       },
 
       /**
-       * @param   {object}    props
-       * @param   {string}    props.method
-       * @param   {string}    props.path
-       * @param   {object}    props.schema
-       * @param   {Function}  props.authenticate
-       * @param   {Function}  props.authorize
+       * @param {object}   props
+       * @param {string}   props.method
+       * @param {string}   props.path
+       * @param {object}   props.schema
+       * @param {Function} props.authenticate
+       * @param {Function} props.authorize
        *
        * @returns {undefined}
        */
@@ -142,9 +142,9 @@ module.exports = {
       /**
        * { function_description }
        *
-       * @param   {object} arg1       The argument 1
-       * @param   {object} arg1.route The route
-       * @param   {object} arg1.req   The request
+       * @param {object} arg1       The argument 1
+       * @param {object} arg1.route The route
+       * @param {object} arg1.req   The request
        *
        * @returns {object}
        */
