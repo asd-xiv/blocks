@@ -1,9 +1,9 @@
 module.exports = {
   method: "POST",
-  path: "/upload",
+  path: "/with-conditional-schema",
 
   // 409 if invalid req.query, req.headers, req.params or req.body
-  schema: require("./upload.schema"),
+  schema: require("./with-conditional-schema.schema"),
 
   // 401 if returns false or throws
   authenticate: (/* plugins */) => (/* req */) => true,
@@ -12,10 +12,13 @@ module.exports = {
   authorize: (/* plugins */) => (/* req */) => true,
 
   action:
-    (/* plugins */) =>
-    ({ ctx: { body } }) => {
+    ({ Good }) =>
+    ({ ctx }) => {
       return {
-        file: body.file,
+        message: Good.getMessage(),
+        params: ctx.params,
+        query: ctx.query,
+        body: ctx.body,
       }
     },
 }

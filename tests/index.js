@@ -51,6 +51,7 @@ describe("blocks :: init with defaults", async assert => {
         require("./routes/no-schema.route"),
         require("./routes/with-schema.route"),
         require("./routes/with-keywords.route"),
+        require("./routes/with-conditional-schema.route"),
         require("./routes/no-authenticate.route"),
         require("./routes/no-authorize.route"),
         require("./routes/dont-authenticate.route"),
@@ -71,10 +72,10 @@ describe("blocks :: init with defaults", async assert => {
     })
 
     assert({
-      given: "13 custom routes",
+      given: "14 custom routes",
       should: "load default /ping and all custom",
       actual: plugins.Router.count(),
-      expected: 13,
+      expected: 14,
     })
 
     assert({
@@ -274,6 +275,42 @@ describe("blocks :: init with defaults", async assert => {
         query: {},
         params: {},
         body: { foo: "foobar", title: "up cased" },
+      },
+    })
+
+    assert({
+      given: "a versioned schema based on header",
+      should: "use one schema or the other based on the API header value",
+      actual: await POST(`${API_URL}/with-conditional-schema`, {
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          "x-api-version": "1.0.0",
+        },
+        body: "foo=1",
+      }),
+      expected: {
+        message: "Hello Plugin World!",
+        query: {},
+        params: {},
+        body: { foo: "1" },
+      },
+    })
+
+    assert({
+      given: "a versioned schema based on header",
+      should: "use one schema or the other based on the API header value",
+      actual: await POST(`${API_URL}/with-conditional-schema`, {
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          "x-api-version": "2.4.0",
+        },
+        body: "foo=1",
+      }),
+      expected: {
+        message: "Hello Plugin World!",
+        query: {},
+        params: {},
+        body: { foo: 1 },
       },
     })
 
