@@ -1,9 +1,7 @@
-// const debug = require("debug")("blocks:QueryParserPlugin")
-
 import qs  from "qs"
 import { is } from "@asd14/m"
 
-module.exports = {
+export default {
   create: () => {
     const DELIMITER = process.env.QS_DELIMITER
     const ALLOW_DOTS = process.env.QS_ALLOW_DOTS

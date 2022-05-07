@@ -1,9 +1,7 @@
-const debug = require("debug")("blocks:CORSMiddleware")
+import cors from "cors"
+import { is, isEmpty } from "@asd14/m"
 
-const cors = require("cors")
-const { is, isEmpty } = require("@asd14/m")
-
-module.exports = () => {
+export default () => {
   const ORIGIN = process.env.CORS_ORIGIN
   const METHODS = process.env.CORS_METHODS
 

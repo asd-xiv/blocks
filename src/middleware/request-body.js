@@ -1,14 +1,12 @@
-const debug = require("debug")("blocks:BodyMiddleware")
+import cuid from "cuid"
+import Busboy from "busboy"
+import slugify from "@sindresorhus/slugify"
+import { tmpdir } from "os"
+import { pipe, is, isEmpty, clone } from "@asd14/m"
+import { createWriteStream } from "fs"
+import path from "path"
 
-const cuid = require("cuid")
-const Busboy = require("busboy")
-const slugify = require("@sindresorhus/slugify")
-const { tmpdir } = require("os")
-const { pipe, is, isEmpty, clone } = require("@asd14/m")
-const { createWriteStream } = require("fs")
-const path = require("path")
-
-const { InputError } = require("../errors/input.js")
+import { InputError } from "../errors/input.js"
 
 const handleText = (request, { onParse, onError }) => {
   const chunks = []
@@ -60,7 +58,7 @@ const handleForm = (request, { onParse, onError }) => {
   }
 }
 
-module.exports =
+export default
   ({ QueryParser }) =>
   (request, response, next) => {
     switch (request.headers["x-content-type"]) {

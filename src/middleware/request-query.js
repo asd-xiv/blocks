@@ -1,8 +1,6 @@
-const debug = require("debug")("blocks:QueryMiddleware")
+import { isEmpty } from "@asd14/m"
 
-const { isEmpty } = require("@asd14/m")
-
-module.exports =
+export default
   ({ QueryParser }) =>
   (request, response, next) => {
     request.ctx.query = isEmpty(request.ctx.query)

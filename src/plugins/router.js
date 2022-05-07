@@ -1,10 +1,9 @@
 /* eslint-disable promise/no-nesting */
 
-// const debug = require("debug")("blocks:RouterPlugin")
 import Ajv from "ajv"
 import addFormats from "ajv-formats"
 import addKeywords from "ajv-keywords"
-import * as pathToRegexp from "path-to-regexp"
+import { pathToRegexp } from "path-to-regexp"
 import { count, reduce, findWith, merge, pluck, is, isEmpty } from "@asd14/m"
 
 import { InputError } from "../errors/input.js"
@@ -18,7 +17,7 @@ const exports = {
     const COERCE_TYPES = process.env.AJV_COERCE_TYPES
     const USE_DEFAULTS = process.env.AJV_USE_DEFAULTS
 
-    const ajv = new Ajv({
+    const ajv = new Ajv.default({
       allErrors: is(ALL_ERRORS) ? ALL_ERRORS === "true" : true,
       coerceTypes: is(COERCE_TYPES) ? COERCE_TYPES === "true" : true,
       useDefaults: is(USE_DEFAULTS) ? USE_DEFAULTS === "true" : true,

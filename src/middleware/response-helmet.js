@@ -1,8 +1,6 @@
-const debug = require("debug")("blocks:HelmetMiddleware")
+import helmet from "helmet"
 
-const helmet = require("helmet")
-
-module.exports = () => {
+export default () => {
   return helmet({
     contentSecurityPolicy: false,
     expectCt: process.env.EXPECT_CT,

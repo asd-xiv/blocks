@@ -1,11 +1,11 @@
-const { elapsedTime, is } = require("@asd14/m")
+import { elapsedTime, is } from "@asd14/m"
 
-module.exports = {
+export default {
   method: "GET",
   path: "/ping",
 
   // 409 if invalid req.query, req.headers, req.params or req.body
-  schema: require("./ping.schema.js"),
+  schema: import("./ping.schema.js"),
 
   // 401 if returns false or throws
   authenticate: (/* plugins */) => (/* req */) => true,

@@ -1,8 +1,8 @@
-const debug = require("debug")("blocks:ErrorMiddleware")
+import debug from "debug"
 
-const { pluck, is } = require("@asd14/m")
+import { pluck, is } from "@asd14/m"
 
-module.exports =
+export default
   ({ ErrorPlugin }) =>
   (error, request, response, next) => {
     response.ctx.status = error.statusCode || 500

@@ -1,7 +1,7 @@
-const http = require("http")
-const glob = require("glob")
+import http from "http"
+import glob from "glob"
 
-const { block } = require("../src")
+import { block } from "../src"
 
 // initialize application
 const app = block({

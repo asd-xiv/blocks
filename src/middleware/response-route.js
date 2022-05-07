@@ -1,6 +1,4 @@
-const debug = require("debug")("blocks:RouteMiddleware")
-
-module.exports =
+export default
   ({ Router }) =>
   (request, response, next) => {
     Router.answer({

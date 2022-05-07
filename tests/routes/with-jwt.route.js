@@ -1,6 +1,6 @@
-const jwt = import("jsonwebtoken")
+import jwt from "jsonwebtoken"
 
-const { AuthenticationError } = import("../../src/errors/authentication.js")
+import { AuthenticationError } from "../../src/errors/authentication.js"
 
 const exports = {
   method: "GET",

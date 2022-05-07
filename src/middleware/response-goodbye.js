@@ -1,7 +1,7 @@
-const debug = require("debug")("blocks:GoodbyeMiddleware")
+import debug from "debug"
 
-const { read } = require("@asd14/m")
-const accepts = require("accepts")
+import { read } from "@asd14/m"
+import accepts from "accepts"
 
 const toNowInMs = start => {
   const end = process.hrtime(start)
@@ -33,7 +33,7 @@ const bodyByRequestAccept = ({ accept, reponse }) => {
   }
 }
 
-module.exports = () => (request, reponse) => {
+export default () => (request, reponse) => {
   debug(
     `${request.method}:${request.url} responding with ${reponse.ctx.status}`
   )

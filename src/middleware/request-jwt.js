@@ -1,11 +1,9 @@
-const debug = require("debug")("blocks:JWTDecodeMiddleware")
+import jwt from "jsonwebtoken"
+import { is, isEmpty } from "@asd14/m"
 
-const jwt = require("jsonwebtoken")
-const { is, isEmpty } = require("@asd14/m")
+import { InputError } from "../errors/input.js"
 
-const { InputError } = require("../errors/input.js")
-
-module.exports = () =>
+export default () =>
   // Active middleware if JWT_SECRET present
   isEmpty(process.env.JWT_SECRET)
     ? undefined

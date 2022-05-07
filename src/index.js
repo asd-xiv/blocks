@@ -1,9 +1,7 @@
-// const debug = require("debug")("blocks:Index")
-
 import connect from "connect"
 import path from "path"
 import { pluginus } from "@asd14/pluginus"
-import { is, forEach, reduce } from "@asd14/m"
+import { is, forEach, reduce, type } from "@asd14/m"
 
 const block = ({
   plugins: pluginPaths = [],
@@ -32,9 +30,9 @@ const block = ({
      * Register routes
      */
     forEach(
-      item => {
-        const { authenticate, authorize, action, ...rest } =
-          typeof item === "string" ? import(item) : item
+      async item => {
+        const imported = await (typeof item === "string" ?  import(item) : item)
+        const { default: { authenticate, authorize, action, ...rest } } = imported
 
         plugins.Router.add({
           ...rest,
@@ -55,29 +53,31 @@ const block = ({
        * Middleware `connect` pipeline
        */
       reduce(
-        (accumulator, item) => {
+        async (accumulator, item) => {
+          const source = await import(item)
+
           const middleware =
-            typeof item === "string" ? require(item)(plugins) : item(plugins)
+            typeof item === "string" ? source.default(plugins) : item(plugins)
 
           return is(middleware) ? accumulator.use(middleware) : accumulator
         },
         connect(),
         [
-          "./middleware/request-bootstrap",
-          "./middleware/request-cors",
-          "./middleware/request-route-exists",
-          // "./middleware/req-jwt",
-          "./middleware/request-query",
-          "./middleware/request-body",
+          "./middleware/request-bootstrap.js",
+          "./middleware/request-cors.js",
+          "./middleware/request-route-exists.js",
+          // "./middleware/req-jwt.js",
+          "./middleware/request-query.js",
+          "./middleware/request-body.js",
           ...beforeRoute,
-          "./middleware/response-route",
+          "./middleware/response-route.js",
           ...afterRoute,
-          "./middleware/response-error",
+          "./middleware/response-error.js",
           ...afterError,
-          "./middleware/response-goodbye-error",
+          "./middleware/response-goodbye-error.js",
           ...beforeSend,
-          "./middleware/response-helmet",
-          "./middleware/response-goodbye",
+          "./middleware/response-helmet.js",
+          "./middleware/response-goodbye.js",
         ]
       ),
 

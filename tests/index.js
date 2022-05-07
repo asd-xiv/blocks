@@ -58,8 +58,8 @@ test("blocks :: init with defaults", async t => {
     ].map(_path => import(_path))
     const [middleware, plugins] = await block({
       plugins: [
-        path.resolve(__dirname, "plugins", "good.js"),
-        path.resolve(__dirname, "plugins", "error.js"),
+        path.resolve(__dirname, "tests", "plugins", "good.js"),
+        path.resolve(__dirname, "tests", "plugins", "error.js"),
       ],
       routes,
       // [
