@@ -1,9 +1,9 @@
-const { BaseError } = require("./base")
+import { BaseError } from "./base"
 
 class AuthenticationError extends BaseError {
   constructor(
     message = "Need to be authenticated to access resource",
-    details
+    details: Record<string, any>
   ) {
     super(message, details)
 
@@ -12,4 +12,4 @@ class AuthenticationError extends BaseError {
   }
 }
 
-module.exports = { AuthenticationError }
+export { AuthenticationError }

@@ -1,15 +1,13 @@
-const debug = require("debug")("blocks:Index")
+import connect from "connect"
+import path from "node:path"
+import { pluginus } from "@asd14/pluginus"
+import { is, forEach, reduce } from "@asd14/m"
 
-const connect = require("connect")
-const path = require("path")
-const { pluginus } = require("@asd14/pluginus")
-const { is, forEach, reduce } = require("@asd14/m")
-
-const { BaseError } = require("./errors/base")
-const { NotFoundError } = require("./errors/not-found")
-const { InputError } = require("./errors/input")
-const { AuthenticationError } = require("./errors/authentication")
-const { AuthorizationError } = require("./errors/authorization")
+import { BaseError } from "./errors/base"
+import { NotFoundError } from "./errors/not-found"
+import { InputError } from "./errors/input"
+import { AuthenticationError } from "./errors/authentication"
+import { AuthorizationError } from "./errors/authorization"
 
 const block = ({
   plugins: pluginPaths = [],

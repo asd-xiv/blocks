@@ -1,7 +1,7 @@
-const { BaseError } = require("./base")
+import { BaseError } from "./base"
 
 class InputError extends BaseError {
-  constructor(message, details) {
+  constructor(message: string, details?: Record<string, any>) {
     super(message, details)
 
     this.name = "InputError"
@@ -9,4 +9,4 @@ class InputError extends BaseError {
   }
 }
 
-module.exports = { InputError }
+export { InputError }

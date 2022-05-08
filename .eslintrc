@@ -1,13 +1,9 @@
 {
-  "parser": "babel-eslint",
   "root": true,
   "extends": [
-    "@asd14/eslint-config/targets/node"
+    "@asd14/eslint-config/targets/node-ts"
   ],
   "settings": {
-    "import/resolver": "node",
-
-    // Recommended if you use eslint_d
     "import/cache": {
       "lifetime": 5
     }
@@ -16,5 +12,5 @@
     "unicorn/consistent-function-scoping": "warn",
     "promise/avoid-new": "off",
     "valid-jsdoc": "off"
-  },
+  }
 }
