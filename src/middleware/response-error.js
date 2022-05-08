@@ -1,4 +1,4 @@
-import debug from "debug"
+// import debug from "debug"
 
 import { pluck, is } from "@asd14/m"
 
@@ -23,7 +23,7 @@ export default
       })
     }
 
-    debug(error)
+    // debug(error)
 
     next(error)
   }

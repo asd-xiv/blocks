@@ -1,6 +1,6 @@
-import debug from "debug"
+// import debug from "debug"
 
-import { read } from "@asd14/m"
+import { read, type } from "@asd14/m"
 import accepts from "accepts"
 
 const toNowInMs = start => {
@@ -34,9 +34,9 @@ const bodyByRequestAccept = ({ accept, reponse }) => {
 }
 
 export default () => (request, reponse) => {
-  debug(
-    `${request.method}:${request.url} responding with ${reponse.ctx.status}`
-  )
+  // debug(
+  //   `${request.method}:${request.url} responding with ${reponse.ctx.status}`
+  // )
 
   const body = bodyByRequestAccept({
     accept: accepts(request),

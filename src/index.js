@@ -1,9 +1,9 @@
 import connect from "connect"
 import path from "path"
 import { pluginus } from "@asd14/pluginus"
-import { is, forEach, reduce, type } from "@asd14/m"
+import { is, forEach, reduce, type, map } from "@asd14/m"
 
-const block = ({
+const block = async ({
   plugins: pluginPaths = [],
   routes = [],
   middleware: {
@@ -17,7 +17,7 @@ const block = ({
 
   const __dirname = path.resolve()
 
-  return pluginus({
+  const plugins = await pluginus({
     source: [
       // path.resolve("./plugins/router.js"),
       // path.resolve("./plugins/query-parser.js"),
@@ -25,13 +25,15 @@ const block = ({
       path.resolve(__dirname, "src", "plugins", "query-parser.js"),
       ...pluginPaths,
     ],
-  }).then(plugins => {
-    /*
-     * Register routes
-     */
-    forEach(
+  })
+
+  /*
+   * Register routes
+   */
+  await Promise.all(
+    map(
       async item => {
-        const imported = await (typeof item === "string" ?  import(item) : item)
+        const imported = await (typeof item === "string" ? import(item) : item)
         const { default: { authenticate, authorize, action, ...rest } } = imported
 
         plugins.Router.add({
@@ -47,43 +49,47 @@ const block = ({
       },
       ["./routes/ping.route.js", ...routes]
     )
+  )
 
-    return [
-      /*
-       * Middleware `connect` pipeline
-       */
-      reduce(
-        async (accumulator, item) => {
-          const source = await import(item)
+  const middlewarePaths = [
+    "./middleware/request-bootstrap.js",
+    "./middleware/request-cors.js",
+    "./middleware/request-route-exists.js",
+    // "./middleware/req-jwt.js",
+    "./middleware/request-query.js",
+    "./middleware/request-body.js",
+    ...beforeRoute,
+    "./middleware/response-route.js",
+    ...afterRoute,
+    "./middleware/response-error.js",
+    ...afterError,
+    "./middleware/response-goodbye-error.js",
+    ...beforeSend,
+    "./middleware/response-helmet.js",
+    "./middleware/response-goodbye.js",
+  ]
 
-          const middleware =
-            typeof item === "string" ? source.default(plugins) : item(plugins)
-
-          return is(middleware) ? accumulator.use(middleware) : accumulator
-        },
-        connect(),
-        [
-          "./middleware/request-bootstrap.js",
-          "./middleware/request-cors.js",
-          "./middleware/request-route-exists.js",
-          // "./middleware/req-jwt.js",
-          "./middleware/request-query.js",
-          "./middleware/request-body.js",
-          ...beforeRoute,
-          "./middleware/response-route.js",
-          ...afterRoute,
-          "./middleware/response-error.js",
-          ...afterError,
-          "./middleware/response-goodbye-error.js",
-          ...beforeSend,
-          "./middleware/response-helmet.js",
-          "./middleware/response-goodbye.js",
-        ]
+  const middlewares = await Promise.all(
+    map((item) =>
+      import(item).then((source) =>
+        typeof item === "string" ? source.default(plugins) : item(plugins)
       ),
+      middlewarePaths
+    )
+  )
 
-      plugins,
-    ]
-  })
+  return [
+    /*
+     * Middleware `connect` pipeline
+     */
+    reduce(
+     (accumulator, item) => is(item) ? accumulator.use(item) : accumulator,
+      connect(),
+      middlewares
+    ),
+
+    plugins,
+  ]
 }
 
 export { block }
