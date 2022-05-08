@@ -42,44 +42,31 @@ set({
 
 test("blocks :: init with defaults", async t => {
   {
-    const routes = [
-      "./routes/no-schema.route.js",
-      "./routes/with-schema.route.js",
-      "./routes/with-keywords.route.js",
-      "./routes/no-authenticate.route.js",
-      "./routes/no-authorize.route.js",
-      "./routes/dont-authenticate.route.js",
-      "./routes/dont-authorize.route.js",
-      "./routes/authenticate-throws.route.js",
-      "./routes/authorize-throws.route.js",
-      "./routes/return-undefined.route.js",
-      "./routes/upload.route.js",
-      "./routes/custom-validator-fields.route.js",
-    ].map(_path => import(_path))
+    const routes =
+      [
+        "../tests/routes/no-schema.route.js",
+        "../tests/routes/with-schema.route.js",
+        "../tests/routes/with-keywords.route.js",
+        "../tests/routes/no-authenticate.route.js",
+        "../tests/routes/no-authorize.route.js",
+        "../tests/routes/dont-authenticate.route.js",
+        "../tests/routes/dont-authorize.route.js",
+        "../tests/routes/authenticate-throws.route.js",
+        "../tests/routes/authorize-throws.route.js",
+        "../tests/routes/return-undefined.route.js",
+        "../tests/routes/upload.route.js",
+        "../tests/routes/custom-validator-fields.route.js",
+      ]
+
     const [middleware, plugins] = await block({
       plugins: [
         path.resolve(__dirname, "tests", "plugins", "good.js"),
         path.resolve(__dirname, "tests", "plugins", "error.js"),
       ],
       routes,
-      // [
-      //  require("./routes/no-schema.route.js"),
-      //  require("./routes/with-schema.route.js"),
-      //  require("./routes/with-keywords.route.js"),
-      //  require("./routes/with-conditional-schema.route.js"),
-      //  require("./routes/no-authenticate.route.js"),
-      //  require("./routes/no-authorize.route.js"),
-      //  require("./routes/dont-authenticate.route.js"),
-      //  require("./routes/dont-authorize.route.js"),
-      //  require("./routes/authenticate-throws.route.js"),
-      //  require("./routes/authorize-throws.route.js"),
-      //  require("./routes/return-undefined.route.js"),
-      //  require("./routes/upload.route.js"),
-      //  require("./routes/custom-validator-fields.route.js"),
-      // ],
     })
 
-    t.equal(
+    t.deepEqual(
       Object.keys(plugins).sort(),
       ["ErrorPlugin", "Good", "QueryParser", "Router"],
       "Given 1 custom plugin, it should load default plugins (Router, QueryParser) and custom"
@@ -99,7 +86,7 @@ test("blocks :: init with defaults", async t => {
 
     const server = http.createServer(middleware).listen(PORT, "localhost")
 
-    t.equal(
+    t.deepEqual(
       await GET(`${API_URL}/ping`).then(({ name, ping }) => ({
         name,
         ping,
@@ -108,7 +95,7 @@ test("blocks :: init with defaults", async t => {
       "Given default route /ping, it should response with pong"
     )
 
-    t.equal(
+    t.deepEqual(
       await PATCH(
         `${API_URL}/custom-validator/f81d4fae-7dec-11d0-a765-00a0c91e6bf6`,
         {
@@ -122,11 +109,11 @@ test("blocks :: init with defaults", async t => {
         }
       ),
       {
-        params: {
-          id: "f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
-        },
         query: {
           email: "foo@bar.com",
+        },
+        params: {
+          id: "f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
         },
         body: {
           thumbnailURL: "https://foo.bar.com",
@@ -136,7 +123,7 @@ test("blocks :: init with defaults", async t => {
       "Given route with custom validator in schema and valid req data, it should respond with mirrored data"
     )
 
-    t.equal(
+    t.deepEqual(
       await GET(`${API_URL}/not-exist`).catch(({ status, body }) => ({
         status,
         body,
@@ -151,7 +138,7 @@ test("blocks :: init with defaults", async t => {
       "Given route path does not exist, it should return 404"
     )
 
-    t.equal(
+    t.deepEqual(
       await GET(`${API_URL}/no-authenticate`).catch(({ status, body }) => ({
         status,
         body,
@@ -166,7 +153,7 @@ test("blocks :: init with defaults", async t => {
       "Given route without isAuthenticated defined, it should return 401"
     )
 
-    t.equal(
+    t.deepEqual(
       await GET(`${API_URL}/no-authorize`).catch(({ status, body }) => ({
         status,
         body,
@@ -181,7 +168,7 @@ test("blocks :: init with defaults", async t => {
       "Given route without isAuthorized defined, it should return 403"
     )
 
-    t.equal(
+    t.deepEqual(
       await GET(`${API_URL}/dont-authenticate`).catch(({ status, body }) => ({
         status,
         body,
@@ -196,7 +183,7 @@ test("blocks :: init with defaults", async t => {
       "Given route isAuthenticated returns false, it should return 401"
     )
 
-    t.equal(
+    t.deepEqual(
       await GET(`${API_URL}/is-authenticated-throws`).catch(
         ({ status, body }) => ({
           status,
@@ -213,7 +200,7 @@ test("blocks :: init with defaults", async t => {
       "Given route isAuthenticated throws error, it should return 401"
     )
 
-    t.equal(
+    t.deepEqual(
       await GET(`${API_URL}/return-undefined`, {
         headers: {
           Accepts: "application/json",
@@ -223,7 +210,7 @@ test("blocks :: init with defaults", async t => {
       "Given accept app/json on route that returns undefined, it should return empty JSON object"
     )
 
-    t.equal(
+    t.deepEqual(
       await GET(`${API_URL}/return-undefined`, {
         headers: {
           Accept: "text/plain",
@@ -233,13 +220,13 @@ test("blocks :: init with defaults", async t => {
       "Given accept text/plain on route that returns undefined, it should return empty JSON object"
     )
 
-    t.equal(
+    t.deepEqual(
       await GET(`${API_URL}/return-undefined`),
       {},
       "Given route that returns null, it should return empty JSON object"
     )
 
-    t.equal(
+    t.deepEqual(
       await POST(`${API_URL}/with-schema/mutant?v=1`, {
         headers: {
           "content-type": "application/x-www-form-urlencoded",
@@ -255,7 +242,7 @@ test("blocks :: init with defaults", async t => {
       "Given form encoded body and content type, it should parse body with qs"
     )
 
-    t.equal(
+    t.deepEqual(
       await POST(`${API_URL}/with-keywords`, {
         headers: {
           "content-type": "application/x-www-form-urlencoded",
@@ -271,7 +258,7 @@ test("blocks :: init with defaults", async t => {
       "Given form encoded with custom keywords, it should transform and validate data inside schema with added functionalities from ajv-keywords"
     )
 
-    t.equal(
+    t.deepEqual(
       await POST(`${API_URL}/with-conditional-schema`, {
         headers: {
           "content-type": "application/x-www-form-urlencoded",
@@ -288,7 +275,7 @@ test("blocks :: init with defaults", async t => {
       "Given a versioned schema based on header, it should use one schema or the other based on the API header value",
     )
 
-    t.equal(
+    t.deepEqual(
       await POST(`${API_URL}/with-conditional-schema`, {
         headers: {
           "content-type": "application/x-www-form-urlencoded",
@@ -305,7 +292,7 @@ test("blocks :: init with defaults", async t => {
       "Given a versioned schema based on header, it should use one schema or the other based on the API header value",
     )
 
-    t.equal(
+    t.deepEqual(
       await MULTIPART(`${API_URL}/upload`, {
         body: {
           field: "testField",
@@ -316,41 +303,39 @@ test("blocks :: init with defaults", async t => {
       "Given multipart/form-data with file field, it should upload and save file localy"
     )
 
-    assert({
-      given: "a versioned schema based on header",
-      should: "use one schema or the other based on the API header value",
-      actual: await POST(`${API_URL}/with-conditional-schema`, {
+    t.deepEqual(
+      await POST(`${API_URL}/with-conditional-schema`, {
         headers: {
           "content-type": "application/x-www-form-urlencoded",
           "x-api-version": "1.0.0",
         },
         body: "foo=1",
       }),
-      expected: {
+      {
         message: "Hello Plugin World!",
         query: {},
         params: {},
         body: { foo: "1" },
       },
-    })
+      "Given a versioned schema based on header, it should use one schema or the other based on the API header value",
+    )
 
-    assert({
-      given: "a versioned schema based on header",
-      should: "use one schema or the other based on the API header value",
-      actual: await POST(`${API_URL}/with-conditional-schema`, {
+    t.deepEqual(
+      await POST(`${API_URL}/with-conditional-schema`, {
         headers: {
           "content-type": "application/x-www-form-urlencoded",
           "x-api-version": "2.4.0",
         },
         body: "foo=1",
       }),
-      expected: {
+      {
         message: "Hello Plugin World!",
         query: {},
         params: {},
         body: { foo: 1 },
       },
-    })
+      "Given a versioned schema based on header, it should use one schema or the other based on the API header value"
+    )
 
     server.close()
   }
@@ -359,11 +344,11 @@ test("blocks :: init with defaults", async t => {
     process.env.JWT_SECRET = "testing"
 
     const [middleware] = await block({
-      routes: [import("./routes/with-jwt.route.js")],
+      routes: ["./tests/routes/with-jwt.route.js"],
     })
     const server = http.createServer(middleware).listen(PORT, "localhost")
 
-    t.equal(
+    t.deepEqual(
       await GET(`/with-jwt`, {
         headers: {
           Authorization: "invalid-jwt",
@@ -382,7 +367,7 @@ test("blocks :: init with defaults", async t => {
       "Given invalid jwt in request headers, it should return 401"
     )
 
-    t.equal(
+    t.deepEqual(
       await GET(`/with-jwt`, {
         headers: {
           Authorization: jwt.sign(

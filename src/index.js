@@ -19,8 +19,6 @@ const block = async ({
 
   const plugins = await pluginus({
     source: [
-      // path.resolve("./plugins/router.js"),
-      // path.resolve("./plugins/query-parser.js"),
       path.resolve(__dirname, "src", "plugins", "router.js"),
       path.resolve(__dirname, "src", "plugins", "query-parser.js"),
       ...pluginPaths,
