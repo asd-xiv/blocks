@@ -6,6 +6,8 @@ import addKeywords from "ajv-keywords"
 import { pathToRegexp } from "path-to-regexp"
 import { count, reduce, findWith, merge, pluck, is, isEmpty } from "@asd14/m"
 
+import defaultRouteSchema from "./route-default.schema.js"
+
 import { InputError } from "../errors/input.js"
 import { AuthenticationError } from "../errors/authentication.js"
 import { AuthorizationError } from "../errors/authorization.js"
@@ -40,7 +42,6 @@ const exports = {
 
     addKeywords(ajv, ["regexp", "transform"])
 
-    const defaultRouteSchema = import("./route-default.schema.js")
     const routes = []
 
     return {

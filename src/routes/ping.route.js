@@ -5,7 +5,7 @@ export default {
   path: "/ping",
 
   // 409 if invalid req.query, req.headers, req.params or req.body
-  schema: import("./ping.schema.js"),
+  schema: await import("./ping.schema.js"),
 
   // 401 if returns false or throws
   authenticate: (/* plugins */) => (/* req */) => true,

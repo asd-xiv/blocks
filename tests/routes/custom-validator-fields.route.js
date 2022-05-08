@@ -23,7 +23,7 @@ const exports = {
    * against a JSON Schema. If check fails, respond with 409,
    * otherwise continue to ".authenticate".
    */
-  schema: "./custom-validator-fields.schema",
+  schema: await import("./custom-validator-fields.schema.js"),
 
   /**
    * Check for valid JWT.

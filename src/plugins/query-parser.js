@@ -1,4 +1,4 @@
-import qs  from "qs"
+import qs from "qs"
 import { is } from "@asd14/m"
 
 export default {

@@ -1,5 +1,7 @@
 /* eslint-disable new-cap,no-sync */
 
+import 'dotenv/config'
+
 import http from "http"
 
 import path from "path"
@@ -12,6 +14,7 @@ import test from "tape"
 import { createReadStream, existsSync } from "fs"
 import { GET, PATCH, POST, MULTIPART, set } from "@asd14/fetch-node"
 
+import { type } from '@asd14/m'
 import { block } from "../src/index.js"
 
 const PORT = 4567
@@ -56,6 +59,7 @@ test("blocks :: init with defaults", async t => {
         "../tests/routes/return-undefined.route.js",
         "../tests/routes/upload.route.js",
         "../tests/routes/custom-validator-fields.route.js",
+        "../tests/routes/with-conditional-schema.route.js",
       ]
 
     const [middleware, plugins] = await block({
@@ -80,8 +84,8 @@ test("blocks :: init with defaults", async t => {
 
     t.equal(
       middleware.stack.length,
-      9,
-      "Given no custom middleware, it should contain 9 middleware"
+      10,
+      "Given no custom middleware, it should contain 10 middleware"
     )
 
     const server = http.createServer(middleware).listen(PORT, "localhost")
@@ -292,49 +296,15 @@ test("blocks :: init with defaults", async t => {
       "Given a versioned schema based on header, it should use one schema or the other based on the API header value",
     )
 
-    t.deepEqual(
+    t.equal(
       await MULTIPART(`${API_URL}/upload`, {
         body: {
           field: "testField",
-          file: createReadStream(`${__dirname}/index.js`),
+          file: createReadStream(`${__dirname}/tests/index.js`),
         },
       }).then(({ file }) => existsSync(file)),
       true,
-      "Given multipart/form-data with file field, it should upload and save file localy"
-    )
-
-    t.deepEqual(
-      await POST(`${API_URL}/with-conditional-schema`, {
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          "x-api-version": "1.0.0",
-        },
-        body: "foo=1",
-      }),
-      {
-        message: "Hello Plugin World!",
-        query: {},
-        params: {},
-        body: { foo: "1" },
-      },
-      "Given a versioned schema based on header, it should use one schema or the other based on the API header value",
-    )
-
-    t.deepEqual(
-      await POST(`${API_URL}/with-conditional-schema`, {
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          "x-api-version": "2.4.0",
-        },
-        body: "foo=1",
-      }),
-      {
-        message: "Hello Plugin World!",
-        query: {},
-        params: {},
-        body: { foo: 1 },
-      },
-      "Given a versioned schema based on header, it should use one schema or the other based on the API header value"
+      "Given multipart/form-data with file field, it should upload and save file locally"
     )
 
     server.close()
@@ -344,7 +314,7 @@ test("blocks :: init with defaults", async t => {
     process.env.JWT_SECRET = "testing"
 
     const [middleware] = await block({
-      routes: ["./tests/routes/with-jwt.route.js"],
+      routes: ["../tests/routes/with-jwt.route.js"],
     })
     const server = http.createServer(middleware).listen(PORT, "localhost")
 
@@ -353,9 +323,9 @@ test("blocks :: init with defaults", async t => {
         headers: {
           Authorization: "invalid-jwt",
         },
-      }).catch(({ status, body }) => ({
-        status,
-        body,
+      }).catch((error) => ({
+        status: error.status,
+        body: error.body,
       })),
       {
         status: 401,

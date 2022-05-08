@@ -3,7 +3,7 @@ export default {
   path: "/with-conditional-schema",
 
   // 409 if invalid req.query, req.headers, req.params or req.body
-  schema: require("./with-conditional-schema.schema"),
+  schema: await import("./with-conditional-schema.schema.js"),
 
   // 401 if returns false or throws
   authenticate: (/* plugins */) => (/* req */) => true,

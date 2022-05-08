@@ -1,6 +1,6 @@
 // import debug from "debug"
 
-import { read, type } from "@asd14/m"
+import { read } from "@asd14/m"
 import accepts from "accepts"
 
 const toNowInMs = start => {

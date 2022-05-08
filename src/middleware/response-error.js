@@ -2,8 +2,7 @@
 
 import { pluck, is } from "@asd14/m"
 
-export default
-  ({ ErrorPlugin }) =>
+export default ({ ErrorPlugin }) =>
   (error, request, response, next) => {
     response.ctx.status = error.statusCode || 500
     response.ctx.payload = {

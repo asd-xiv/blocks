@@ -1,5 +1,4 @@
-export default
-  ({ Router }) =>
+export default ({ Router }) =>
   (request, response, next) => {
     try {
       const { route, params } = Router.find({

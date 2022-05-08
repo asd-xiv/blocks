@@ -58,8 +58,7 @@ const handleForm = (request, { onParse, onError }) => {
   }
 }
 
-export default
-  ({ QueryParser }) =>
+export default ({ QueryParser }) =>
   (request, response, next) => {
     switch (request.headers["x-content-type"]) {
       //

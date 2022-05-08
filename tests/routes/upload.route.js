@@ -3,7 +3,7 @@ const exports = {
   path: "/upload",
 
   // 409 if invalid req.query, req.headers, req.params or req.body
-  schema: import("./upload.schema.js"),
+  schema: await import("./upload.schema.js"),
 
   // 401 if returns false or throws
   authenticate: (/* plugins */) => (/* req */) => true,

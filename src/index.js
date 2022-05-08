@@ -1,7 +1,7 @@
 import connect from "connect"
 import path from "path"
 import { pluginus } from "@asd14/pluginus"
-import { is, forEach, reduce, type, map } from "@asd14/m"
+import { is, reduce, map } from "@asd14/m"
 
 const block = async ({
   plugins: pluginPaths = [],
@@ -32,10 +32,15 @@ const block = async ({
     map(
       async item => {
         const imported = await (typeof item === "string" ? import(item) : item)
-        const { default: { authenticate, authorize, action, ...rest } } = imported
+        const {
+          default: { authenticate, authorize, action, schema = {}, ...rest },
+        } = imported
+        const _schema =
+          is(schema.default) && !is(schema.headers) ? schema.default : schema
 
         plugins.Router.add({
           ...rest,
+          schema: _schema,
           authenticate:
             typeof authenticate === "function"
               ? authenticate(plugins)
@@ -68,10 +73,11 @@ const block = async ({
   ]
 
   const middlewares = await Promise.all(
-    map((item) =>
-      import(item).then((source) =>
-        typeof item === "string" ? source.default(plugins) : item(plugins)
-      ),
+    map(
+      item =>
+        import(item).then(input =>
+          typeof item === "string" ? input.default(plugins) : item(plugins)
+        ),
       middlewarePaths
     )
   )
@@ -81,7 +87,7 @@ const block = async ({
      * Middleware `connect` pipeline
      */
     reduce(
-     (accumulator, item) => is(item) ? accumulator.use(item) : accumulator,
+      (accumulator, item) => (is(item) ? accumulator.use(item) : accumulator),
       connect(),
       middlewares
     ),
