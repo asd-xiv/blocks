@@ -1,4 +1,8 @@
-[`mermaid`](https://github.com/knsv/mermaid) sequence diagram. Use [`mermaid-live-editor`](https://mermaidjs.github.io/mermaid-live-editor) to visualize.
+# High-level request process flow
+
+[`mermaid`](https://github.com/knsv/mermaid) sequence diagram. Use
+[`mermaid-live-editor`](https://mermaidjs.github.io/mermaid-live-editor) to
+visualize.
 
 ```mermaid
 sequenceDiagram
@@ -8,9 +12,9 @@ sequenceDiagram
     participant .isAllowed
     participant Route
 
-    Client ->>+ .isValid: I have some data    
+    Client ->>+ .isValid: I have some data
     .isValid -->>- Client: 409: Conflict
-    Note over Client,.isValid: Check against JSONSchema 
+    Note over Client,.isValid: Check against JSONSchema
 
     .isValid ->>+ .isAllowed: isValid
     .isAllowed -->>- Client: 403: Forbidden
