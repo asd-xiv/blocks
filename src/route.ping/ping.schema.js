@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   headers: {
     type: "object",
     additionalProperties: true,

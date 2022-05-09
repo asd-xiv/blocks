@@ -1,12 +1,13 @@
-const debug = require("debug")("blocks:GoodbyeMiddleware")
+import d from "debug"
+import { read } from "@asd14/m"
+import accepts from "accepts"
 
-const { read } = require("@asd14/m")
-const accepts = require("accepts")
+const debug = d("blocks:GoodbyeMiddleware")
 
 const toNowInMs = start => {
   const end = process.hrtime(start)
 
-  return end[0] * 1000 + end[1] / 1000000
+  return end[0] * 1000 + end[1] / 1_000_000
 }
 
 const acceptedContentTypes = ["json", "text"]
@@ -33,7 +34,7 @@ const bodyByRequestAccept = ({ accept, reponse }) => {
   }
 }
 
-module.exports = () => (request, reponse) => {
+export default () => (request, reponse) => {
   debug(
     `${request.method}:${request.url} responding with ${reponse.ctx.status}`
   )

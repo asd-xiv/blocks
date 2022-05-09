@@ -1,4 +1,4 @@
-const { BaseError } = require("./base")
+import { BaseError } from "./base.js"
 
 class AuthenticationError extends BaseError {
   constructor(
@@ -12,4 +12,4 @@ class AuthenticationError extends BaseError {
   }
 }
 
-module.exports = { AuthenticationError }
+export { AuthenticationError }

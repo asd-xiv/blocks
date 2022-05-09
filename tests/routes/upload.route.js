@@ -1,19 +1,16 @@
-module.exports = {
+import schema from "./upload.schema.js"
+
+export default {
   method: "POST",
   path: "/upload",
-
-  // 409 if invalid req.query, req.headers, req.params or req.body
-  schema: require("./upload.schema"),
-
-  // 401 if returns false or throws
-  authenticate: (/* plugins */) => (/* req */) => true,
-
-  // 403 if returns false or throws
-  authorize: (/* plugins */) => (/* req */) => true,
-
-  action: (/* plugins */) => ({ ctx: { body } }) => {
-    return {
-      file: body.file,
-    }
-  },
+  schema,
+  authenticate: () => () => true,
+  authorize: () => () => true,
+  action:
+    () =>
+    ({ ctx: { body } }) => {
+      return {
+        file: body.file,
+      }
+    },
 }

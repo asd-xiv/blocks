@@ -1,10 +1,8 @@
-const debug = require("debug")("blocks:BootstrapMiddleware")
+import cuid from "cuid"
+import contentType from "content-type"
+import { pluck } from "@asd14/m"
 
-const cuid = require("cuid")
-const contentType = require("content-type")
-const { pluck } = require("@asd14/m")
-
-module.exports = () => (request, response, next) => {
+export default () => (request, response, next) => {
   request.ctx = {
     id: cuid(),
     startAt: process.hrtime(),
