@@ -35,7 +35,6 @@
   ],
   "scripts": {
     "----UTIL": "",
-    "prepare": "git config --local core.hooksPath .githooks",
     "setup": "npm ci --prefer-offline --no-audit --progress=false",
     "update": "ncu --interactive",
     "postupdate": "npm audit fix",
