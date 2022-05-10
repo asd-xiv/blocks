@@ -2,7 +2,7 @@
 
 # Changelog
 
-Releases and changelog are automaticly handled by
+Releases and changelog are automatically handled by
 [semantic-release](https://github.com/semantic-release/semantic-release).
 
 All releases are based on Angular's
