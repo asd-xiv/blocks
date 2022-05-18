@@ -1,5 +1,6 @@
 import Ajv from "ajv"
 import addFormats from "ajv-formats"
+import addKeywords from "ajv-keywords"
 import { pathToRegexp } from "path-to-regexp"
 import { count, reduce, findWith, merge, pluck, is, isEmpty } from "@asd14/m"
 
@@ -34,6 +35,8 @@ export default {
         "regex",
       ],
     })
+
+    addKeywords(ajv, ["regexp", "transform"])
 
     const { default: defaultRouteSchema } = await import("./default.schema.js")
     const routes = []

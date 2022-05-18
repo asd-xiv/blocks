@@ -37,6 +37,7 @@ test("blocks :: init with defaults", async t => {
       routes: [
         await import("./routes/no-schema.route.js"),
         await import("./routes/with-schema.route.js"),
+        await import("./routes/with-keywords.route.js"),
         await import("./routes/no-authenticate.route.js"),
         await import("./routes/no-authorize.route.js"),
         await import("./routes/dont-authenticate.route.js"),
@@ -57,8 +58,8 @@ test("blocks :: init with defaults", async t => {
 
     t.deepEquals(
       plugins.Router.count(),
-      12,
-      "given [11 custom routes] should [load default /ping and all custom]"
+      13,
+      "given [12 custom routes] should [load default /ping and all custom]"
     )
 
     t.deepEquals(
@@ -223,6 +224,22 @@ test("blocks :: init with defaults", async t => {
         body: { parsed: "with qs", another: "value" },
       },
       "given [form encoded body and content type] should [parse body with qs]"
+    )
+
+    t.deepEqual(
+      await POST(`${API_URL}/with-keywords`, {
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+        },
+        body: "title=%20UP%20CASED%20&foo=foobar",
+      }),
+      {
+        message: "Hello Plugin World!",
+        query: {},
+        params: {},
+        body: { foo: "foobar", title: "up cased" },
+      },
+      "given [form encoded with custom keywords] should [transform and validate data inside schema with added functionalities from ajv-keywords]",
     )
 
     t.deepEqual(
