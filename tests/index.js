@@ -38,6 +38,7 @@ test("blocks :: init with defaults", async t => {
         await import("./routes/no-schema.route.js"),
         await import("./routes/with-schema.route.js"),
         await import("./routes/with-keywords.route.js"),
+        await import("./routes/with-conditional-schema.route.js"),
         await import("./routes/no-authenticate.route.js"),
         await import("./routes/no-authorize.route.js"),
         await import("./routes/dont-authenticate.route.js"),
@@ -58,8 +59,8 @@ test("blocks :: init with defaults", async t => {
 
     t.deepEquals(
       plugins.Router.count(),
-      13,
-      "given [12 custom routes] should [load default /ping and all custom]"
+      14,
+      "given [13 custom routes] should [load default /ping and all custom]"
     )
 
     t.deepEquals(
@@ -240,6 +241,40 @@ test("blocks :: init with defaults", async t => {
         body: { foo: "foobar", title: "up cased" },
       },
       "given [form encoded with custom keywords] should [transform and validate data inside schema with added functionalities from ajv-keywords]",
+    )
+
+    t.deepEqual(
+      await POST(`${API_URL}/with-conditional-schema`, {
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          "x-api-version": "1.0.0",
+        },
+        body: "foo=1",
+      }),
+      {
+        message: "Hello Plugin World!",
+        query: {},
+        params: {},
+        body: { foo: "1" },
+      },
+      "given [a versioned schema based on header] should [use one schema or the other based on the API header value]",
+    )
+
+    t.deepEqual(
+      await POST(`${API_URL}/with-conditional-schema`, {
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          "x-api-version": "2.4.0",
+        },
+        body: "foo=1",
+      }),
+      {
+        message: "Hello Plugin World!",
+        query: {},
+        params: {},
+        body: { foo: 1 },
+      },
+      "given [a versioned schema based on header] should [use one schema or the other based on the API header value]",
     )
 
     t.deepEqual(
