@@ -1,6 +1,6 @@
 {
   "name": "@asd14/blocks",
-  "version": "0.0.1",
+  "version": "5.0.0",
   "description": "REST API framework for Node.js",
   "homepage": "https://github.com/asd-xiv/blocks",
   "license": "MIT",
