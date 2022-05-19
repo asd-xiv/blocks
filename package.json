@@ -15,71 +15,85 @@
     "name": "Andrei Dumitrescu",
     "url": "https://github.com/andreidmt"
   },
-  "main": "src/index.js",
+  "contributors": [
+    {
+      "name": "David Gil",
+      "url": "https://github.com/dgilperez"
+    }
+  ],
   "keywords": [
     "nodejs",
     "api",
     "server",
     "framework"
   ],
-  "engines": {
-    "node": ">=12"
-  },
+  "type": "module",
+  "exports": "./src/index.js",
+  "sideEffects": false,
+  "files": [
+    "/src"
+  ],
   "scripts": {
     "----UTIL": "",
-    "setup": "rm -rf ./node_modules && npm i && npm audit fix",
-    "setup:ci": "npm ci && npm audit fix",
-    "update": "npm-check -u",
+    "setup": "npm ci --prefer-offline --no-audit --progress=false",
+    "update": "ncu --interactive",
+    "postupdate": "npm audit fix",
+    "format": "prettier --write --prose-wrap=always . && eslint --fix .",
     "----LINT": "",
-    "lint:js": "eslint --quiet --ext .js src/",
-    "lint:md": "markdownlint *.md",
+    "lint:js": "eslint --quiet src",
+    "lint:js-staged": "eslint --quiet",
+    "lint:md": "markdownlint '*.md'",
+    "lint:md-staged": "markdownlint",
     "lint": "npm run lint:md && npm run lint:js",
     "----TEST": "",
-    "start": "nodemon examples/simple.js",
     "test": "node tests/index.js | tap-nirvana",
     "tdd": "nodemon --watch src --watch tests --watch examples --exec \"npm test\"",
-    "coverage:report": "nyc npm test && nyc report --reporter=html",
-    "coverage:ci": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
+    "coverage": "nyc npm run test && nyc report --reporter=text-lcov | coveralls",
+    "----PUBLISH": "",
+    "release": "semantic-release"
+  },
+  "lint-staged": {
+    "*.{js,json}": "npm run lint:js-staged",
+    "*.md": "npm run lint:md-staged"
   },
   "dependencies": {
-    "@asd14/m": "^4.7.1",
-    "@asd14/pluginus": "^2.2.0",
-    "@sindresorhus/slugify": "^1.1.0",
-    "accepts": "^1.3.7",
-    "ajv": "^7.1.1",
-    "ajv-formats": "^1.5.1",
-    "busboy": "^0.3.1",
+    "@asd14/m": "^7.8.1",
+    "@asd14/pluginus": "^3.0.0",
+    "@sindresorhus/slugify": "^2.1.0",
+    "accepts": "^1.3.8",
+    "ajv": "^8.11.0",
+    "ajv-formats": "^2.1.1",
+    "busboy": "^1.6.0",
     "connect": "^3.7.0",
     "content-type": "^1.0.4",
     "cors": "^2.8.5",
     "cuid": "^2.1.8",
-    "debug": "^4.3.1",
-    "helmet": "^4.4.1",
-    "path-to-regexp": "^6.2.0",
-    "qs": "^6.9.6"
+    "debug": "^4.3.4",
+    "helmet": "^5.0.2",
+    "path-to-regexp": "^6.2.1",
+    "qs": "^6.10.3"
   },
   "devDependencies": {
-    "@asd14/eslint-config": "^5.26.0",
+    "@asd14/eslint-config": "^7.3.0",
     "@asd14/fetch-node": "^1.2.2",
-    "babel-eslint": "^10.1.0",
-    "coveralls": "^3.1.0",
-    "eslint": "^7.20.0",
-    "eslint-config-prettier": "^7.2.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsdoc": "^32.0.2",
-    "eslint-plugin-json": "^2.1.2",
-    "eslint-plugin-no-inferred-method-name": "^2.0.0",
-    "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-promise": "^4.3.1",
-    "eslint-plugin-unicorn": "^28.0.2",
+    "@commitlint/cli": "^16.2.4",
+    "@commitlint/config-conventional": "^16.2.4",
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "coveralls": "^3.1.1",
+    "eslint": "^8.15.0",
     "jsonwebtoken": "^8.5.1",
-    "markdownlint-cli": "^0.26.0",
-    "nodemon": "^2.0.7",
-    "npm-check": "^5.9.2",
+    "lint-staged": "^12.4.1",
+    "markdownlint-cli": "^0.31.1",
+    "nodemon": "^2.0.16",
+    "npm-check-updates": "^12.5.11",
     "nyc": "^15.1.0",
-    "prettier": "^2.2.1",
-    "riteway": "^6.2.1",
-    "semantic-release": "^17.3.9",
-    "tap-nirvana": "^1.1.0"
+    "prettier": "^2.6.2",
+    "semantic-release": "^19.0.2",
+    "tap-nirvana": "^1.1.0",
+    "tape": "^5.5.3"
+  },
+  "engines": {
+    "node": "^14.13.1 || >=16.0.0"
   }
 }

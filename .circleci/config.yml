@@ -1,112 +1,148 @@
-# Javascript Node CircleCI 2.0 configuration file
+# CircleCI 2.0 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
-#
-version: 2
 
-#
-# YAML variable templates
-#
-job_defaults: &job_defaults
-  working_directory: ~/blocks
-  docker:
-    - image: circleci/node:12
+version: 2.1
 
-job_filter: &job_filter
-  filters:
-    branches:
-      only:
-        - master
+# Executors - https://circleci.com/docs/2.0/executor-intro/
+#
+# The underlying technology or environment in which to run a job
 
-#
-# Run all jobs in sequence
-#
-workflows:
-  version: 2
-  deploy_npm:
-    jobs:
-      - setup:
-          <<: *job_filter
-      - test:
-          <<: *job_filter
-          requires:
-            - setup
-      - coverage:
-          <<: *job_filter
-          requires:
-            - test
-      - publish:
-          <<: *job_filter
-          requires:
-            - coverage
+executors:
+  gitleaks:
+    docker:
+      - image: zricethezav/gitleaks:latest
+  node14:
+    docker:
+      - image: cimg/node:14.13.1
+  node16:
+    docker:
+      - image: cimg/node:16.14.2
 
+# Jobs - https://circleci.com/docs/2.0/configuration-reference/#jobs
 #
-# Define atomic jobs
-#
+# Atomic parts of the pipeline that will be composed and configured in one or
+# more Workflows
+
 jobs:
-  setup:
-    <<: *job_defaults
-
+  detect-secrets:
+    executor: gitleaks
+    working_directory: &JOB_WORKING_DIR "~/blocks"
     steps:
       - checkout
-
       - run:
-          name: "blocks: Install npm packages"
-          command: "npm run setup:ci"
+          name: "[gitleaks] Detect secrets in repository history"
+          command: |
+            gitleaks detect --redact --verbose
+      - persist_to_workspace:
+          root: &WORKSPACE_ROOT "~/"
+          paths:
+            - blocks
 
+  setup:
+    executor: node16
+    working_directory: *JOB_WORKING_DIR
+    steps:
+      - attach_workspace:
+          at: *WORKSPACE_ROOT
+      - restore_cache:
+          name: '[circleci] Restore cached "node_modules" folder'
+          key:
+            &CACHE_KEY_NODE_MODULES 'blocks-v1-{{ arch }}-{{ checksum
+            "package-lock.json" }}'
+      - run:
+          name: "[npm]: Install packages"
+          command: |
+            node -v && npm -v
+            npm run setup
       - save_cache:
           paths:
             - node_modules
-            - src
-            - tests
-            - .git
-            - .eslintrc
-            - .gitignore
-            - .nycrc
-            - .prettierrc
-            - README.md
-            - CHANGELOG.md
-            - package-lock.json
-            - package.json
-          key: blocks-{{ .Branch }}-{{ .Revision }}
+          key: *CACHE_KEY_NODE_MODULES
+      - persist_to_workspace:
+          root: *WORKSPACE_ROOT
+          paths:
+            - blocks
 
   test:
-    <<: *job_defaults
-
+    parameters:
+      node-version:
+        type: string
+    executor: node<< parameters.node-version >>
+    working_directory: *JOB_WORKING_DIR
     steps:
-      - restore_cache:
-          keys:
-            - blocks-{{ .Branch }}-{{ .Revision }}
-
+      - attach_workspace:
+          at: *WORKSPACE_ROOT
       - run:
-          name: "blocks: Run linter"
-          command: "npm run lint"
-
+          name: "[eslint, markdownlint]: Lint"
+          command: |
+            npm run lint
       - run:
-          name: "blocks: Run tests"
-          command: "npm run test"
+          name: "[tape]: Unit tests"
+          command: "npm test"
 
-  coverage:
-    <<: *job_defaults
-
+  submit-coverage:
+    executor: node16
+    working_directory: *JOB_WORKING_DIR
     steps:
-      - restore_cache:
-          keys:
-            - blocks-{{ .Branch }}-{{ .Revision }}
-
+      - attach_workspace:
+          at: *WORKSPACE_ROOT
       - run:
-          name: "blocks: Publish test coverage to COVERALLS"
-          command: "npm run coverage:ci"
+          name: "[coveralls]: Publish test coverage to COVERALLS"
+          command: "npm run coverage"
 
-  publish:
-    <<: *job_defaults
-
+  release-npm:
+    executor: node16
+    working_directory: *JOB_WORKING_DIR
     steps:
-      - restore_cache:
-          keys:
-            - blocks-{{ .Branch }}-{{ .Revision }}
-
+      - attach_workspace:
+          at: *WORKSPACE_ROOT
       - run:
-          name: "blocks: Release to npm with semantic-release"
-          command: "npx semantic-release"
+          name:
+            "[semantic-release]: Update version, generate release, publish npm
+            package"
+          command: "npm run release"
 
+# Workflows - https://circleci.com/docs/2.0/workflows/
+#
+# Treat workflows as a jobs/commands pipe:
+# cmd1 -p1 lorem | cmd2 -foo bar | ... | cmdN)
+
+workflows:
+  test:
+    jobs:
+      - detect-secrets:
+          filters:
+            branches:
+              ignore: [master]
+      - setup:
+          requires: [detect-secrets]
+      - test:
+          name: "test_node14"
+          requires: [setup]
+          node-version: "14"
+      - test:
+          name: "test_node16"
+          requires: [setup]
+          node-version: "16"
+
+  release:
+    jobs:
+      - detect-secrets:
+          filters:
+            branches:
+              only: [master]
+      - setup:
+          requires: [detect-secrets]
+      - test:
+          name: "test_node14"
+          requires: [setup]
+          node-version: "14"
+      - test:
+          name: "test_node16"
+          requires: [setup]
+          node-version: "16"
+      - submit-coverage:
+          requires: [test_node14, test_node16]
+      - release-npm:
+          requires: [test_node14, test_node16]

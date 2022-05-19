@@ -1,32 +1,19 @@
-const http = require("http")
-const glob = require("glob")
+import http from "node:http"
+import glob from "glob"
 
-const { block } = require("../src")
+import { block } from "../src/index.js"
 
-// initialize application
-const app = block({
-  // always scan relative to current folder
+const [middleware] = await block({
   plugins: glob.sync("../src/plugins/*.js", { absolute: true }),
   routes: glob.sync("../src/**/*.route.js", { absolute: true }),
 })
 
-// start node server
-app
-  .then(([middleware, { Config }]) => {
-    const server = http.createServer(middleware)
-
-    server.listen({
-      port: process.env.PORT,
-    })
-
-    server.on("error", error => {
-      console.log("Server error", error)
-    })
-
-    server.on("listening", () => {
-      console.log(`Server started on port ${Config.PORT}`)
-    })
+http
+  .createServer(middleware)
+  .listen(process.env.PORT)
+  .on("error", error => {
+    console.log("Server error", error)
   })
-  .catch(error => {
-    console.log("Application could not initialize", error)
+  .on("listening", () => {
+    console.log(`Server started on port ${process.env.PORT}`)
   })

@@ -1,19 +1,16 @@
-const debug = require("debug")("blocks:Index")
+import path from "node:path"
+import connect from "connect"
+import { pluginus } from "@asd14/pluginus"
+import { pick, map, pipeP, is, forEach, reduce } from "@asd14/m"
 
-const connect = require("connect")
-const path = require("path")
-const { pluginus } = require("@asd14/pluginus")
-const { is, forEach, reduce } = require("@asd14/m")
+import { importAll } from "./core.libs/node.js"
+import { alwaysFalse } from "./core.libs/boolean.js"
 
-const { BaseError } = require("./errors/base")
-const { NotFoundError } = require("./errors/not-found")
-const { InputError } = require("./errors/input")
-const { AuthenticationError } = require("./errors/authentication")
-const { AuthorizationError } = require("./errors/authorization")
+const __dirname = new URL(".", import.meta.url).pathname
 
-const block = ({
+const block = async ({
   plugins: pluginPaths = [],
-  routes = [],
+  routes: routesPaths = [],
   middleware: {
     beforeRoute = [],
     afterRoute = [],
@@ -23,76 +20,73 @@ const block = ({
 } = {}) => {
   process.env.STARTUP_TIME = new Date()
 
-  return pluginus({
+  const plugins = await pluginus({
     source: [
-      path.resolve(__dirname, "plugins", "router.js"),
-      path.resolve(__dirname, "plugins", "query-parser.js"),
+      path.resolve(__dirname, "plugin.router", "router.js"),
+      path.resolve(__dirname, "plugin.query-parser", "query-parser.js"),
       ...pluginPaths,
     ],
-  }).then(plugins => {
-    /*
-     * Register routes
-     */
-    forEach(
-      item => {
-        const { authenticate, authorize, action, ...rest } =
-          typeof item === "string" ? require(item) : item
-
-        plugins.Router.add({
-          ...rest,
-          authenticate:
-            typeof authenticate === "function"
-              ? authenticate(plugins)
-              : () => false,
-          authorize:
-            typeof authorize === "function" ? authorize(plugins) : () => false,
-          action: action(plugins),
-        })
-      },
-      ["./routes/ping.route.js", ...routes]
-    )
-
-    return [
-      /*
-       * Middleware `connect` pipeline
-       */
-      reduce(
-        (accumulator, item) => {
-          const middleware =
-            typeof item === "string" ? require(item)(plugins) : item(plugins)
-
-          return is(middleware) ? accumulator.use(middleware) : accumulator
-        },
-        connect(),
-        [
-          "./middleware/request-bootstrap",
-          "./middleware/request-cors",
-          "./middleware/request-route-exists",
-          // "./middleware/req-jwt",
-          "./middleware/request-query",
-          "./middleware/request-body",
-          ...beforeRoute,
-          "./middleware/response-route",
-          ...afterRoute,
-          "./middleware/response-error",
-          ...afterError,
-          "./middleware/response-goodbye-error",
-          ...beforeSend,
-          "./middleware/response-helmet",
-          "./middleware/response-goodbye",
-        ]
-      ),
-
-      plugins,
-    ]
   })
+
+  const middlewarePipeline = await pipeP(
+    map(item =>
+      typeof item === "string" ? path.resolve(__dirname, item) : item
+    ),
+    importAll,
+    pick("default"),
+    reduce((accumulator, item) => {
+      const middlewareFn = item(plugins)
+
+      return is(middlewareFn) ? accumulator.use(item(plugins)) : accumulator
+    }, connect())
+  )([
+    "./middleware/request-bootstrap.js",
+    "./middleware/request-cors.js",
+    "./middleware/request-route-exists.js",
+    // "./middleware/req-jwt.js",
+    "./middleware/request-query.js",
+    "./middleware/request-body.js",
+    ...beforeRoute,
+    "./middleware/response-route.js",
+    ...afterRoute,
+    "./middleware/response-error.js",
+    ...afterError,
+    "./middleware/response-goodbye-error.js",
+    ...beforeSend,
+    "./middleware/response-helmet.js",
+    "./middleware/response-goodbye.js",
+  ])
+
+  const routes = await pipeP(
+    map(item =>
+      typeof item === "string" ? path.resolve(__dirname, item) : item
+    ),
+    importAll,
+    pick("default"),
+    map(({ authenticate, authorize, action, ...rest }) => {
+      return {
+        ...rest,
+        authenticate:
+          typeof authenticate === "function"
+            ? authenticate(plugins)
+            : alwaysFalse,
+        authorize:
+          typeof authorize === "function" ? authorize(plugins) : alwaysFalse,
+        action: action(plugins),
+      }
+    })
+  )(["./route.ping/ping.js", ...routesPaths])
+
+  forEach(item => {
+    plugins.Router.add(item)
+  }, routes)
+
+  return [middlewarePipeline, plugins]
 }
 
-module.exports = {
-  block,
-  BaseError,
-  InputError,
-  NotFoundError,
-  AuthenticationError,
-  AuthorizationError,
-}
+export { block }
+export { BaseError } from "./core.errors/base.js"
+export { InputError } from "./core.errors/input.js"
+export { NotFoundError } from "./core.errors/not-found.js"
+export { AuthorizationError } from "./core.errors/authorization.js"
+export { AuthenticationError } from "./core.errors/authentication.js"

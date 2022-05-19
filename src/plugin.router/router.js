@@ -1,26 +1,15 @@
-/* eslint-disable promise/no-nesting */
+import Ajv from "ajv"
+import addFormats from "ajv-formats"
+import { pathToRegexp } from "path-to-regexp"
+import { count, reduce, findWith, merge, pluck, is, isEmpty } from "@asd14/m"
 
-const debug = require("debug")("blocks:RouterPlugin")
-const Ajv = require("ajv").default
-const addFormats = require("ajv-formats")
-const { pathToRegexp } = require("path-to-regexp")
-const {
-  count,
-  reduce,
-  findWith,
-  merge,
-  pluck,
-  is,
-  isEmpty,
-} = require("@asd14/m")
+import { InputError } from "../core.errors/input.js"
+import { AuthenticationError } from "../core.errors/authentication.js"
+import { AuthorizationError } from "../core.errors/authorization.js"
+import { NotFoundError } from "../core.errors/not-found.js"
 
-const { InputError } = require("../errors/input")
-const { AuthenticationError } = require("../errors/authentication")
-const { AuthorizationError } = require("../errors/authorization")
-const { NotFoundError } = require("../errors/not-found")
-
-module.exports = {
-  create: () => {
+export default {
+  create: async () => {
     const ALL_ERRORS = process.env.AJV_ALL_ERRORS
     const COERCE_TYPES = process.env.AJV_COERCE_TYPES
     const USE_DEFAULTS = process.env.AJV_USE_DEFAULTS
@@ -46,7 +35,7 @@ module.exports = {
       ],
     })
 
-    const defaultRouteSchema = require("./route-default.schema")
+    const { default: defaultRouteSchema } = await import("./default.schema.js")
     const routes = []
 
     return {
@@ -55,9 +44,9 @@ module.exports = {
       /**
        * Searches for the first match.
        *
-       * @param   {object} arg1          Props
-       * @param   {string} arg1.method   HTTP method
-       * @param   {string} arg1.pathname URL pathname
+       * @param {object} arg1          Props
+       * @param {string} arg1.method   HTTP method
+       * @param {string} arg1.pathname URL pathname
        *
        * @returns {object}
        */
@@ -92,12 +81,12 @@ module.exports = {
       },
 
       /**
-       * @param   {object}    props
-       * @param   {string}    props.method
-       * @param   {string}    props.path
-       * @param   {object}    props.schema
-       * @param   {Function}  props.authenticate
-       * @param   {Function}  props.authorize
+       * @param {object}   props
+       * @param {string}   props.method
+       * @param {string}   props.path
+       * @param {object}   props.schema
+       * @param {Function} props.authenticate
+       * @param {Function} props.authorize
        *
        * @returns {undefined}
        */
@@ -110,8 +99,6 @@ module.exports = {
         ...rest
       }) => {
         const keys = []
-
-        debug(`Loading ${method}: ${path}`)
 
         routes.push({
           method,
@@ -135,9 +122,9 @@ module.exports = {
       /**
        * { function_description }
        *
-       * @param   {object} arg1       The argument 1
-       * @param   {object} arg1.route The route
-       * @param   {object} arg1.req   The request
+       * @param {object} arg1       The argument 1
+       * @param {object} arg1.route The route
+       * @param {object} arg1.req   The request
        *
        * @returns {object}
        */

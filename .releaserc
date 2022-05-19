@@ -1,0 +1,33 @@
+{
+  "branches": [{ "name": "master" }],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "conventionalcommits",
+        "presetConfig": {
+          "types": [
+            { "type": "feat", "section": "Features" },
+            { "type": "fix", "section": "Bug Fixes" },
+            { "type": "perf", "section": "Performance Improvements" },
+            { "type": "style", "section": "Styles", "hidden": false },
+            { "type": "test", "section": "Tests", "hidden": false },
+            { "type": "docs", "section": "Documentation", "hidden": false },
+            { "type": "build", "section": "Build System", "hidden": false },
+            { "type": "refactor", "section": "Refactors", "hidden": false },
+            { "type": "ci", "section": "CI", "hidden": false }
+          ]
+        }
+      }
+    ],
+    "@semantic-release/npm",
+    [
+      "@semantic-release/git",
+      {
+        "assets": ["package.json", "package-lock.json"]
+      }
+    ],
+    "@semantic-release/github"
+  ]
+}
