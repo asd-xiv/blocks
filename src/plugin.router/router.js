@@ -1,5 +1,6 @@
 import Ajv from "ajv"
 import addFormats from "ajv-formats"
+import addKeywords from "ajv-keywords"
 import { pathToRegexp } from "path-to-regexp"
 import { count, reduce, findWith, merge, pluck, is, isEmpty } from "@asd14/m"
 
@@ -34,6 +35,8 @@ export default {
         "regex",
       ],
     })
+
+    addKeywords(ajv, ["regexp", "transform"])
 
     const { default: defaultRouteSchema } = await import("./default.schema.js")
     const routes = []
@@ -100,6 +103,19 @@ export default {
       }) => {
         const keys = []
 
+        // If conditional schemas or other complex scenarios are found,
+        // defer to the schema itself instead of trying to expect certain keys
+        const schemaToValidate =
+          is(schema.properties) && is(schema.if)
+            ? pluck(["properties", "type", "if", "then", "else"])(schema)
+            : {
+                type: "object",
+                properties: merge(
+                  defaultRouteSchema,
+                  pluck(["headers", "params", "query", "body"])(schema)
+                ),
+              }
+
         routes.push({
           method,
           path,
@@ -109,13 +125,7 @@ export default {
           ...rest,
           pathParamsKeys: keys,
           pathRegExp: pathToRegexp(path, keys),
-          validate: ajv.compile({
-            type: "object",
-            properties: merge(
-              defaultRouteSchema,
-              pluck(["headers", "params", "query", "body"])(schema)
-            ),
-          }),
+          validate: ajv.compile(schemaToValidate),
         })
       },
 
