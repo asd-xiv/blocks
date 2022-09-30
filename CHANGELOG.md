@@ -1,13 +1,8 @@
-<!-- markdownlint-disable line-length -->
-
 # Changelog
 
-Releases and changelog are automatically handled by
-[semantic-release](https://github.com/semantic-release/semantic-release).
-
-All releases are based on Angular's
-[Git commit message](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines)
-patterns.
-
-See the [releases section](https://github.com/asd-xiv/blocks/releases) for
-details.
+1. Versioning, releases and changelogs are automaticly handled by
+   [semantic-release](https://github.com/semantic-release/semantic-release).
+1. Commit messages follow
+   [Conventional Commits](https://www.conventionalcommits.org/) rules.
+1. See the [releases section](https://github.com/asd-xiv/blocks/releases) for
+   details.
