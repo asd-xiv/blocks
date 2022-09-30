@@ -68,7 +68,7 @@ jobs:
     parameters:
       node-version:
         type: string
-    executor: node<< parameters.node-version >>
+    executor: node-<< parameters.node-version >>
     working_directory: *JOB_WORKING_DIR
     steps:
       - attach_workspace:
