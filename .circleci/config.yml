@@ -109,23 +109,6 @@ jobs:
 # cmd1 -p1 lorem | cmd2 -foo bar | ... | cmdN)
 
 workflows:
-  test:
-    jobs:
-      - detect-secrets:
-          filters:
-            branches:
-              ignore: [master]
-      - setup:
-          requires: [detect-secrets]
-      - test:
-          name: "test_node-lts"
-          requires: [setup]
-          node-version: "lts"
-      - test:
-          name: "test_node-18"
-          requires: [setup]
-          node-version: "18"
-
   release:
     jobs:
       - detect-secrets:
